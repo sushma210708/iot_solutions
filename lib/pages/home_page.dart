@@ -66,6 +66,14 @@ class _HomePageState extends State<HomePage> {
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: false,
+            leading: !isDesktop 
+              ? Builder(
+                  builder: (context) => IconButton(
+                    icon: const Icon(Icons.menu, color: Colors.white),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  ),
+                )
+              : null,
             backgroundColor: _isScrolled ? Colors.black87 : Colors.transparent,
             elevation: _isScrolled ? 4 : 0,
             iconTheme: const IconThemeData(color: Colors.white),

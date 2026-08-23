@@ -28,13 +28,6 @@ class NavBar extends StatelessWidget {
           // Logo placeholder
           Row(
             children: [
-              if (!isDesktop)
-                IconButton(
-                  icon: Icon(Icons.menu, color: textColor),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                  padding: const EdgeInsets.only(right: 16),
-                  constraints: const BoxConstraints(),
-                ),
               Container(
                 width: 40,
                 height: 40,
