@@ -1,0 +1,559 @@
+import 'package:flutter/material.dart';
+import 'dart:typed_data';
+import 'package:image_picker/image_picker.dart';
+import '../models/product.dart';
+import '../services/api_service.dart';
+import '../services/auth_service.dart';
+
+class AdminEditProductView extends StatefulWidget {
+  final Product product;
+  final VoidCallback onBack;
+
+  const AdminEditProductView({super.key, required this.product, required this.onBack});
+
+  @override
+  State<AdminEditProductView> createState() => _AdminEditProductViewState();
+}
+
+class _AdminEditProductViewState extends State<AdminEditProductView> {
+  final ApiService _apiService = ApiService();
+  bool _isUploading = false;
+
+  late TextEditingController _titleController;
+  late TextEditingController _shortTitleController;
+  late TextEditingController _categoryController;
+  late TextEditingController _shortDescController;
+  late TextEditingController _detailedDescController;
+  late TextEditingController _yearController;
+  late String _status;
+
+  List<TextEditingController> _benefitControllers = [];
+  List<TextEditingController> _parameterControllers = [];
+  List<TextEditingController> _techControllers = [];
+  List<Map<String, TextEditingController>> _specControllers = [];
+  
+  List<ProductImage> _existingImages = [];
+  List<XFile> _newImages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.product.title);
+    _shortTitleController = TextEditingController(text: widget.product.shortTitle);
+    _categoryController = TextEditingController(text: widget.product.category);
+    _shortDescController = TextEditingController(text: widget.product.shortDescription);
+    _detailedDescController = TextEditingController(text: widget.product.detailedDescription);
+    _yearController = TextEditingController(text: widget.product.year);
+    _status = widget.product.status;
+    
+    _existingImages = List.from(widget.product.images);
+
+    if (widget.product.benefits.isEmpty) {
+      _benefitControllers.add(TextEditingController());
+    } else {
+      for (var b in widget.product.benefits) {
+        _benefitControllers.add(TextEditingController(text: b));
+      }
+    }
+
+    if (widget.product.parameters.isEmpty) {
+      _parameterControllers.add(TextEditingController());
+    } else {
+      for (var p in widget.product.parameters) {
+        _parameterControllers.add(TextEditingController(text: p));
+      }
+    }
+
+    if (widget.product.technologies.isEmpty) {
+      _techControllers.add(TextEditingController());
+    } else {
+      for (var t in widget.product.technologies) {
+        _techControllers.add(TextEditingController(text: t));
+      }
+    }
+
+    if (widget.product.specifications.isEmpty) {
+      _specControllers.add({'param': TextEditingController(), 'val': TextEditingController()});
+    } else {
+      for (var s in widget.product.specifications) {
+        _specControllers.add({'param': TextEditingController(text: s.parameter), 'val': TextEditingController(text: s.value)});
+      }
+    }
+  }
+
+  Future<void> _pickImages() async {
+    if (_existingImages.length + _newImages.length >= 3) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Maximum 3 images allowed')));
+      return;
+    }
+    final picker = ImagePicker();
+    final picked = await picker.pickMultiImage();
+    if (picked.isNotEmpty) {
+      setState(() {
+        _newImages.addAll(picked);
+        if (_existingImages.length + _newImages.length > 3) {
+          int allowed = 3 - _existingImages.length;
+          _newImages = _newImages.sublist(0, allowed);
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Limited to 3 images maximum')));
+        }
+      });
+    }
+  }
+
+  Future<void> _saveChanges() async {
+    if (_titleController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Title is required')));
+      return;
+    }
+
+    setState(() => _isUploading = true);
+
+    try {
+      List<Map<String, dynamic>> finalImages = _existingImages.map((e) => <String, dynamic>{'url': e.url, 'cloudinaryPublicId': e.publicId}).toList();
+
+      if (_newImages.isNotEmpty) {
+        List<Uint8List> bytesList = [];
+        List<String> filenames = [];
+        for (var file in _newImages) {
+          bytesList.add(await file.readAsBytes());
+          filenames.add(file.name);
+        }
+        var uploaded = await _apiService.uploadMultipleImages(bytesList, filenames);
+        finalImages.addAll(uploaded);
+      }
+
+      List<String> benefitsList = _benefitControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
+      List<String> paramsList = _parameterControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
+      List<String> techsList = _techControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
+      
+      List<Map<String, String>> specsList = _specControllers
+          .map((e) => {'parameter': e['param']!.text.trim(), 'value': e['val']!.text.trim()})
+          .where((e) => e['parameter']!.isNotEmpty && e['value']!.isNotEmpty)
+          .toList();
+
+      final token = await AuthService().getIdToken();
+      if (token == null) throw Exception("Authentication required");
+
+      await _apiService.updateProduct(widget.product.id, {
+        'title': _titleController.text.trim(),
+        'shortTitle': _shortTitleController.text.trim(),
+        'category': _categoryController.text.trim(),
+        'shortDescription': _shortDescController.text.trim(),
+        'detailedDescription': _detailedDescController.text.trim(),
+        'year': _yearController.text.trim(),
+        'status': _status,
+        'images': finalImages,
+        'benefits': benefitsList,
+        'specifications': specsList,
+        'parameters': paramsList,
+        'technologies': techsList,
+      }, token);
+
+      widget.onBack();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+        setState(() => _isUploading = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: widget.onBack,
+                    child: const Row(
+                      children: [
+                        Icon(Icons.arrow_back, color: Color(0xFF14B885), size: 16),
+                        SizedBox(width: 4),
+                        Text('Back to Products', style: TextStyle(color: Color(0xFF14B885), fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Edit Product', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  const Text('Update product information and details', style: TextStyle(color: Colors.black54)),
+                ],
+              ),
+              Row(
+                children: [
+                  OutlinedButton(
+                    onPressed: widget.onBack,
+                    style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)),
+                    child: const Text('Cancel', style: TextStyle(color: Colors.black)),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: _isUploading ? null : _saveChanges,
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885), padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)),
+                    child: _isUploading
+                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                        : const Text('Save Changes', style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+              )
+            ],
+          ),
+          const SizedBox(height: 32),
+          
+          // Form Layout
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // LEFT COLUMN
+                Expanded(
+                  flex: 5,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildWhiteContainer(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Product Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 24),
+                              Row(
+                                children: [
+                                  Expanded(child: _buildTextField('Product Title *', _titleController)),
+                                  const SizedBox(width: 16),
+                                  Expanded(child: _buildTextField('Short Title', _shortTitleController)),
+                                  const SizedBox(width: 16),
+                                  Expanded(child: _buildTextField('Category *', _categoryController)),
+                                  const SizedBox(width: 16),
+                                  Expanded(child: _buildTextField('Year', _yearController)),
+                                ],
+                              ),
+                              const SizedBox(height: 24),
+                              _buildTextField('Short Description *', _shortDescController, maxLines: 3),
+                              const SizedBox(height: 24),
+                              _buildTextField('Detailed Description', _detailedDescController, maxLines: 5, isRichText: true),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildWhiteContainer(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Key Benefits', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 24),
+                              ..._benefitControllers.asMap().entries.map((e) => _buildDynamicListItem(
+                                    TextField(controller: e.value, style: const TextStyle(color: Colors.black), decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Enter benefit', isDense: true, hintStyle: TextStyle(color: Colors.black38))),
+                                    () => setState(() => _benefitControllers.removeAt(e.key)),
+                                  )),
+                              const SizedBox(height: 16),
+                              Center(
+                                child: TextButton.icon(
+                                  onPressed: () => setState(() => _benefitControllers.add(TextEditingController())),
+                                  icon: const Icon(Icons.add, color: Color(0xFF14B885)),
+                                  label: const Text('Add Benefit', style: TextStyle(color: Color(0xFF14B885))),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildWhiteContainer(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Parameters', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 24),
+                              ..._parameterControllers.asMap().entries.map((e) => _buildDynamicListItem(
+                                    TextField(controller: e.value, style: const TextStyle(color: Colors.black), decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Enter parameter', isDense: true, hintStyle: TextStyle(color: Colors.black38))),
+                                    () => setState(() => _parameterControllers.removeAt(e.key)),
+                                  )),
+                              const SizedBox(height: 16),
+                              Center(
+                                child: TextButton.icon(
+                                  onPressed: () => setState(() => _parameterControllers.add(TextEditingController())),
+                                  icon: const Icon(Icons.add, color: Color(0xFF14B885)),
+                                  label: const Text('Add Parameter', style: TextStyle(color: Color(0xFF14B885))),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildWhiteContainer(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Technologies', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 24),
+                              ..._techControllers.asMap().entries.map((e) => _buildDynamicListItem(
+                                    TextField(controller: e.value, style: const TextStyle(color: Colors.black), decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Enter technology', isDense: true, hintStyle: TextStyle(color: Colors.black38))),
+                                    () => setState(() => _techControllers.removeAt(e.key)),
+                                  )),
+                              const SizedBox(height: 16),
+                              Center(
+                                child: TextButton.icon(
+                                  onPressed: () => setState(() => _techControllers.add(TextEditingController())),
+                                  icon: const Icon(Icons.add, color: Color(0xFF14B885)),
+                                  label: const Text('Add Technology', style: TextStyle(color: Color(0xFF14B885))),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 24),
+                
+                // RIGHT COLUMN
+                Expanded(
+                  flex: 5,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildWhiteContainer(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text('Product Images (Carousel)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                  ElevatedButton.icon(
+                                    onPressed: _pickImages,
+                                    icon: const Icon(Icons.add, color: Colors.white, size: 16),
+                                    label: const Text('Add Images', style: TextStyle(color: Colors.white)),
+                                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885)),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              const Text('Recommended: 1200x800px, JPG/PNG, Max 5MB', style: TextStyle(color: Colors.black54, fontSize: 12)),
+                              const SizedBox(height: 16),
+                              SizedBox(
+                                height: 120,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    ..._existingImages.map((e) => _buildImageThumbnail(
+                                          Image.network(e.url, fit: BoxFit.cover),
+                                          () => setState(() => _existingImages.remove(e)),
+                                        )),
+                                    ..._newImages.map((e) => _buildImageThumbnail(
+                                          const Center(child: Icon(Icons.image, color: Colors.grey)), // Placeholder until uploaded
+                                          () => setState(() => _newImages.remove(e)),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                color: Colors.grey[100],
+                                child: const Row(
+                                  children: [
+                                    Icon(Icons.info_outline, size: 16, color: Colors.black54),
+                                    SizedBox(width: 8),
+                                    Text('Images will appear in the product details carousel.', style: TextStyle(color: Colors.black54, fontSize: 12)),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildWhiteContainer(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Technical Specifications', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 24),
+                              ..._specControllers.asMap().entries.map((e) => _buildDynamicListItem(
+                                    Row(
+                                      children: [
+                                        Expanded(flex: 2, child: TextField(controller: e.value['param'], style: const TextStyle(color: Colors.black), decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Parameter', isDense: true, hintStyle: TextStyle(color: Colors.black38)))),
+                                        const SizedBox(width: 16),
+                                        Expanded(flex: 3, child: TextField(controller: e.value['val'], style: const TextStyle(color: Colors.black), decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Value', isDense: true, hintStyle: TextStyle(color: Colors.black38)))),
+                                      ],
+                                    ),
+                                    () => setState(() => _specControllers.removeAt(e.key)),
+                                  )),
+                              const SizedBox(height: 16),
+                              Center(
+                                child: TextButton.icon(
+                                  onPressed: () => setState(() => _specControllers.add({'param': TextEditingController(), 'val': TextEditingController()})),
+                                  icon: const Icon(Icons.add, color: Color(0xFF14B885)),
+                                  label: const Text('Add Specification', style: TextStyle(color: Color(0xFF14B885))),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildWhiteContainer(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                                  const Text('Status', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                                  DropdownButton<String>(
+                                    value: _status,
+                                    onChanged: (String? newValue) {
+                                      if (newValue != null) {
+                                        setState(() {
+                                          _status = newValue;
+                                        });
+                                      }
+                                    },
+                                    items: <String>['Active', 'Draft']
+                                        .map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value, style: TextStyle(color: value == 'Active' ? Colors.green : Colors.orange)),
+                                      );
+                                    }).toList(),
+                                  )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWhiteContainer({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller, {int maxLines = 1, bool isRichText = false}) {
+    bool hasAsterisk = label.endsWith('*');
+    String title = hasAsterisk ? label.substring(0, label.length - 1).trim() : label;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        RichText(
+          text: TextSpan(
+            style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 12),
+            children: [
+              TextSpan(text: title),
+              if (hasAsterisk)
+                const TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        if (isRichText)
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey[300]!),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+              color: Colors.white,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                const Text('Normal', style: TextStyle(fontSize: 12)),
+                const Icon(Icons.arrow_drop_down, size: 16),
+                const SizedBox(width: 16),
+                const Icon(Icons.format_bold, size: 16, color: Colors.black54),
+                const SizedBox(width: 16),
+                const Icon(Icons.format_italic, size: 16, color: Colors.black54),
+                const SizedBox(width: 16),
+                const Icon(Icons.format_underlined, size: 16, color: Colors.black54),
+                const SizedBox(width: 16),
+                const Icon(Icons.format_list_bulleted, size: 16, color: Colors.black54),
+                const SizedBox(width: 16),
+                const Icon(Icons.format_list_numbered, size: 16, color: Colors.black54),
+                const SizedBox(width: 16),
+                const Icon(Icons.code, size: 16, color: Colors.black54),
+              ],
+            ),
+          ),
+        TextField(
+          controller: controller,
+          maxLines: maxLines,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: isRichText ? const BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)) : BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey[300]!),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: isRichText ? const BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)) : BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey[300]!),
+            ),
+            contentPadding: const EdgeInsets.all(16),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDynamicListItem(Widget inputField, VoidCallback onDelete) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        children: [
+          Expanded(child: inputField),
+          IconButton(icon: const Icon(Icons.delete_outline, color: Colors.redAccent), onPressed: onDelete),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImageThumbnail(Widget imageChild, VoidCallback onDelete) {
+    return Container(
+      width: 160,
+      margin: const EdgeInsets.only(right: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(child: ClipRRect(borderRadius: BorderRadius.circular(8), child: imageChild)),
+          Positioned(
+            top: 8,
+            right: 8,
+            child: GestureDetector(
+              onTap: onDelete,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 16),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
