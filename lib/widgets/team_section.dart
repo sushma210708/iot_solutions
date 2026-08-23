@@ -43,32 +43,37 @@ class _TeamSectionState extends State<TeamSection> {
       );
     }
 
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
     // Use only dynamic mentors
     final displayMentors = _mentors;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 64.0, vertical: 64.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 64.0 : 24.0,
+        vertical: isDesktop ? 64.0 : 32.0,
+      ),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Meet Our Mentors',
             style: TextStyle(
-              fontSize: 40,
+              fontSize: isDesktop ? 40 : 32,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'Our diverse team brings together expertise in IoT, AI, and energy management to\ndeliver cutting-edge solutions.',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: isDesktop ? 18 : 16,
               color: Colors.white70,
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 48),
+          SizedBox(height: isDesktop ? 48 : 32),
           Wrap(
             spacing: 24,
             runSpacing: 24,
