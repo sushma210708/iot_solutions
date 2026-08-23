@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> {
         slivers: [
           SliverAppBar(
             pinned: true,
+            automaticallyImplyLeading: false,
             backgroundColor: _isScrolled ? Colors.black87 : Colors.transparent,
             elevation: _isScrolled ? 4 : 0,
             iconTheme: const IconThemeData(color: Colors.white),
