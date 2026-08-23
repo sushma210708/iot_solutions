@@ -43,8 +43,13 @@ class _OurProductsSectionState extends State<OurProductsSection> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
+    
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 64.0, vertical: 64.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 64.0 : 24.0, 
+        vertical: isDesktop ? 64.0 : 32.0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -64,32 +69,32 @@ class _OurProductsSectionState extends State<OurProductsSection> {
             ),
           ),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'Innovative Products',
             style: TextStyle(
-              fontSize: 48,
+              fontSize: isDesktop ? 48 : 32,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
           ),
-          const Text(
+          Text(
             'For a Smarter Tomorrow',
             style: TextStyle(
-              fontSize: 48,
+              fontSize: isDesktop ? 48 : 32,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF14B885),
+              color: const Color(0xFF14B885),
             ),
           ),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'Explore our diverse portfolio of IoT and AI-powered solutions\ndesigned to optimize energy usage and drive efficiency.',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: isDesktop ? 18 : 16,
               color: Colors.white70,
               height: 1.5,
             ),
           ),
-          const SizedBox(height: 64),
+          SizedBox(height: isDesktop ? 64 : 32),
           _isLoading
               ? const Center(child: CircularProgressIndicator(color: Color(0xFF14B885)))
               : _products.isEmpty
@@ -109,13 +114,13 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                         itemCount: _products.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.only(right: 24.0),
+                            padding: EdgeInsets.only(right: isDesktop ? 24.0 : 16.0),
                             child: _productCard(_products[index]),
                           );
                         },
                       ),
                     ),
-          const SizedBox(height: 64),
+          SizedBox(height: isDesktop ? 64 : 32),
           Center(
             child: OutlinedButton(
               onPressed: () {},

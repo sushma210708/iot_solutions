@@ -43,6 +43,8 @@ class _HeroSectionState extends State<HeroSection> {
       );
     }
 
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
+
     // Default values if no data or error
     final badgeText = _heroContent?.badge.isNotEmpty == true ? _heroContent!.badge : 'Intelligent Energy Solutions';
     final title1 = _heroContent?.titleLine1.isNotEmpty == true ? _heroContent!.titleLine1 : 'Save Energy,';
@@ -51,167 +53,174 @@ class _HeroSectionState extends State<HeroSection> {
         ? _heroContent!.description 
         : 'Revolutionizing industrial energy consumption through IoT and AI-powered\nsolutions. Save up to 10% on energy costs.';
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 64.0, vertical: 48.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Left Side Content
-          Expanded(
-            flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Intelligent Energy Solutions Badge
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white24),
+    final leftContent = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Intelligent Energy Solutions Badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white24),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Color(0xFF14B885),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                badgeText,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 32),
+        // Heading
+        Text(
+          title1,
+          style: TextStyle(
+            fontSize: isDesktop ? 72 : 48,
+            fontWeight: FontWeight.w900,
+            height: 1.1,
+          ),
+        ),
+        Text(
+          title2,
+          style: TextStyle(
+            fontSize: isDesktop ? 72 : 48,
+            fontWeight: FontWeight.w900,
+            color: const Color(0xFF14B885),
+            height: 1.1,
+          ),
+        ),
+        const SizedBox(height: 24),
+        // Subtitle
+        Text(
+          description,
+          style: TextStyle(
+            fontSize: isDesktop ? 18 : 16,
+            color: Colors.white60,
+            height: 1.5,
+          ),
+        ),
+        const SizedBox(height: 48),
+        // Buttons
+        Wrap(
+          spacing: 24,
+          runSpacing: 16,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF14B885),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Contact Us',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFF14B885),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        badgeText,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_forward, size: 18),
+                ],
+              ),
+            ),
+            OutlinedButton(
+              onPressed: () {},
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                side: const BorderSide(color: Colors.white24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Watch Video',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                ),
-                const SizedBox(height: 32),
-                // Heading
-                Text(
-                  title1,
-                  style: const TextStyle(
-                    fontSize: 72,
-                    fontWeight: FontWeight.w900,
-                    height: 1.1,
-                  ),
-                ),
-                Text(
-                  title2,
-                  style: const TextStyle(
-                    fontSize: 72,
-                    fontWeight: FontWeight.w900,
-                    color: Color(0xFF14B885),
-                    height: 1.1,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                // Subtitle
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.white60,
-                    height: 1.5,
-                  ),
-                ),
-                const SizedBox(height: 48),
-                // Buttons
-                Wrap(
-                  spacing: 24,
-                  runSpacing: 16,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF14B885),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Contact Us',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(Icons.arrow_forward, size: 18),
-                        ],
-                      ),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                        side: const BorderSide(color: Colors.white24),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Watch Video',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(Icons.play_circle_outline, size: 18, color: Color(0xFF14B885)),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 64),
-                // Info Cards
-                Row(
-                  children: [
-                    _infoCard('10%', 'Energy Savings'),
-                    const SizedBox(width: 24),
-                    _infoCard('24/7', 'Monitoring'),
-                  ],
-                ),
+                  SizedBox(width: 8),
+                  Icon(Icons.play_circle_outline, size: 18, color: Color(0xFF14B885)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 64),
+        // Info Cards
+        Wrap(
+          spacing: 24,
+          runSpacing: 24,
+          children: [
+            _infoCard('10%', 'Energy Savings'),
+            _infoCard('24/7', 'Monitoring'),
+          ],
+        ),
+      ],
+    );
+
+    final rightContent = _heroContent?.imageUrl.isNotEmpty == true
+        ? Container(
+            height: isDesktop ? 500 : 300,
+            margin: EdgeInsets.only(left: isDesktop ? 32 : 0, top: isDesktop ? 0 : 32),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(
+                image: NetworkImage(_heroContent!.imageUrl),
+                fit: BoxFit.cover,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF14B885).withOpacity(0.1),
+                  blurRadius: 40,
+                  offset: const Offset(0, 20),
+                )
               ],
             ),
-          ),
-          
-          // Right Side Content
-          Expanded(
-            flex: 1,
-            child: _heroContent?.imageUrl.isNotEmpty == true
-                ? Container(
-                    height: 500,
-                    margin: const EdgeInsets.only(left: 32),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      image: DecorationImage(
-                        image: NetworkImage(_heroContent!.imageUrl),
-                        fit: BoxFit.cover,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF14B885).withOpacity(0.1),
-                          blurRadius: 40,
-                          offset: const Offset(0, 20),
-                        )
-                      ],
-                    ),
-                  )
-                : const SizedBox(),
-          ),
-        ],
+          )
+        : const SizedBox();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 64.0 : 24.0,
+        vertical: isDesktop ? 48.0 : 24.0,
       ),
+      child: isDesktop
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 1, child: leftContent),
+                Expanded(flex: 1, child: rightContent),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                leftContent,
+                rightContent,
+              ],
+            ),
     );
   }
 

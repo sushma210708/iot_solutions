@@ -42,32 +42,38 @@ class _AchievementsSectionState extends State<AchievementsSection> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 64.0, vertical: 64.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 64.0 : 24.0,
+        vertical: isDesktop ? 64.0 : 32.0,
+      ),
       child: Column(
         children: [
-          const Text(
+          Text(
             'Our Achievements',
             style: TextStyle(
-              fontSize: 40,
+              fontSize: isDesktop ? 40 : 32,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'Recognition for our innovative solutions in energy management and sustainability',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: isDesktop ? 18 : 16,
               color: Colors.white70,
             ),
           ),
-          const SizedBox(height: 48),
+          SizedBox(height: isDesktop ? 48 : 32),
           if (_isLoading)
-            const Center(child: CircularProgressIndicator())
+            const Center(child: CircularProgressIndicator(color: Color(0xFF14B885)))
           else if (_error.isNotEmpty)
-            Center(child: Text('Error loading achievements', style: const TextStyle(color: Colors.red)))
+            const Center(child: Text('Error loading achievements', style: TextStyle(color: Colors.red)))
           else if (_achievements.isEmpty)
             const Center(child: Text('No achievements found', style: TextStyle(color: Colors.white70)))
           else
@@ -85,6 +91,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
   Widget _achievementCard(Achievement achievement) {
     return Container(
       width: 350,
+      height: 550, // Enforce equal alignment size for all cards
       decoration: BoxDecoration(
         color: const Color(0xFF1E272D),
         borderRadius: BorderRadius.circular(16),
@@ -114,38 +121,45 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                     ),
                   ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  achievement.title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    achievement.title,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  achievement.year.toString(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF14B885),
+                  const SizedBox(height: 12),
+                  Text(
+                    achievement.year.toString(),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF14B885),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  achievement.description,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white60,
-                    height: 1.5,
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: Text(
+                      achievement.description,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.white60,
+                        height: 1.5,
+                      ),
+                      overflow: TextOverflow.fade,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

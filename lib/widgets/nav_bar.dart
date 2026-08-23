@@ -18,9 +18,10 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = isScrolled ? Colors.black87 : Colors.white70;
+    final isDesktop = MediaQuery.of(context).size.width >= 900;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 64.0, vertical: 24.0),
+      padding: EdgeInsets.symmetric(horizontal: isDesktop ? 64.0 : 16.0, vertical: isDesktop ? 24.0 : 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -58,28 +59,29 @@ class NavBar extends StatelessWidget {
             ],
           ),
           // Navigation Links
-          Row(
-            children: [
-              _navItem('Our Product', textColor, onTap: onProductClick),
-              const SizedBox(width: 24),
-              _navItem('Mentors', textColor, onTap: onTeamClick),
-              const SizedBox(width: 24),
-              _navItem('More', textColor, hasDropdown: true),
-              const SizedBox(width: 24),
-              _navItem('Contact Us', textColor, onTap: onContactClick),
-              const SizedBox(width: 24),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF14B885),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          if (isDesktop)
+            Row(
+              children: [
+                _navItem('Our Product', textColor, onTap: onProductClick),
+                const SizedBox(width: 24),
+                _navItem('Mentors', textColor, onTap: onTeamClick),
+                const SizedBox(width: 24),
+                _navItem('More', textColor, hasDropdown: true),
+                const SizedBox(width: 24),
+                _navItem('Contact Us', textColor, onTap: onContactClick),
+                const SizedBox(width: 24),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF14B885),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  ),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+                  },
+                  child: const Text('Login', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginPage()));
-                },
-                child: const Text('Login', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              ),
-            ],
-          )
+              ],
+            )
         ],
       ),
     );

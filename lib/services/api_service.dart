@@ -8,9 +8,12 @@ import '../models/hero.dart';
 import '../models/admin_user.dart';
 import '../models/mentor.dart';
 import '../models/footer.dart';
+import 'package:flutter/foundation.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:5000/api';
+  static const String _localUrl = 'http://localhost:5000/api';
+  static const String _prodUrl = 'https://iot-solutions.onrender.com/api';
+  static const String baseUrl = kReleaseMode ? _prodUrl : _localUrl;
 
   Future<List<Product>> getProducts() async {
     final response = await http.get(Uri.parse('$baseUrl/products'));
