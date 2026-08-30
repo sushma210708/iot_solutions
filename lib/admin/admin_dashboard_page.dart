@@ -150,7 +150,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       if (newImage != null) {
                         final bytes = await newImage!.readAsBytes();
                         final res = await _apiService.uploadImage(bytes, newImage!.name);
-                        imgUrl = res['url'];
+                        imgUrl = res['imageUrl'];
                         pubId = res['publicId'];
                       }
 
@@ -545,8 +545,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           runSpacing: 12,
                           children: [
                             _actionButton('+ Add Product', () => widget.onNavigate(1, action: 'add')),
-                            _actionButton('+ Add Achievement', () => widget.onNavigate(3, action: 'add')),
-                            _actionButton('+ Add Mentor', () => widget.onNavigate(2, action: 'add')),
+                            _actionButton('+ Add Achievement', () => widget.onNavigate(5, action: 'add')),
+                            _actionButton('+ Add Mentor', () => widget.onNavigate(4, action: 'add')),
                             if (_currentUser?.permissions.contains('manage_homepage') == true || _currentUser?.role == 'super_admin') ...[
                               _actionButton('Edit Homepage', () => _showEditHeroDialog()),
                               _actionButton('Edit Footer', () => _showEditFooterDialog()),
@@ -600,33 +600,36 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   if (_admins.isEmpty)
                     const Text('No admins found or no permission to view.', style: TextStyle(color: Colors.black54))
                   else
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        headingRowColor: MaterialStateProperty.all(Colors.grey[50]),
-                        columns: const [
-                          DataColumn(label: Text('Name', style: TextStyle(fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text('Email', style: TextStyle(fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text('Role', style: TextStyle(fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text('Permissions', style: TextStyle(fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold))),
-                          DataColumn(label: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold))),
-                        ],
-                        rows: _admins.map((admin) => DataRow(
-                          cells: [
-                            DataCell(Text(admin.name)),
-                            DataCell(Text(admin.email)),
-                            DataCell(Text(admin.role)),
-                            DataCell(Text('${admin.permissions.length} perms')),
-                            DataCell(Text(admin.status, style: TextStyle(color: admin.status == 'active' ? Colors.green : Colors.red))),
-                            DataCell(Row(
-                              children: [
-                                TextButton(onPressed: () {}, child: const Text('Edit')),
-                                TextButton(onPressed: () {}, child: const Text('Remove', style: TextStyle(color: Colors.red))),
-                              ],
-                            )),
-                          ]
-                        )).toList(),
+                    Theme(
+                      data: ThemeData.light(),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          headingRowColor: MaterialStateProperty.all(Colors.grey[50]),
+                          columns: const [
+                            DataColumn(label: Text('Name', style: TextStyle(fontWeight: FontWeight.bold))),
+                            DataColumn(label: Text('Email', style: TextStyle(fontWeight: FontWeight.bold))),
+                            DataColumn(label: Text('Role', style: TextStyle(fontWeight: FontWeight.bold))),
+                            DataColumn(label: Text('Permissions', style: TextStyle(fontWeight: FontWeight.bold))),
+                            DataColumn(label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold))),
+                            DataColumn(label: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold))),
+                          ],
+                          rows: _admins.map((admin) => DataRow(
+                            cells: [
+                              DataCell(Text(admin.name)),
+                              DataCell(Text(admin.email)),
+                              DataCell(Text(admin.role)),
+                              DataCell(Text('${admin.permissions.length} perms')),
+                              DataCell(Text(admin.status, style: TextStyle(color: admin.status == 'active' ? Colors.green : Colors.red))),
+                              DataCell(Row(
+                                children: [
+                                  TextButton(onPressed: () {}, child: const Text('Edit')),
+                                  TextButton(onPressed: () {}, child: const Text('Remove', style: TextStyle(color: Colors.red))),
+                                ],
+                              )),
+                            ]
+                          )).toList(),
+                        ),
                       ),
                     ),
                 ],

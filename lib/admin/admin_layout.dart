@@ -3,11 +3,17 @@ import 'admin_dashboard_page.dart';
 import 'admin_products_page.dart';
 import 'admin_achievements_page.dart';
 import 'admin_mentors_page.dart';
+import 'admin_updates_page.dart';
+import 'admin_hero_page.dart';
+import 'admin_inquiries_page.dart';
 import '../pages/home_page.dart';
 import '../pages/login_page.dart';
 import '../services/auth_service.dart';
 import '../services/api_service.dart';
 import '../models/admin_user.dart';
+
+import 'admin_challenges_page.dart';
+import 'admin_projects_page.dart';
 
 class AdminLayout extends StatefulWidget {
   const AdminLayout({super.key});
@@ -17,10 +23,11 @@ class AdminLayout extends StatefulWidget {
 }
 
 class _AdminLayoutState extends State<AdminLayout> {
-  int _selectedIndex = 1; // Default to Products
+  int _selectedIndex = 1; // Default to Solutions
   final GlobalKey<AdminProductsPageState> _productsKey = GlobalKey<AdminProductsPageState>();
   final GlobalKey<AdminMentorsPageState> _mentorsKey = GlobalKey<AdminMentorsPageState>();
   final GlobalKey<AdminAchievementsPageState> _achievementsKey = GlobalKey<AdminAchievementsPageState>();
+  final GlobalKey<AdminUpdatesPageState> _updatesKey = GlobalKey<AdminUpdatesPageState>();
   
   final AuthService _authService = AuthService();
   final ApiService _apiService = ApiService();
@@ -80,19 +87,24 @@ class _AdminLayoutState extends State<AdminLayout> {
           Future.delayed(const Duration(milliseconds: 50), () {
             _productsKey.currentState?.showAddProductDialog();
           });
-        } else if (index == 2 && action == 'add') {
+        } else if (index == 4 && action == 'add') {
           Future.delayed(const Duration(milliseconds: 50), () {
             _mentorsKey.currentState?.showMentorDialog();
           });
-        } else if (index == 3 && action == 'add') {
+        } else if (index == 5 && action == 'add') {
           Future.delayed(const Duration(milliseconds: 50), () {
             _achievementsKey.currentState?.showAchievementDialog();
           });
         }
       }),
-      AdminProductsPage(key: _productsKey),
+      AdminProductsPage(key: _productsKey), // Solutions
+      const AdminProjectsPage(), // Case Studies
+      const AdminChallengesPage(),
       AdminMentorsPage(key: _mentorsKey),
       AdminAchievementsPage(key: _achievementsKey),
+      AdminUpdatesPage(key: _updatesKey),
+      const AdminHeroPage(),
+      const AdminInquiriesPage(),
       const Center(child: Text('Settings')),
     ];
   }
@@ -138,21 +150,31 @@ class _AdminLayoutState extends State<AdminLayout> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                _navItem(Icons.dashboard_outlined, 'Dashboard', 0),
-                _navItem(Icons.inventory_2_outlined, 'Products', 1),
-                _navItem(Icons.people_outline, 'Mentors', 2),
-                _navItem(Icons.emoji_events_outlined, 'Achievements', 3),
-                _navItem(Icons.settings_outlined, 'Settings', 4),
-                const Spacer(),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      _navItem(Icons.dashboard_outlined, 'Dashboard', 0),
+                      _navItem(Icons.precision_manufacturing_outlined, 'Solutions', 1),
+                      _navItem(Icons.cases_outlined, 'Case Studies', 2),
+                      _navItem(Icons.lightbulb_outline, 'Challenges', 3),
+                      _navItem(Icons.people_outline, 'Mentors', 4),
+                      _navItem(Icons.emoji_events_outlined, 'Journey', 5),
+                      _navItem(Icons.campaign_outlined, 'Insights', 6),
+                      _navItem(Icons.view_carousel_outlined, 'Hero Banner', 7),
+                      _navItem(Icons.mail_outline, 'Inquiries', 8),
+                      _navItem(Icons.settings_outlined, 'Settings', 9),
+                    ],
+                  ),
+                ),
                 const Divider(),
-                _navItem(Icons.logout, 'Logout', 5, isLogout: true),
+                _navItem(Icons.logout, 'Logout', 10, isLogout: true),
                 const SizedBox(height: 24),
               ],
             ),
           ),
           // Main Content
           Expanded(
-            child: _pages[_selectedIndex == 5 ? 0 : _selectedIndex],
+            child: _pages[_selectedIndex],
           ),
         ],
       ),

@@ -108,26 +108,29 @@ class AdminProductsPageState extends State<AdminProductsPage> {
                   BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4)),
                 ],
               ),
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ListView(
-                      padding: const EdgeInsets.all(24.0),
-                      children: [
-                        // Table Header
-                        const Row(
-                          children: [
-                            Expanded(flex: 1, child: Text('Image', style: TextStyle(fontWeight: FontWeight.bold))),
-                            Expanded(flex: 2, child: Text('Title', style: TextStyle(fontWeight: FontWeight.bold))),
-                            Expanded(flex: 2, child: Text('Category', style: TextStyle(fontWeight: FontWeight.bold))),
-                            Expanded(flex: 1, child: Text('Status', style: TextStyle(fontWeight: FontWeight.bold))),
-                            Expanded(flex: 1, child: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold))),
-                          ],
-                        ),
-                        const Divider(height: 32),
-                        // Table Rows
-                        ..._products.map((product) => _buildProductRow(product)).toList(),
-                      ],
-                    ),
+              child: Theme(
+                data: ThemeData.light(),
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView(
+                        padding: const EdgeInsets.all(24.0),
+                        children: [
+                          // Table Header
+                          const Row(
+                            children: [
+                              Expanded(flex: 1, child: Text('Image', style: TextStyle(fontWeight: FontWeight.bold))),
+                              Expanded(flex: 2, child: Text('Title', style: TextStyle(fontWeight: FontWeight.bold))),
+                              Expanded(flex: 2, child: Text('Category', style: TextStyle(fontWeight: FontWeight.bold))),
+                              Expanded(flex: 1, child: Text('Status', style: TextStyle(fontWeight: FontWeight.bold))),
+                              Expanded(flex: 1, child: Text('Actions', style: TextStyle(fontWeight: FontWeight.bold))),
+                            ],
+                          ),
+                          const Divider(height: 32),
+                          // Table Rows
+                          ..._products.map((product) => _buildProductRow(product)).toList(),
+                        ],
+                      ),
+              ),
             ),
           ),
         ],

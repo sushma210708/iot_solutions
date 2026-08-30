@@ -5,9 +5,14 @@ import 'package:http_parser/http_parser.dart';
 import '../models/product.dart';
 import '../models/achievement.dart';
 import '../models/hero.dart';
+import '../models/project.dart';
+import '../models/update.dart';
 import '../models/admin_user.dart';
 import '../models/mentor.dart';
 import '../models/footer.dart';
+import '../models/inquiry.dart';
+import '../models/challenge.dart';
+import '../models/testimonial.dart';
 import 'package:flutter/foundation.dart';
 
 class ApiService {
@@ -377,6 +382,308 @@ class ApiService {
     );
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Failed to delete mentor');
+    }
+  }
+
+  // --- Projects ---
+
+  Future<List<Project>> getProjects() async {
+    final response = await http.get(Uri.parse('$baseUrl/projects'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        final List<dynamic> projectsJson = data['projects'];
+        return projectsJson.map((json) => Project.fromJson(json)).toList();
+      }
+    }
+    throw Exception('Failed to load projects');
+  }
+
+  Future<Project> getFeaturedProject() async {
+    final response = await http.get(Uri.parse('$baseUrl/projects/featured'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true && data['project'] != null) {
+        return Project.fromJson(data['project']);
+      }
+    }
+    throw Exception('Failed to load featured project');
+  }
+
+  Future<Project> createProject(Map<String, dynamic> projectData, String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/projects'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(projectData),
+    );
+    if (response.statusCode == 201) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        return Project.fromJson(data['project']);
+      }
+    }
+    throw Exception('Failed to create project');
+  }
+
+  Future<void> updateProject(String id, Map<String, dynamic> updates, String token) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/projects/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(updates),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update project');
+    }
+  }
+
+  Future<void> deleteProject(String id, String token) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/projects/$id'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to delete project');
+    }
+  }
+
+  // --- Updates ---
+
+  Future<List<AppUpdate>> getUpdates() async {
+    final response = await http.get(Uri.parse('$baseUrl/updates'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        final List<dynamic> updatesJson = data['updates'];
+        return updatesJson.map((json) => AppUpdate.fromJson(json)).toList();
+      }
+    }
+    throw Exception('Failed to load updates');
+  }
+
+  Future<List<AppUpdate>> getAllUpdatesAdmin(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/updates/admin'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        final List<dynamic> updatesJson = data['updates'];
+        return updatesJson.map((json) => AppUpdate.fromJson(json)).toList();
+      }
+    }
+    throw Exception('Failed to load updates for admin');
+  }
+
+  Future<AppUpdate> createUpdate(Map<String, dynamic> updateData, String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/updates'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(updateData),
+    );
+    if (response.statusCode == 201) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        return AppUpdate.fromJson(data['update']);
+      }
+    }
+    throw Exception('Failed to create update');
+  }
+
+  Future<void> updateAppUpdate(String id, Map<String, dynamic> updates, String token) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/updates/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(updates),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to modify update');
+    }
+  }
+
+  Future<void> deleteUpdate(String id, String token) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/updates/$id'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to delete update');
+    }
+  }
+
+  // --- Challenges ---
+
+  Future<List<Challenge>> getChallenges() async {
+    final response = await http.get(Uri.parse('$baseUrl/challenges'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        final List<dynamic> challengesJson = data['data'];
+        return challengesJson.map((json) => Challenge.fromJson(json)).toList();
+      }
+    }
+    throw Exception('Failed to load challenges');
+  }
+
+  Future<Challenge> createChallenge(Map<String, dynamic> challengeData, String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/challenges'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(challengeData),
+    );
+    if (response.statusCode == 201) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        return Challenge.fromJson(data['data']);
+      }
+    }
+    throw Exception('Failed to create challenge: ${response.body}');
+  }
+
+  Future<void> updateChallenge(String id, Map<String, dynamic> updates, String token) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/challenges/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(updates),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update challenge: ${response.body}');
+    }
+  }
+
+  Future<void> deleteChallenge(String id, String token) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/challenges/$id'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to delete challenge');
+    }
+  }
+
+  // --- Testimonials ---
+
+  Future<List<Testimonial>> getTestimonials() async {
+    final response = await http.get(Uri.parse('$baseUrl/testimonials'));
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        final List<dynamic> testimonialsJson = data['data'];
+        return testimonialsJson.map((json) => Testimonial.fromJson(json)).toList();
+      }
+    }
+    throw Exception('Failed to load testimonials');
+  }
+
+  Future<Testimonial> createTestimonial(Map<String, dynamic> testimonialData, String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/testimonials'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(testimonialData),
+    );
+    if (response.statusCode == 201) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        return Testimonial.fromJson(data['data']);
+      }
+    }
+    throw Exception('Failed to create testimonial: ${response.body}');
+  }
+
+  Future<void> updateTestimonial(String id, Map<String, dynamic> updates, String token) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/testimonials/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(updates),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update testimonial: ${response.body}');
+    }
+  }
+
+  Future<void> deleteTestimonial(String id, String token) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/testimonials/$id'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to delete testimonial');
+    }
+  }
+
+  // --- Inquiries ---
+
+  Future<void> createInquiry(Map<String, dynamic> data) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/inquiries'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(data),
+    );
+    if (response.statusCode != 201) {
+      throw Exception('Failed to submit inquiry: ${response.body}');
+    }
+  }
+
+  Future<List<Inquiry>> getInquiries(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/inquiries'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        final List<dynamic> inquiriesJson = data['inquiries'];
+        return inquiriesJson.map((json) => Inquiry.fromJson(json)).toList();
+      }
+    }
+    throw Exception('Failed to load inquiries: ${response.body}');
+  }
+
+  Future<void> updateInquiryStatus(String id, String status, String token) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/inquiries/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({'status': status}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update inquiry: ${response.body}');
+    }
+  }
+
+  Future<void> deleteInquiry(String id, String token) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/inquiries/$id'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to delete inquiry');
     }
   }
 }

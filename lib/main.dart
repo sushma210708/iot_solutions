@@ -4,6 +4,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'admin/admin_layout.dart';
+import 'pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,7 @@ class GreenFusionApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomePage(),
         '/admin': (context) => const AdminLayout(),
+        '/login': (context) => const LoginPage(),
       },
     );
   }

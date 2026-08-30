@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/mentor.dart';
+import 'custom_carousel.dart';
 
 class TeamSection extends StatefulWidget {
   const TeamSection({super.key});
@@ -74,12 +75,27 @@ class _TeamSectionState extends State<TeamSection> {
             ),
           ),
           SizedBox(height: isDesktop ? 48 : 32),
-          Wrap(
-            spacing: 24,
-            runSpacing: 24,
-            alignment: WrapAlignment.center,
-            children: displayMentors.map((m) => _teamMemberCard(m)).toList(),
-          ),
+          if (displayMentors.isEmpty)
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.02),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white12, style: BorderStyle.solid),
+              ),
+              child: const Center(
+                child: Text(
+                  'No mentors have been added yet.',
+                  style: TextStyle(color: Colors.white54, fontSize: 16),
+                ),
+              ),
+            )
+          else
+            CustomCarousel(
+              height: 480,
+              items: displayMentors.map((m) => _teamMemberCard(m)).toList(),
+            ),
         ],
       ),
     );
@@ -88,16 +104,20 @@ class _TeamSectionState extends State<TeamSection> {
   Widget _teamMemberCard(Mentor mentor) {
     return Container(
       width: 280,
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.02),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white12),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Image Placeholder or Network Image
           Container(
-            height: 300,
+            height: 280,
             decoration: BoxDecoration(
               color: const Color(0xFF1E272D),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white12),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               image: mentor.imageUrl.isNotEmpty
                   ? DecorationImage(
                       image: NetworkImage(mentor.imageUrl),
@@ -108,31 +128,58 @@ class _TeamSectionState extends State<TeamSection> {
             child: mentor.imageUrl.isEmpty
                 ? const Center(
                     child: Icon(
-                      Icons.person,
+                      Icons.person_outline,
                       size: 80,
                       color: Colors.white24,
                     ),
                   )
                 : null,
           ),
-          const SizedBox(height: 16),
-          Text(
-            mentor.name,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  mentor.name,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  mentor.role,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF14B885),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  width: 32,
+                  height: 2,
+                  color: Colors.white24,
+                ),
+                const SizedBox(height: 16),
+                const Row(
+                  children: [
+                    Text(
+                      'View Profile',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, size: 12, color: Colors.white70),
+                  ],
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            mentor.role,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF14B885),
-            ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

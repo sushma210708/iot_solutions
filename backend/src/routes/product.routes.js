@@ -15,7 +15,7 @@ router.route('/')
   .post(protect, requirePermission('manage_projects'), createProduct);
 
 router.route('/:id')
-  .get(protectFirebase, getProduct)
+  .get(getProduct)
   .put(protect, requirePermission('manage_projects'), updateProduct)
   .delete(protect, requirePermission('manage_projects'), deleteProduct);
 

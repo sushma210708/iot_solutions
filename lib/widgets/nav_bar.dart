@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 import '../pages/login_page.dart';
 
 class NavBar extends StatelessWidget {
-  final VoidCallback? onProductClick;
-  final VoidCallback? onTeamClick;
+  final VoidCallback? onSolutionsClick;
+  final VoidCallback? onProjectsClick;
+  final VoidCallback? onMentorsClick;
   final VoidCallback? onContactClick;
   final bool isScrolled;
 
   const NavBar({
     super.key,
-    this.onProductClick,
-    this.onTeamClick,
+    this.onSolutionsClick,
+    this.onProjectsClick,
+    this.onMentorsClick,
     this.onContactClick,
     this.isScrolled = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final textColor = isScrolled ? Colors.black87 : Colors.white70;
     final isDesktop = MediaQuery.of(context).size.width >= 900;
 
     return Padding(
@@ -35,11 +36,11 @@ class NavBar extends StatelessWidget {
                   color: Color(0xFF14B885),
                   shape: BoxShape.circle,
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'GF',
                     style: TextStyle(
-                      color: isScrolled ? Colors.white : const Color(0xFF161E24),
+                      color: Color(0xFF161E24),
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -62,23 +63,23 @@ class NavBar extends StatelessWidget {
           if (isDesktop)
             Row(
               children: [
-                _navItem('Our Product', textColor, onTap: onProductClick),
-                const SizedBox(width: 24),
-                _navItem('Mentors', textColor, onTap: onTeamClick),
-                const SizedBox(width: 24),
-                _navItem('More', textColor, hasDropdown: true),
-                const SizedBox(width: 24),
-                _navItem('Contact Us', textColor, onTap: onContactClick),
-                const SizedBox(width: 24),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF14B885),
+                _navItem('Solutions', Colors.white, onTap: onSolutionsClick),
+                const SizedBox(width: 32),
+                _navItem('Case Studies', Colors.white, onTap: onProjectsClick),
+                const SizedBox(width: 32),
+                _navItem('About', Colors.white, onTap: onMentorsClick),
+                const SizedBox(width: 32),
+                _navItem('Contact', Colors.white, onTap: onContactClick),
+                const SizedBox(width: 32),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Color(0xFF14B885)),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   ),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginPage()));
+                    Navigator.pushNamed(context, '/login');
                   },
-                  child: const Text('Login', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  child: const Text('Client Portal', style: TextStyle(color: Color(0xFF14B885), fontWeight: FontWeight.bold)),
                 ),
               ],
             )
@@ -98,8 +99,9 @@ class NavBar extends StatelessWidget {
               title,
               style: TextStyle(
                 color: textColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1,
               ),
             ),
             if (hasDropdown) ...[

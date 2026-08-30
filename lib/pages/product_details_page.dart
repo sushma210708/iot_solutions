@@ -4,6 +4,7 @@ import '../services/api_service.dart';
 import '../models/product.dart';
 import '../widgets/footer_section.dart';
 import '../services/auth_service.dart';
+import '../widgets/custom_carousel.dart';
 import 'login_page.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -18,6 +19,7 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   final ApiService _apiService = ApiService();
   Product? _product;
+  List<Product> _relatedProducts = [];
   bool _isLoading = true;
   String _error = '';
   int _currentImageIndex = 0;
@@ -65,9 +67,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       // In the normal flow, our_products_section.dart prevents logged-out users from reaching here.
 
       final product = await _apiService.getProductById(widget.productId, token ?? '');
+      final allProducts = await _apiService.getProducts();
       if (mounted) {
         setState(() {
           _product = product;
+          _relatedProducts = allProducts.where((p) => p.id != widget.productId).toList();
           _isLoading = false;
         });
         _startAutoSlide();
@@ -140,10 +144,25 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Main Image Carousel
-                      MouseRegion(
-                        onEnter: (_) => _pauseAutoSlide(),
-                        onExit: (_) => _resetAutoSlide(),
-                        child: Container(
+                      if (images.isNotEmpty)
+                        CustomCarousel(
+                          height: 400,
+                          autoPlay: images.length > 1,
+                          items: images.map((url) => Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF161E24),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: Colors.white12),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.network(url, fit: BoxFit.contain),
+                            ),
+                          )).toList(),
+                        )
+                      else
+                        Container(
                           height: 400,
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -151,79 +170,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(color: Colors.white12),
                           ),
-                          child: Stack(
-                            children: [
-                              if (currentImageUrl.isNotEmpty)
-                                Positioned.fill(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Image.network(currentImageUrl, fit: BoxFit.contain),
-                                  ),
-                                ),
-                              if (images.length > 1) ...[
-                                Positioned(
-                                  left: 16,
-                                  top: 180,
-                                  child: Container(
-                                    decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 20),
-                                      onPressed: () {
-                                        _resetAutoSlide();
-                                        setState(() {
-                                          _currentImageIndex = (_currentImageIndex - 1) % images.length;
-                                          if (_currentImageIndex < 0) _currentImageIndex = images.length - 1;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 16,
-                                  top: 180,
-                                  child: Container(
-                                    decoration: const BoxDecoration(color: Colors.black54, shape: BoxShape.circle),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
-                                      onPressed: () {
-                                        _resetAutoSlide();
-                                        setState(() {
-                                          _currentImageIndex = (_currentImageIndex + 1) % images.length;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                            ]
-                          ],
+                          child: const Center(child: Icon(Icons.engineering, size: 64, color: Colors.white24)),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                      if (images.length > 1) ...[
-                        const SizedBox(height: 16),
-                        // Pagination Dots
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(images.length, (index) {
-                            return GestureDetector(
-                              onTap: () {
-                                _resetAutoSlide();
-                                setState(() => _currentImageIndex = index);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 4),
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: index == _currentImageIndex ? const Color(0xFF14B885) : Colors.white54,
-                                ),
-                              ),
-                            );
-                          }),
-                        ),
-                      ],
                       
                       const SizedBox(height: 48),
                       const Text('Key Benefits', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
@@ -303,8 +251,105 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               ],
             ),
           ),
+          if (_relatedProducts.isNotEmpty) ...[
+            const SizedBox(height: 64),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64.0),
+              child: const Text('Explore More Projects', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
+              child: CustomCarousel(
+                height: 480,
+                autoPlay: true,
+                items: _relatedProducts.map((p) => _buildRelatedProjectCard(p, context)).toList(),
+              ),
+            ),
+          ],
           const SizedBox(height: 64),
           const FooterSection(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRelatedProjectCard(Product project, BuildContext context) {
+    final imageUrl = project.images.isNotEmpty ? project.images.first.url : '';
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: const Color(0xFF161E24),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 220,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E272D),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              image: imageUrl.isNotEmpty
+                  ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
+                  : null,
+            ),
+            child: imageUrl.isEmpty
+                ? const Center(child: Icon(Icons.engineering, size: 64, color: Colors.white24))
+                : null,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (project.technologies.isNotEmpty)
+                    Text(
+                      project.technologies.take(2).join(' | '),
+                      style: const TextStyle(
+                        color: Color(0xFF14B885),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  const SizedBox(height: 12),
+                  Text(
+                    project.title,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, height: 1.2),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: Text(
+                      project.shortDescription,
+                      style: const TextStyle(fontSize: 14, color: Colors.white70, height: 1.5),
+                      maxLines: 3,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProductDetailsPage(productId: project.id)),
+                      );
+                    },
+                    child: const Row(
+                      children: [
+                        Text('View Details', style: TextStyle(color: Color(0xFF14B885), fontWeight: FontWeight.bold)),
+                        SizedBox(width: 8),
+                        Icon(Icons.arrow_forward, color: Color(0xFF14B885), size: 16),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

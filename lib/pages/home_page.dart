@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/hero_section.dart';
-import '../widgets/our_products_section.dart';
+import '../widgets/challenges_section.dart';
+import '../widgets/solutions_section.dart';
+import '../widgets/featured_project_section.dart';
 import '../widgets/achievements_section.dart';
 import '../widgets/team_section.dart';
-import '../widgets/testimonials_section.dart';
+import '../widgets/updates_section.dart';
+import '../widgets/cta_section.dart';
 import '../widgets/footer_section.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,7 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey _productKey = GlobalKey();
+  final GlobalKey _solutionsKey = GlobalKey();
+  final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _teamKey = GlobalKey();
   final GlobalKey _contactKey = GlobalKey();
   final ScrollController _scrollController = ScrollController();
@@ -82,20 +86,26 @@ class _HomePageState extends State<HomePage> {
             titleSpacing: 0,
             title: NavBar(
               isScrolled: _isScrolled,
-              onProductClick: () => _scrollTo(_productKey),
-              onTeamClick: () => _scrollTo(_teamKey),
+              onSolutionsClick: () => _scrollTo(_solutionsKey),
+              onProjectsClick: () => _scrollTo(_projectsKey),
+              onMentorsClick: () => _scrollTo(_teamKey),
               onContactClick: () => _scrollTo(_contactKey),
             ),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              const HeroSection(),
-              Container(key: _productKey, child: const OurProductsSection()),
-              const AchievementsSection(),
-              Container(key: _teamKey, child: const TeamSection()),
-              const TestimonialsSection(),
-              Container(key: _contactKey, child: const FooterSection()),
-            ]),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                const HeroSection(),
+                const ChallengesSection(),
+                Container(key: _solutionsKey, child: const SolutionsSection()),
+                Container(key: _projectsKey, child: const FeaturedProjectSection()),
+                const AchievementsSection(),
+                Container(key: _teamKey, child: const TeamSection()),
+                const UpdatesSection(),
+                const CtaSection(),
+                Container(key: _contactKey, child: const FooterSection()),
+              ],
+            ),
           ),
         ],
       ),
@@ -146,24 +156,28 @@ class _HomePageState extends State<HomePage> {
             ),
             const Divider(color: Colors.white12),
             _drawerItem(Icons.home_outlined, 'Home', () => Navigator.pop(context)),
-            _drawerItem(Icons.inventory_2_outlined, 'Our Products', () {
+            _drawerItem(Icons.lightbulb_outline, 'Solutions', () {
               Navigator.pop(context);
-              _scrollTo(_productKey);
+              _scrollTo(_solutionsKey);
             }),
-            _drawerItem(Icons.group_outlined, 'Mentors', () {
+            _drawerItem(Icons.inventory_2_outlined, 'Case Studies', () {
+              Navigator.pop(context);
+              _scrollTo(_projectsKey);
+            }),
+            _drawerItem(Icons.group_outlined, 'About', () {
               Navigator.pop(context);
               _scrollTo(_teamKey);
             }),
-            _drawerItem(Icons.mail_outlined, 'Contact Us', () {
+            _drawerItem(Icons.mail_outlined, 'Contact', () {
               Navigator.pop(context);
               _scrollTo(_contactKey);
             }),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.all(24.0),
-              child: ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF14B885),
+              child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Color(0xFF14B885)),
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
@@ -171,8 +185,8 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, '/login');
                 },
-                icon: const Icon(Icons.login, color: Colors.white),
-                label: const Text('Login', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                icon: const Icon(Icons.login, color: Color(0xFF14B885)),
+                label: const Text('Client Portal', style: TextStyle(color: Color(0xFF14B885), fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             )
           ],

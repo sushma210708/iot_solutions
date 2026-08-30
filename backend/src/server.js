@@ -10,6 +10,11 @@ const adminRoutes = require('./routes/admin.routes');
 const mentorRoutes = require('./routes/mentor.routes');
 const footerRoutes = require('./routes/footer.routes');
 const authRoutes = require('./routes/auth.routes');
+const projectRoutes = require('./routes/project.routes');
+const updateRoutes = require('./routes/update.routes');
+const inquiryRoutes = require('./routes/inquiry.routes');
+const testimonialRoutes = require('./routes/testimonial.routes');
+const challengeRoutes = require('./routes/challenge.routes');
 const errorHandler = require('./middleware/error.middleware');
 const connectDB = require('./config/db');
 const { connectCloudinary } = require('./config/cloudinary');
@@ -35,6 +40,8 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/health', healthRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/updates', updateRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/hero', heroRoutes);
 app.use('/api/footer', footerRoutes);
@@ -42,6 +49,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admins', adminRoutes);
 app.use('/api/mentors', mentorRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/inquiries', inquiryRoutes);
+app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/challenges', challengeRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {

@@ -1,114 +1,198 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import '../models/testimonial.dart';
+import '../services/api_service.dart';
 
-class TestimonialsSection extends StatelessWidget {
+class TestimonialsSection extends StatefulWidget {
   const TestimonialsSection({super.key});
+
+  @override
+  State<TestimonialsSection> createState() => _TestimonialsSectionState();
+}
+
+class _TestimonialsSectionState extends State<TestimonialsSection> {
+  final ApiService _apiService = ApiService();
+  List<Testimonial> _testimonials = [];
+  bool _isLoading = true;
+  int _currentIndex = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTestimonials();
+  }
+
+  Future<void> _loadTestimonials() async {
+    try {
+      final data = await _apiService.getTestimonials();
+      if (mounted) {
+        setState(() {
+          _testimonials = data.where((t) => t.status == 'Active').toList();
+          _isLoading = false;
+        });
+        if (_testimonials.length > 1) {
+          _startTimer();
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 8), (timer) {
+      if (mounted && _testimonials.isNotEmpty) {
+        setState(() {
+          _currentIndex = (_currentIndex + 1) % _testimonials.length;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width >= 900;
 
-    final cards = [
-      _testimonialCard(
-        quote: 'Green Fusion helped us reduce our energy costs by 25% within the first quarter.',
-        authorName: 'Radhakrishna Industries',
-        authorTitle: 'Harsha (MD)',
-        isDesktop: isDesktop,
-      ),
-      _testimonialCard(
-        quote: 'Its a good technology which can help many large/medium scale industries. Looking forward to it.',
-        authorName: 'Coca Cola Manufacturing Unit',
-        authorTitle: 'Ravindra (Manager of Orbital)',
-        isDesktop: isDesktop,
-      ),
-    ];
+    if (_isLoading) {
+      return const SizedBox(
+        height: 400,
+        child: Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+      );
+    }
 
-    return Padding(
+    if (_testimonials.isEmpty) {
+      return Container(
+        width: double.infinity,
+        color: const Color(0xFF161E24),
+        padding: EdgeInsets.symmetric(
+          horizontal: isDesktop ? 100.0 : 24.0,
+          vertical: isDesktop ? 120.0 : 80.0,
+        ),
+        child: const Center(
+          child: Text(
+            'Testimonials will appear here once added from the Admin Dashboard.',
+            style: TextStyle(color: Colors.white70, fontSize: 16),
+          ),
+        ),
+      );
+    }
+    final current = _testimonials[_currentIndex];
+
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF161E24),
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 64.0 : 24.0,
-        vertical: isDesktop ? 64.0 : 32.0,
+        horizontal: isDesktop ? 100.0 : 24.0,
+        vertical: isDesktop ? 120.0 : 80.0,
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Trusted by Industry Leaders',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: isDesktop ? 40 : 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          Row(
+            children: [
+              Container(width: 40, height: 2, color: const Color(0xFF14B885)),
+              const SizedBox(width: 16),
+              const Text(
+                'TRUSTED BY INDUSTRY LEADERS',
+                style: TextStyle(
+                  color: Color(0xFF14B885),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 64),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 800),
+            transitionBuilder: (child, animation) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            child: SizedBox(
+              key: ValueKey<int>(_currentIndex),
+              width: isDesktop ? MediaQuery.of(context).size.width * 0.7 : double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '”${current.quote}”',
+                    style: TextStyle(
+                      fontSize: isDesktop ? 40 : 28,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                      height: 1.4,
+                      fontFamily: 'Inter',
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+                  Row(
+                    children: [
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF0F161B),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.person, color: Color(0xFF14B885)),
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            current.personName,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${current.designation.isNotEmpty ? current.designation + ', ' : ''}${current.organization}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white60,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-          SizedBox(height: isDesktop ? 48 : 32),
-          isDesktop
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: cards,
-                )
-              : Column(
-                  children: cards,
+          if (_testimonials.length > 1) ...[
+            const SizedBox(height: 64),
+            Row(
+              children: List.generate(
+                _testimonials.length,
+                (index) => Container(
+                  margin: const EdgeInsets.only(right: 12),
+                  width: _currentIndex == index ? 32 : 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: _currentIndex == index ? const Color(0xFF14B885) : Colors.white24,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
+              ),
+            ),
+          ]
         ],
       ),
     );
-  }
-
-  Widget _testimonialCard({
-    required String quote,
-    required String authorName,
-    required String authorTitle,
-    required bool isDesktop,
-  }) {
-    final card = Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 16.0 : 0.0,
-        vertical: isDesktop ? 0.0 : 16.0,
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(40),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1E272D),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.white12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Icon(
-              Icons.format_quote,
-              color: Color(0xFF14B885),
-              size: 40,
-            ),
-            const SizedBox(height: 24),
-            Text(
-              quote,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 32),
-            Text(
-              authorName,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              authorTitle,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white54,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-    
-    return isDesktop ? Expanded(child: card) : card;
   }
 }

@@ -25,6 +25,14 @@ const heroContentSchema = new mongoose.Schema(
     cloudinaryPublicId: {
       type: String,
       default: '',
+    },
+    impactBackgroundUrl: {
+      type: String,
+      default: '',
+    },
+    impactBackgroundPublicId: {
+      type: String,
+      default: '',
     }
   },
   {

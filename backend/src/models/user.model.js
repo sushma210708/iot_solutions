@@ -30,13 +30,18 @@ const userSchema = new mongoose.Schema(
         'manage_homepage',
         'manage_gallery',
         'view_users',
-        'manage_admins'
+        'manage_admins',
+        'manage_updates'
       ]
     }],
     status: {
       type: String,
       enum: ['active', 'disabled'],
       default: 'active',
+    },
+    emailUpdates: {
+      type: Boolean,
+      default: true,
     },
   },
   {

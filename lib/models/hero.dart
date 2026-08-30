@@ -6,6 +6,8 @@ class HeroContent {
   final String description;
   final String imageUrl;
   final String cloudinaryPublicId;
+  final String impactBackgroundUrl;
+  final String impactBackgroundPublicId;
 
   HeroContent({
     required this.id,
@@ -15,6 +17,8 @@ class HeroContent {
     required this.description,
     required this.imageUrl,
     required this.cloudinaryPublicId,
+    required this.impactBackgroundUrl,
+    required this.impactBackgroundPublicId,
   });
 
   factory HeroContent.fromJson(Map<String, dynamic> json) {
@@ -26,6 +30,8 @@ class HeroContent {
       description: json['description'] ?? '',
       imageUrl: json['imageUrl'] ?? '',
       cloudinaryPublicId: json['cloudinaryPublicId'] ?? '',
+      impactBackgroundUrl: json['impactBackgroundUrl'] ?? '',
+      impactBackgroundPublicId: json['impactBackgroundPublicId'] ?? '',
     );
   }
 }
