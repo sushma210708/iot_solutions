@@ -163,8 +163,8 @@ class _ServiceDialogState extends State<_ServiceDialog> {
       try {
         final Uint8List bytes = await image.readAsBytes();
         final uploadedData = await _apiService.uploadImage(bytes, image.name);
-        if (uploadedData != null && uploadedData['url'] != null) {
-          setState(() => _imageUrl = uploadedData['url']);
+        if (uploadedData != null && uploadedData['imageUrl'] != null) {
+          setState(() => _imageUrl = uploadedData['imageUrl']);
         }
       } catch (e) {
         if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Upload failed: $e')));
