@@ -92,7 +92,7 @@ class _ServicesSectionState extends State<ServicesSection> {
                 crossAxisCount: crossAxisCount,
                 crossAxisSpacing: 24,
                 mainAxisSpacing: 24,
-                childAspectRatio: isDesktop ? 0.85 : 0.9,
+                childAspectRatio: isDesktop ? 1.1 : 1.1,
               ),
               itemCount: _services.length,
               itemBuilder: (context, index) {
