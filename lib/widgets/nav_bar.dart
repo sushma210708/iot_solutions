@@ -33,7 +33,7 @@ class NavBar extends StatelessWidget {
         _buildLogo(),
         Builder(
           builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu, color: Color(0xFF1E293B)),
+            icon: const Icon(Icons.menu, color: Color(0xFF0F161B)),
             onPressed: () => Scaffold.of(ctx).openDrawer(),
           ),
         ),
@@ -49,9 +49,9 @@ class NavBar extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           decoration: BoxDecoration(
-            color: Color(0xFF1E293B).withOpacity(0.05),
+            color: Color(0xFF0F161B).withOpacity(0.05),
             borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: Color(0xFF1E293B).withOpacity(0.1)),
+            border: Border.all(color: Color(0xFF0F161B).withOpacity(0.1)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -70,19 +70,19 @@ class NavBar extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () => Navigator.pushNamed(context, '/login'),
-              child: const Text('Login', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold)),
+              child: const Text('Login', style: TextStyle(color: Color(0xFF0F161B), fontWeight: FontWeight.bold)),
             ),
             const SizedBox(width: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2563EB),
-                foregroundColor: const Color(0xFFF8FAFC),
+                backgroundColor: const Color(0xFF60A5FA),
+                foregroundColor: const Color(0xFF0B1120),
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 elevation: 0,
               ),
               onPressed: onContactClick ?? () => Navigator.pushNamed(context, '/contact'),
-              child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF1E293B))),
+              child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF0B1120))),
             ),
           ],
         )
@@ -97,14 +97,14 @@ class NavBar extends StatelessWidget {
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: const Color(0xFF2563EB),
+            color: const Color(0xFF60A5FA),
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Center(
             child: Text(
               'IoT',
               style: TextStyle(
-                color: Color(0xFFF8FAFC),
+                color: Color(0xFF0B1120),
                 fontWeight: FontWeight.w900,
                 fontSize: 18,
               ),
@@ -115,7 +115,7 @@ class NavBar extends StatelessWidget {
         const Text(
           'IoT Solutions',
           style: TextStyle(
-            color: Color(0xFF1E293B),
+            color: Color(0xFF0F161B),
             fontWeight: FontWeight.w800,
             fontSize: 20,
             letterSpacing: -0.5,
@@ -133,8 +133,8 @@ class NavBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Text(
           title,
-          style: const TextStyle(
-            color: Color(0xFF475569),
+          style: TextStyle(
+            color: Color(0xFF0F161B).withValues(alpha: 0.7),
             fontSize: 14,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,

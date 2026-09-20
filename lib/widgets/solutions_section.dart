@@ -50,7 +50,7 @@ class _SolutionsSectionState extends State<SolutionsSection> {
     if (_isLoading) {
       return Container(
         height: 400,
-        color: const Color(0xFFFFFFFF),
+        color: Colors.transparent,
         child: const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
@@ -61,9 +61,9 @@ class _SolutionsSectionState extends State<SolutionsSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFFFFFFFF),
+      color: Colors.transparent,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Header Section
           Container(
@@ -76,11 +76,11 @@ class _SolutionsSectionState extends State<SolutionsSection> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 1200),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
                       'OUR PRODUCTS',
-                      style: TextStyle(
+                      textAlign: TextAlign.center, style: TextStyle(
                         color: Color(0xFF2563EB),
                         fontWeight: FontWeight.bold,
                         letterSpacing: 2,
@@ -90,7 +90,7 @@ class _SolutionsSectionState extends State<SolutionsSection> {
                     const SizedBox(height: 24),
                     Text(
                       'Products built for real-world impact.',
-                      style: TextStyle(
+                      textAlign: TextAlign.center, style: TextStyle(
                         fontSize: isDesktop ? 48 : 32,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF1E293B),
@@ -103,7 +103,7 @@ class _SolutionsSectionState extends State<SolutionsSection> {
                       width: isDesktop ? 600 : double.infinity,
                       child: const Text(
                         'Each product addresses a concrete operational problem — designed to be deployed, not just demonstrated.',
-                        style: TextStyle(
+                        textAlign: TextAlign.center, style: TextStyle(
                           fontSize: 18,
                           color: Color(0xFF475569),
                           height: 1.5,
@@ -146,7 +146,7 @@ class _SolutionsSectionState extends State<SolutionsSection> {
                           ),
                           child: Text(
                             cat,
-                            style: TextStyle(
+                            textAlign: TextAlign.center, style: TextStyle(
                               color: isSelected ? const Color(0xFF2563EB) : Color(0xFF475569),
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                               fontSize: 14,
@@ -171,7 +171,7 @@ class _SolutionsSectionState extends State<SolutionsSection> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 1200),
                 child: filteredProducts.isEmpty
-                    ? Center(child: Text('No products found in this category.', style: TextStyle(color: Color(0x8A1E293B))))
+                    ? Center(child: Text('No products found in this category.', textAlign: TextAlign.center, style: TextStyle(color: Color(0x8A1E293B))))
                     : Wrap(
                         spacing: 32,
                         runSpacing: 32,
@@ -218,6 +218,7 @@ class _ProductCardState extends State<_ProductCard> {
           duration: const Duration(milliseconds: 200),
           transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
           width: widget.isDesktop ? 378.0 : double.infinity,
+          height: 480,
           decoration: BoxDecoration(
             color: Color(0xFF1E293B),
             borderRadius: BorderRadius.circular(16),

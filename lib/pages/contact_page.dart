@@ -1,3 +1,4 @@
+import '../widgets/interactive_grid_background.dart';
 import 'package:flutter/material.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/app_drawer.dart';
@@ -74,7 +75,8 @@ class _ContactPageState extends State<ContactPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: !isDesktop ? const AppDrawer() : null,
-      body: CustomScrollView(
+      body: InteractiveGridBackground(
+        child: CustomScrollView(
         slivers: [
           SliverAppBar(
             pinned: true,
@@ -152,6 +154,7 @@ class _ContactPageState extends State<ContactPage> {
             ),
           ),
         ],
+      )
       ),
     );
   }

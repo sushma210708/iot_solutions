@@ -1,3 +1,4 @@
+import '../widgets/interactive_grid_background.dart';
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/product.dart';

@@ -1,3 +1,4 @@
+import '../widgets/interactive_grid_background.dart';
 import 'package:flutter/material.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/hero_section.dart';
@@ -64,7 +65,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       drawer: !isDesktop ? const AppDrawer() : null,
-      body: CustomScrollView(
+      body: InteractiveGridBackground(
+        child: CustomScrollView(
         controller: _scrollController,
         slivers: [
           SliverAppBar(
@@ -97,6 +99,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      )
       ),
     );
   }

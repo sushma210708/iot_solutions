@@ -78,7 +78,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFFF8FAFC),
+      color: Colors.transparent,
       child: Stack(
         children: [
           // Dynamic Background Image
@@ -101,10 +101,11 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                   vertical: isDesktop ? 120 : 80,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Impact Stories',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: isDesktop ? 48 : 32,
                         fontWeight: FontWeight.w900,
@@ -117,6 +118,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                       width: isDesktop ? 600 : double.infinity,
                       child: Text(
                         'Real challenges. Intelligent solutions. Measurable impact.\n\nExplore how Green Fusion is solving real-world problems and creating value across industries.',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: isDesktop ? 18 : 16,
                           color: Color(0xFF475569),
@@ -127,10 +129,12 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                     const SizedBox(height: 48),
                 
                 // Categories
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: categories.map((category) {
+                Center(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: categories.map((category) {
                       final isSelected = _selectedCategory == category;
                       return Padding(
                         padding: const EdgeInsets.only(right: 12),
@@ -158,6 +162,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                     }).toList(),
                   ),
                 ),
+                ),
                 const SizedBox(height: 48),
                 
                 // Project Cards Grid
@@ -175,26 +180,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                     },
                   ),
                 ],
-                const SizedBox(height: 64),
-                Center(
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: BorderSide(color: Color(0x611E293B)),
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('View All Case Studies'),
-                        SizedBox(width: 8),
-                        Icon(Icons.arrow_forward, size: 16),
-                      ],
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 32),
               ],
             ),
           ),
@@ -259,7 +245,7 @@ class _ProjectCardState extends State<ProjectCard> {
           curve: Curves.easeOut,
           transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFFFFF),
+            color: Colors.white.withOpacity(0.85),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
               color: _isHovered ? Color(0xFF2563EB).withOpacity(0.5) : Color(0xFFE2E8F0),

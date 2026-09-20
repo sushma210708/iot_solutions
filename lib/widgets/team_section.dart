@@ -50,7 +50,7 @@ class _TeamSectionState extends State<TeamSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFFFFFFFF),
+      color: Colors.transparent,
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 64.0 : 24.0,
         vertical: isDesktop ? 120.0 : 80.0,
@@ -59,10 +59,11 @@ class _TeamSectionState extends State<TeamSection> {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 'OUR TEAM',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: const Color(0xFF2563EB),
                   fontWeight: FontWeight.bold,
@@ -73,6 +74,7 @@ class _TeamSectionState extends State<TeamSection> {
               const SizedBox(height: 16),
               Text(
                 'Meet Our Mentors',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: isDesktop ? 48 : 32,
                   fontWeight: FontWeight.w900,
@@ -85,6 +87,7 @@ class _TeamSectionState extends State<TeamSection> {
                 width: isDesktop ? 600 : double.infinity,
                 child: Text(
                   'Our diverse team brings together expertise in IoT, AI, and energy management to deliver cutting-edge solutions.',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: isDesktop ? 18 : 16,
                     color: Color(0xFF475569),

@@ -1,3 +1,4 @@
+import '../widgets/interactive_grid_background.dart';
 import 'package:flutter/material.dart';
 import '../models/project.dart';
 
@@ -39,7 +40,8 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-      body: CustomScrollView(
+      body: InteractiveGridBackground(
+        child: CustomScrollView(
         controller: _scrollController,
         slivers: [
           _buildSliverAppBar(project, isDesktop),
@@ -53,6 +55,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             ]),
           ),
         ],
+      )
       ),
     );
   }

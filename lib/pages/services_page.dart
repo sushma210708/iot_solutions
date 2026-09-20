@@ -1,3 +1,4 @@
+import '../widgets/interactive_grid_background.dart';
 import 'package:flutter/material.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/services_section.dart';
@@ -14,7 +15,8 @@ class ServicesPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       drawer: !isDesktop ? const AppDrawer() : null,
-      body: CustomScrollView(
+      body: InteractiveGridBackground(
+        child: CustomScrollView(
         slivers: [
           const SliverAppBar(
             pinned: true,
@@ -36,6 +38,7 @@ class ServicesPage extends StatelessWidget {
             ),
           ),
         ],
+      )
       ),
     );
   }

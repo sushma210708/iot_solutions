@@ -134,7 +134,7 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Collaboration Inquiries', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87)),
+          const Text('Collaboration Inquiries', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           const Text('Manage collaboration requests and messages from the website.', style: TextStyle(color: Colors.black54)),
           const SizedBox(height: 32),
@@ -142,67 +142,63 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4)),
+                  BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4)),
                 ],
               ),
               child: _isLoading 
                 ? const Center(child: CircularProgressIndicator())
                 : _inquiries.isEmpty
                   ? const Center(child: Text('No inquiries found.', style: TextStyle(color: Colors.black54, fontSize: 16)))
-                  : ListView.builder(
+                  : ListView.separated(
                       padding: const EdgeInsets.all(24.0),
                       itemCount: _inquiries.length,
+                      separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) {
                         final inquiry = _inquiries[index];
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 16.0),
-                          elevation: 2,
-                          color: const Color(0xFFF8FAFC),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(16.0),
-                            title: Text(inquiry.name, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87)),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 4),
-                                Text('${inquiry.email} • ${inquiry.phone}', style: const TextStyle(color: Colors.black54, fontSize: 13)),
-                                const SizedBox(height: 8),
-                                Text(
-                                  inquiry.message,
-                                  style: const TextStyle(color: Colors.black87),
-                                ),
-                              ],
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                DropdownButton<String>(
-                                  value: inquiry.status,
-                                  items: ['New', 'Reviewed', 'Resolved'].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
-                                  onChanged: (val) {
-                                    if (val != null && val != inquiry.status) {
-                                      _updateStatus(inquiry, val);
-                                    }
-                                  },
-                                  underline: const SizedBox(),
-                                ),
-                                const SizedBox(width: 16),
-                                IconButton(
-                                  icon: const Icon(Icons.visibility_outlined, color: Colors.blue),
-                                  onPressed: () => _showInquiryDetails(inquiry),
-                                  tooltip: 'View Details',
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                                  onPressed: () => _deleteInquiry(inquiry.id),
-                                  tooltip: 'Delete',
-                                ),
-                              ],
-                            ),
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(inquiry.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 4),
+                              Text('${inquiry.email} â€¢ ${inquiry.phone}', style: const TextStyle(color: Colors.black54, fontSize: 13)),
+                              const SizedBox(height: 4),
+                              Text(
+                                inquiry.message,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              DropdownButton<String>(
+                                value: inquiry.status,
+                                items: ['New', 'Reviewed', 'Resolved'].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+                                onChanged: (val) {
+                                  if (val != null && val != inquiry.status) {
+                                    _updateStatus(inquiry, val);
+                                  }
+                                },
+                                underline: const SizedBox(),
+                              ),
+                              const SizedBox(width: 16),
+                              IconButton(
+                                icon: const Icon(Icons.visibility_outlined, color: Colors.blue),
+                                onPressed: () => _showInquiryDetails(inquiry),
+                                tooltip: 'View Details',
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                                onPressed: () => _deleteInquiry(inquiry.id),
+                                tooltip: 'Delete',
+                              ),
+                            ],
                           ),
                         );
                       },

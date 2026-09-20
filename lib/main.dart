@@ -37,7 +37,7 @@ class GreenFusionApp extends StatelessWidget {
       title: 'Green Fusion',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFF8FAFC), // Execute Action Dark background
+        scaffoldBackgroundColor: const Color(0xFFF8FAFC),
         primaryColor: const Color(0xFF2563EB), // Green accent
         colorScheme: const ColorScheme.light(
           primary: Color(0xFF2563EB),

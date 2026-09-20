@@ -1,3 +1,4 @@
+import '../widgets/interactive_grid_background.dart';
 import 'package:flutter/material.dart';
 import '../models/mentor.dart';
 import '../widgets/nav_bar.dart';

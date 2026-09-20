@@ -1,3 +1,4 @@
+import '../widgets/interactive_grid_background.dart';
 import 'package:flutter/material.dart';
 import '../models/about_us.dart';
 import '../services/api_service.dart';
@@ -70,7 +71,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
             // 1. HERO SECTION
             Container(
               width: double.infinity,
-              color: const Color(0xFFF8FAFC), // Navy Blue
+              color: const Color(0xFF061426),
               padding: EdgeInsets.symmetric(horizontal: isDesktop ? 100 : 24, vertical: isDesktop ? 120 : 80),
               child: Center(
                 child: ConstrainedBox(
@@ -85,14 +86,14 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       const SizedBox(height: 24),
                       Text(
                         _aboutUs!.heroTitle,
-                        style: TextStyle(color: Color(0xFF1E293B), fontSize: isDesktop ? 64 : 40, fontWeight: FontWeight.w500, height: 1.1, fontFamily: 'serif'), // Using a serif-like or elegant font feeling
+                        style: TextStyle(color: Colors.white, fontSize: isDesktop ? 64 : 40, fontWeight: FontWeight.w500, height: 1.1, fontFamily: 'serif'), // Using a serif-like or elegant font feeling
                       ),
                       const SizedBox(height: 32),
                       SizedBox(
                         width: isDesktop ? 600 : double.infinity,
                         child: Text(
                           _aboutUs!.heroSubtitle,
-                          style: const TextStyle(color: Color(0xFF475569), fontSize: 18, height: 1.6),
+                          style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 18, height: 1.6),
                         ),
                       ),
                     ],
@@ -104,7 +105,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
             // 2. OUR STORY
             Container(
               width: double.infinity,
-              color: Color(0xFF1E293B),
+              color: Colors.white,
               padding: padding,
               child: Center(
                 child: ConstrainedBox(
@@ -133,7 +134,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
             // 3. VISION & MISSION
             Container(
               width: double.infinity,
-              color: const Color(0xFFF8FAFC),
+              color: const Color(0xFF061426),
               padding: padding,
               child: Center(
                 child: ConstrainedBox(
@@ -162,7 +163,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
             // 4. WHAT WE BUILD
             Container(
               width: double.infinity,
-              color: Color(0xFF1E293B),
+              color: Colors.white,
               padding: padding,
               child: Center(
                 child: ConstrainedBox(
@@ -210,7 +211,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
             // 5. CTA
             Container(
               width: double.infinity,
-              color: Color(0xFF1E293B),
+              color: Colors.white,
               padding: EdgeInsets.only(left: isDesktop ? 100 : 24, right: isDesktop ? 100 : 24, bottom: 120, top: 40),
               child: Center(
                 child: ConstrainedBox(
@@ -324,12 +325,12 @@ class _AboutUsPageState extends State<AboutUsPage> {
         const SizedBox(height: 24),
         Text(
           title,
-          style: const TextStyle(color: Color(0xFF1E293B), fontSize: 36, fontWeight: FontWeight.w500, fontFamily: 'serif'),
+          style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w500, fontFamily: 'serif'),
         ),
         const SizedBox(height: 24),
         Text(
           description,
-          style: const TextStyle(color: Color(0xFF475569), fontSize: 16, height: 1.8),
+          style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 16, height: 1.8),
         ),
       ],
     );

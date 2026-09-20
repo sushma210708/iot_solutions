@@ -30,7 +30,7 @@ class _CtaSectionState extends State<CtaSection> {
         vertical: isDesktop ? 96.0 : 64.0,
       ),
       decoration: const BoxDecoration(
-        color: Color(0xFF2563EB),
+        color: Color(0xFF0B1120),
       ),
       child: Column(
         children: [
@@ -40,7 +40,7 @@ class _CtaSectionState extends State<CtaSection> {
             style: TextStyle(
               fontSize: isDesktop ? 48 : 32,
               fontWeight: FontWeight.bold,
-              color: const Color(0xFF0F161B),
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 24),
@@ -49,14 +49,14 @@ class _CtaSectionState extends State<CtaSection> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: isDesktop ? 20 : 16,
-              color: Color(0xFF0F161B).withOpacity(0.8),
+              color: Colors.white.withOpacity(0.8),
             ),
           ),
           const SizedBox(height: 48),
           ElevatedButton(
             onPressed: _showCollaborationDialog,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFF8FAFC),
+              backgroundColor: const Color(0xFF168BFF),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
               elevation: 0,
@@ -115,7 +115,7 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Thank you! Your collaboration request has been submitted.'),
-            backgroundColor: Color(0xFF2563EB),
+            backgroundColor: Color(0xFF0B1120),
           ),
         );
       }
@@ -167,7 +167,7 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
         ),
         ElevatedButton(
           onPressed: _isSubmitting ? null : _submit,
-          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
+          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF0B1120)),
           child: _isSubmitting 
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B), strokeWidth: 2))
               : const Text('Submit', style: TextStyle(color: Color(0xFF1E293B))),
@@ -186,7 +186,7 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
         labelText: label,
         labelStyle: TextStyle(color: Color(0x8A1E293B)),
         enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B)), borderRadius: BorderRadius.circular(12)),
-        focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF2563EB)), borderRadius: BorderRadius.circular(12)),
+        focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF0B1120)), borderRadius: BorderRadius.circular(12)),
         errorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(12)),
         focusedErrorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(12)),
       ),
