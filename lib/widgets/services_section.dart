@@ -101,7 +101,7 @@ class _ServicesSectionState extends State<ServicesSection> {
               },
             ),
           const SizedBox(height: 48),
-          _buildCtaBar(isDesktop),
+          _buildCtaBar(context, isDesktop),
         ],
       ),
     );
@@ -130,7 +130,7 @@ class _ServicesSectionState extends State<ServicesSection> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: service.imageUrl.isNotEmpty
-                    ? Center(child: Image.network(service.imageUrl, width: 32, height: 32, color: const Color(0xFF60A5FA)))
+                    ? Center(child: Image.network(service.imageUrl, width: 32, height: 32))
                     : const Icon(Icons.business_center, color: Color(0xFF60A5FA), size: 32),
               ),
               Text(
@@ -163,79 +163,64 @@ class _ServicesSectionState extends State<ServicesSection> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color(0xFF2563EB),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Learn More', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                  SizedBox(width: 8),
-                  Icon(Icons.arrow_forward, color: Colors.white, size: 16),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 
-  Widget _buildCtaBar(bool isDesktop) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: isDesktop ? 48 : 24, vertical: 32),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF2563EB), Color(0xFF1E3A8A)],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+  Widget _buildCtaBar(BuildContext context, bool isDesktop) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, '/contact'),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: isDesktop ? 48 : 24, vertical: 32),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF2563EB), Color(0xFF1E3A8A)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(16),
         ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Flex(
-        direction: isDesktop ? Axis.horizontal : Axis.vertical,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.rocket_launch, color: Colors.white, size: 40),
-              const SizedBox(width: 24),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('LET\'S BUILD TOGETHER', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                  const SizedBox(height: 8),
-                  RichText(
-                    text: const TextSpan(
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-                      children: [
-                        TextSpan(text: 'Turning Ideas into '),
-                        TextSpan(text: 'Real Solutions', style: TextStyle(color: Color(0xFF93C5FD))),
-                      ],
+        child: Flex(
+          direction: isDesktop ? Axis.horizontal : Axis.vertical,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.rocket_launch, color: Colors.white, size: 40),
+                const SizedBox(width: 24),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('LET\'S BUILD TOGETHER', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                    const SizedBox(height: 8),
+                    RichText(
+                      text: const TextSpan(
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                        children: [
+                          TextSpan(text: 'Turning Ideas into '),
+                          TextSpan(text: 'Real Solutions', style: TextStyle(color: Color(0xFF93C5FD))),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          if (!isDesktop) const SizedBox(height: 24),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
+                  ],
+                ),
+              ],
             ),
-            child: const Icon(Icons.arrow_forward, color: Color(0xFF2563EB)),
-          ),
-        ],
+            if (!isDesktop) const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.arrow_forward, color: Color(0xFF2563EB)),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -117,51 +117,6 @@ class _HeroSectionState extends State<HeroSection> {
           ),
         ),
         const SizedBox(height: 48),
-        // Buttons
-        Wrap(
-          spacing: 24,
-          runSpacing: 16,
-          children: [
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2563EB),
-                foregroundColor: const Color(0xFF0B1120),
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                ),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Execute Action',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 12),
-                  Icon(Icons.arrow_forward, size: 18),
-                ],
-              ),
-            ),
-            OutlinedButton(
-              onPressed: () {},
-              style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.white.withOpacity(0.2)),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                ),
-              ),
-              child: const Text(
-                'Learn More',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
         const SizedBox(height: 64),
       ],
     );
