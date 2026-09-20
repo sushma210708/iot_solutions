@@ -102,10 +102,10 @@ class _ContactPageState extends State<ContactPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (!isDesktop) ...[
-                                  _buildContactInfo(),
-                                  const SizedBox(height: 48),
-                                ],
+                                // if (!isDesktop) ...[
+                                //   _buildContactInfo(),
+                                //   const SizedBox(height: 48),
+                                // ],
                                 Row(
                                   children: [
                                     Expanded(child: _buildTextField('Full Name', 'Your full name', _nameCtrl, isRequired: true)),
@@ -139,10 +139,10 @@ class _ContactPageState extends State<ContactPage> {
                             ),
                           ),
                         ),
-                        if (isDesktop) ...[
-                          const SizedBox(width: 80),
-                          Expanded(flex: 1, child: _buildContactInfo()),
-                        ]
+                        // if (isDesktop) ...[
+                        //   const SizedBox(width: 80),
+                        //   Expanded(flex: 1, child: _buildContactInfo()),
+                        // ]
                       ],
                     ),
                   ),
