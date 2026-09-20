@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../models/inquiry.dart';
@@ -95,7 +95,10 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.grey[300]!),
                   ),
-                  child: Text(inquiry.message),
+                  child: Text(
+                    inquiry.message,
+                    style: const TextStyle(color: Colors.black87, height: 1.5),
+                  ),
                 ),
               ],
             ),
