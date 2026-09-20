@@ -30,7 +30,7 @@ class _CtaSectionState extends State<CtaSection> {
         vertical: isDesktop ? 96.0 : 64.0,
       ),
       decoration: const BoxDecoration(
-        color: Color(0xFF0B1120),
+        color: Color(0xFF168BFF),
       ),
       child: Column(
         children: [
@@ -56,7 +56,7 @@ class _CtaSectionState extends State<CtaSection> {
           ElevatedButton(
             onPressed: _showCollaborationDialog,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF168BFF),
+              backgroundColor: const Color(0xFF061426),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
               elevation: 0,
@@ -115,7 +115,7 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Thank you! Your collaboration request has been submitted.'),
-            backgroundColor: Color(0xFF0B1120),
+            backgroundcolor: Color(0xFF168BFF),
           ),
         );
       }
