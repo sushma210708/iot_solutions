@@ -79,8 +79,8 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0xFFF8FAFC).withValues(alpha: (0.9),
-                    Color(0xFFF8FAFC).withValues(alpha: (0.3),
+                    const Color(0xFFF8FAFC).withValues(alpha: 0.9),
+                    const Color(0xFFF8FAFC).withValues(alpha: 0.3),
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,

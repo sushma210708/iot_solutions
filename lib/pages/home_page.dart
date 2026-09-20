@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: false,
-            backgroundColor: _isScrolled ? Color(0xFFF8FAFC).withValues(alpha: (0.9) : Colors.transparent,
+            backgroundColor: _isScrolled ? const Color(0xFFF8FAFC).withValues(alpha: 0.9) : Colors.transparent,
             elevation: 0,
             iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
             toolbarHeight: 88,

@@ -113,7 +113,7 @@ class _ServicesSectionState extends State<ServicesSection> {
       decoration: BoxDecoration(
         color: const Color(0xFFFFFFFF), // Dark card background
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFF1E293B)10),
+        border: Border.all(color: const Color(0xFF1E293B).withValues(alpha: 0.10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -134,7 +134,7 @@ class _TechnologyPageState extends State<TechnologyPage> {
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: !isDesktop,
-            backgroundColor: Color(0xFFF8FAFC).withValues(alpha: (0.9),
+            backgroundColor: const Color(0xFFF8FAFC).withValues(alpha: 0.9),
             elevation: 0,
             toolbarHeight: 88,
             titleSpacing: 0,
