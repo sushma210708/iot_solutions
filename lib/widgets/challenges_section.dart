@@ -44,16 +44,16 @@ class _ChallengesSectionState extends State<ChallengesSection> {
     if (_isLoading) {
       return const SizedBox(
         height: 400,
-        child: Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+        child: Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
     
     if (_challenges.isEmpty) {
       return Container(
         width: double.infinity,
-        color: const Color(0xFF0F161B),
+        color: const Color(0xFF0B1120),
         padding: EdgeInsets.symmetric(
-          horizontal: isDesktop ? 100 : 24,
+          horizontal: isDesktop ? 64 : 24,
           vertical: isDesktop ? 120 : 80,
         ),
         child: const Center(
@@ -67,52 +67,57 @@ class _ChallengesSectionState extends State<ChallengesSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFF0F161B),
+      color: const Color(0xFF0B1120),
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 100 : 24,
+        horizontal: isDesktop ? 64 : 24,
         vertical: isDesktop ? 120 : 80,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'CHALLENGES WE SOLVE',
-            style: TextStyle(
-              color: const Color(0xFF14B885),
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
-              fontSize: isDesktop ? 14 : 12,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Engineering Solutions for\nReal-World Challenges',
-            style: TextStyle(
-              fontSize: isDesktop ? 48 : 32,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-              height: 1.1,
-              fontFamily: 'Inter',
-            ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: isDesktop ? 600 : double.infinity,
-            child: Text(
-              'We work at the intersection of technology and real-world problems to deliver smarter, safer and more sustainable systems.',
-              style: TextStyle(
-                fontSize: isDesktop ? 18 : 16,
-                color: Colors.white70,
-                height: 1.6,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'CHALLENGES WE SOLVE',
+                style: TextStyle(
+                  color: const Color(0xFF2563EB),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                  fontSize: isDesktop ? 14 : 12,
+                ),
               ),
-            ),
+              const SizedBox(height: 16),
+              Text(
+                'Engineering Solutions for\nReal-World Challenges',
+                style: TextStyle(
+                  fontSize: isDesktop ? 48 : 32,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  height: 1.1,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: isDesktop ? 600 : double.infinity,
+                child: Text(
+                  'We work at the intersection of technology and real-world problems to deliver smarter, safer and more sustainable systems.',
+                  style: TextStyle(
+                    fontSize: isDesktop ? 18 : 16,
+                    color: Colors.white70,
+                    height: 1.6,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 80),
+              
+              isDesktop 
+                  ? _buildDesktopGrid()
+                  : _buildMobileList(),
+            ],
           ),
-          const SizedBox(height: 80),
-          
-          isDesktop 
-              ? _buildDesktopGrid()
-              : _buildMobileList(),
-        ],
+        ),
       ),
     );
   }
@@ -123,7 +128,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
       final rowChildren = <Widget>[];
       for (int j = 0; j < 3; j++) {
         if (i + j < _challenges.length) {
-          rowChildren.add(Expanded(child: _buildChallengeItem(_challenges[i + j])));
+          rowChildren.add(Expanded(child: ChallengeCard(challenge: _challenges[i + j])));
         } else {
           rowChildren.add(const Expanded(child: SizedBox())); // Empty space
         }
@@ -147,73 +152,99 @@ class _ChallengesSectionState extends State<ChallengesSection> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: _challenges.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 32),
+      separatorBuilder: (context, index) => const SizedBox(height: 24),
       itemBuilder: (context, index) {
-        return _buildChallengeItem(_challenges[index]);
+        return ChallengeCard(challenge: _challenges[index]);
       },
     );
   }
+}
 
-  Widget _buildChallengeItem(Challenge challenge) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
+class ChallengeCard extends StatefulWidget {
+  final Challenge challenge;
+  const ChallengeCard({super.key, required this.challenge});
+
+  @override
+  State<ChallengeCard> createState() => _ChallengeCardState();
+}
+
+class _ChallengeCardState extends State<ChallengeCard> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E293B),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: _isHovered ? const Color(0xFF2563EB).withOpacity(0.5) : Colors.white12,
+            width: 1,
           ),
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF14B885),
-                      shape: BoxShape.circle,
-                    ),
+          boxShadow: [
+            if (_isHovered)
+              BoxShadow(
+                color: const Color(0xFF2563EB).withOpacity(0.15),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              )
+          ],
+        ),
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: _isHovered ? const Color(0xFF2563EB) : Colors.white24,
+                    shape: BoxShape.circle,
                   ),
-                  const SizedBox(width: 12),
-                  Text(
-                    challenge.domain.toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
-                      fontSize: 12,
-                    ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  widget.challenge.domain.toUpperCase(),
+                  style: TextStyle(
+                    color: _isHovered ? Colors.white : Colors.white70,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
+                    fontSize: 12,
                   ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Text(
-                challenge.title,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  height: 1.3,
                 ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Text(
+              widget.challenge.title,
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                height: 1.3,
+                letterSpacing: -0.3,
               ),
-              const SizedBox(height: 12),
-              Text(
-                challenge.description,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.white70,
-                  height: 1.6,
-                ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              widget.challenge.description,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.white60,
+                height: 1.6,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

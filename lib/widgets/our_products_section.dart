@@ -62,7 +62,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircleAvatar(radius: 4, backgroundColor: Color(0xFF14B885)),
+                CircleAvatar(radius: 4, backgroundColor: Color(0xFF2563EB)),
                 SizedBox(width: 8),
                 Text('Our Products', style: TextStyle(color: Colors.white70)),
               ],
@@ -82,7 +82,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
             style: TextStyle(
               fontSize: isDesktop ? 48 : 32,
               fontWeight: FontWeight.bold,
-              color: const Color(0xFF14B885),
+              color: const Color(0xFF2563EB),
             ),
           ),
           const SizedBox(height: 24),
@@ -96,7 +96,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
           ),
           SizedBox(height: isDesktop ? 64 : 32),
           _isLoading
-              ? const Center(child: CircularProgressIndicator(color: Color(0xFF14B885)))
+              ? const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)))
               : _products.isEmpty
                   ? const Padding(
                       padding: EdgeInsets.symmetric(vertical: 48.0),
@@ -125,7 +125,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
             child: OutlinedButton(
               onPressed: () {},
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFF14B885)),
+                side: const BorderSide(color: Color(0xFF2563EB)),
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -137,13 +137,13 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                   Text(
                     'View All Products',
                     style: TextStyle(
-                      color: Color(0xFF14B885),
+                      color: Color(0xFF2563EB),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(width: 8),
-                  Icon(Icons.arrow_forward, color: Color(0xFF14B885), size: 20),
+                  Icon(Icons.arrow_forward, color: Color(0xFF2563EB), size: 20),
                 ],
               ),
             ),
@@ -220,7 +220,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF14B885),
+                            backgroundColor: const Color(0xFF2563EB),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
@@ -306,7 +306,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: Colors.white12),
                       ),
-                      child: const Icon(Icons.bolt, color: Color(0xFF14B885), size: 24),
+                      child: const Icon(Icons.bolt, color: Color(0xFF2563EB), size: 24),
                     ),
                   ),
                 ],
@@ -344,12 +344,12 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                         Text(
                           'View Details',
                           style: TextStyle(
-                            color: Color(0xFF14B885),
+                            color: Color(0xFF2563EB),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         SizedBox(width: 8),
-                        Icon(Icons.arrow_forward, color: Color(0xFF14B885), size: 16),
+                        Icon(Icons.arrow_forward, color: Color(0xFF2563EB), size: 16),
                       ],
                     )
                   ],

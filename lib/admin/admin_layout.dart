@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'admin_dashboard_page.dart';
 import 'admin_products_page.dart';
-import 'admin_achievements_page.dart';
+import 'admin_technology_page.dart';
 import 'admin_mentors_page.dart';
 import 'admin_updates_page.dart';
 import 'admin_hero_page.dart';
 import 'admin_inquiries_page.dart';
+import 'admin_about_us_page.dart';
 import '../pages/home_page.dart';
 import '../pages/login_page.dart';
 import '../services/auth_service.dart';
@@ -26,7 +27,6 @@ class _AdminLayoutState extends State<AdminLayout> {
   int _selectedIndex = 1; // Default to Solutions
   final GlobalKey<AdminProductsPageState> _productsKey = GlobalKey<AdminProductsPageState>();
   final GlobalKey<AdminMentorsPageState> _mentorsKey = GlobalKey<AdminMentorsPageState>();
-  final GlobalKey<AdminAchievementsPageState> _achievementsKey = GlobalKey<AdminAchievementsPageState>();
   final GlobalKey<AdminUpdatesPageState> _updatesKey = GlobalKey<AdminUpdatesPageState>();
   
   final AuthService _authService = AuthService();
@@ -41,6 +41,17 @@ class _AdminLayoutState extends State<AdminLayout> {
   void initState() {
     super.initState();
     _checkAuth();
+  }
+
+  Future<void> _logout() async {
+    await _authService.signOut();
+    if (mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomePage()),
+        (route) => false,
+      );
+    }
   }
 
   Future<void> _checkAuth() async {
@@ -87,25 +98,17 @@ class _AdminLayoutState extends State<AdminLayout> {
           Future.delayed(const Duration(milliseconds: 50), () {
             _productsKey.currentState?.showAddProductDialog();
           });
-        } else if (index == 4 && action == 'add') {
+        } else if (index == 3 && action == 'add') {
           Future.delayed(const Duration(milliseconds: 50), () {
             _mentorsKey.currentState?.showMentorDialog();
           });
-        } else if (index == 5 && action == 'add') {
-          Future.delayed(const Duration(milliseconds: 50), () {
-            _achievementsKey.currentState?.showAchievementDialog();
-          });
         }
       }),
-      AdminProductsPage(key: _productsKey), // Solutions
-      const AdminProjectsPage(), // Case Studies
-      const AdminChallengesPage(),
-      AdminMentorsPage(key: _mentorsKey),
-      AdminAchievementsPage(key: _achievementsKey),
-      AdminUpdatesPage(key: _updatesKey),
-      const AdminHeroPage(),
-      const AdminInquiriesPage(),
-      const Center(child: Text('Settings')),
+      AdminProductsPage(key: _productsKey), // 1. Products
+      const AdminTechnologyPage(), // 2. Technology
+      AdminMentorsPage(key: _mentorsKey), // 3. Mentors
+      const AdminInquiriesPage(), // 4. Messages
+      const AdminAboutUsPage(), // 5. About Us
     ];
   }
 
@@ -114,18 +117,18 @@ class _AdminLayoutState extends State<AdminLayout> {
     if (_isLoading) {
       return const Scaffold(
         backgroundColor: Color(0xFFF8F9FA),
-        body: Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+        body: Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA), // Light theme for admin
+      backgroundColor: const Color(0xFFF8F9FA), // Light theme for admin content
       body: Row(
         children: [
           // Sidebar
           Container(
             width: 250,
-            color: Colors.white,
+            color: const Color(0xFF0B1120), // Navy Blue Sidebar
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -135,15 +138,15 @@ class _AdminLayoutState extends State<AdminLayout> {
                     children: [
                       const CircleAvatar(
                         radius: 16,
-                        backgroundColor: Color(0xFF14B885),
-                        child: Text('GF', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                        backgroundColor: Color(0xFF2563EB),
+                        child: Text('IoT', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Green Fusion\nIoT Solutions', style: TextStyle(color: Color(0xFF14B885), fontWeight: FontWeight.bold, fontSize: 14)),
-                          Text(_currentUser?.role.toUpperCase() ?? 'ADMIN', style: const TextStyle(color: Colors.black54, fontSize: 10)),
+                          const Text('NexusTech\nIoT Solutions', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                          Text(_currentUser?.role.toUpperCase() ?? 'ADMIN', style: const TextStyle(color: Colors.white54, fontSize: 10)),
                         ],
                       )
                     ],
@@ -154,61 +157,67 @@ class _AdminLayoutState extends State<AdminLayout> {
                   child: ListView(
                     children: [
                       _navItem(Icons.dashboard_outlined, 'Dashboard', 0),
-                      _navItem(Icons.precision_manufacturing_outlined, 'Solutions', 1),
-                      _navItem(Icons.cases_outlined, 'Case Studies', 2),
-                      _navItem(Icons.lightbulb_outline, 'Challenges', 3),
-                      _navItem(Icons.people_outline, 'Mentors', 4),
-                      _navItem(Icons.emoji_events_outlined, 'Journey', 5),
-                      _navItem(Icons.campaign_outlined, 'Insights', 6),
-                      _navItem(Icons.view_carousel_outlined, 'Hero Banner', 7),
-                      _navItem(Icons.mail_outline, 'Inquiries', 8),
-                      _navItem(Icons.settings_outlined, 'Settings', 9),
+                      _navItem(Icons.inventory_2_outlined, 'Products', 1),
+                      _navItem(Icons.memory_outlined, 'Technology', 2),
+                      _navItem(Icons.people_outline, 'Mentors', 3),
+                      _navItem(Icons.message_outlined, 'Messages', 4),
+                      _navItem(Icons.info_outline, 'About Us', 5),
                     ],
                   ),
                 ),
-                const Divider(),
-                _navItem(Icons.logout, 'Logout', 10, isLogout: true),
-                const SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: TextButton.icon(
+                    onPressed: _logout,
+                    icon: const Icon(Icons.logout, color: Colors.white54, size: 20),
+                    label: const Text('Logout', style: TextStyle(color: Colors.white54)),
+                  ),
+                ),
               ],
             ),
           ),
           // Main Content
           Expanded(
-            child: _pages[_selectedIndex],
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(
+                color: Color(0xFFF8F9FA),
+              ),
+              child: _pages[_selectedIndex],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _navItem(IconData icon, String title, int index, {bool isLogout = false}) {
+  Widget _navItem(IconData icon, String title, int index) {
     final isSelected = _selectedIndex == index;
     return InkWell(
-      onTap: () async {
-        if (!isLogout) {
-          setState(() => _selectedIndex = index);
-        } else {
-          await _authService.signOut();
-          if (mounted) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (_) => const HomePage()),
-              (route) => false,
-            );
-          }
-        }
-      },
+      onTap: () => setState(() => _selectedIndex = index),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        color: isSelected ? const Color(0xFF14B885) : Colors.transparent,
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF2563EB).withOpacity(0.1) : Colors.transparent,
+          border: Border(
+            right: BorderSide(
+              color: isSelected ? const Color(0xFF2563EB) : Colors.transparent,
+              width: 3,
+            ),
+          ),
+        ),
         child: Row(
           children: [
-            Icon(icon, color: isSelected ? Colors.white : Colors.black54, size: 20),
+            Icon(
+              icon,
+              color: isSelected ? const Color(0xFF2563EB) : Colors.white70,
+              size: 20,
+            ),
             const SizedBox(width: 16),
             Text(
               title,
               style: TextStyle(
-                color: isSelected ? Colors.white : Colors.black87,
+                color: isSelected ? const Color(0xFF2563EB) : Colors.white70,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),

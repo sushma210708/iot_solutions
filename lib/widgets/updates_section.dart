@@ -47,8 +47,8 @@ class _UpdatesSectionState extends State<UpdatesSection> {
     if (_isLoading) {
       return Container(
         height: 400,
-        color: const Color(0xFF12181C),
-        child: const Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+        color: const Color(0xFF1E293B),
+        child: const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
 
@@ -61,163 +61,216 @@ class _UpdatesSectionState extends State<UpdatesSection> {
         horizontal: isDesktop ? 64.0 : 24.0,
         vertical: isDesktop ? 96.0 : 48.0,
       ),
-      color: const Color(0xFF12181C),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
+      color: const Color(0xFF1E293B),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(
-                    'Latest Updates',
-                    style: TextStyle(
-                      fontSize: isDesktop ? 40 : 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'LATEST UPDATES',
+                        style: TextStyle(
+                          color: const Color(0xFF2563EB),
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2,
+                          fontSize: isDesktop ? 14 : 12,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'News & Technical Developments',
+                        style: TextStyle(
+                          fontSize: isDesktop ? 48 : 32,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'News, research, and technical developments.',
-                    style: TextStyle(
-                      fontSize: isDesktop ? 18 : 16,
-                      color: Colors.white70,
+                  if (isDesktop)
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.white24),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      ),
+                      child: const Text('View All News', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                     ),
-                  ),
                 ],
               ),
-              if (isDesktop)
-                OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.white24),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              const SizedBox(height: 64),
+              if (_updates.isEmpty)
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.02),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: Colors.white12, style: BorderStyle.solid),
                   ),
-                  child: const Text('View All News', style: TextStyle(color: Colors.white)),
+                  child: const Center(
+                    child: Text(
+                      'No updates have been published yet.',
+                      style: TextStyle(color: Colors.white54, fontSize: 16),
+                    ),
+                  ),
+                )
+              else
+                CustomCarousel(
+                  height: 480,
+                  items: _updates.map((u) => UpdateCard(update: u)).toList(),
                 ),
             ],
           ),
-          const SizedBox(height: 48),
-          if (_updates.isEmpty)
-            Container(
-              height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.02),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white12, style: BorderStyle.solid),
-              ),
-              child: const Center(
-                child: Text(
-                  'No updates have been published yet.',
-                  style: TextStyle(color: Colors.white54, fontSize: 16),
-                ),
-              ),
-            )
-          else
-            CustomCarousel(
-              height: 450,
-              items: _updates.map((u) => _buildUpdateCard(u)).toList(),
-            ),
-        ],
+        ),
       ),
     );
   }
+}
 
-  Widget _buildUpdateCard(AppUpdate update) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.02),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (update.imageUrl.isNotEmpty)
-            Container(
-              height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                image: DecorationImage(
-                  image: NetworkImage(update.imageUrl),
-                  fit: BoxFit.cover,
+class UpdateCard extends StatefulWidget {
+  final AppUpdate update;
+  const UpdateCard({super.key, required this.update});
+
+  @override
+  State<UpdateCard> createState() => _UpdateCardState();
+}
+
+class _UpdateCardState extends State<UpdateCard> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0B1120),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: _isHovered ? const Color(0xFF2563EB).withOpacity(0.5) : Colors.white12,
+            width: 1,
+          ),
+          boxShadow: [
+            if (_isHovered)
+              BoxShadow(
+                color: const Color(0xFF2563EB).withOpacity(0.15),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              )
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.update.imageUrl.isNotEmpty)
+              Container(
+                height: 200,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(23)),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.update.imageUrl),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      update.category,
-                      style: const TextStyle(
-                        color: Color(0xFF14B885),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                    if (update.createdAt != null)
-                      Text(
-                        DateFormat('MMM d, yyyy').format(update.createdAt!),
-                        style: const TextStyle(
-                          color: Colors.white54,
-                          fontSize: 12,
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2563EB).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.2)),
+                        ),
+                        child: Text(
+                          widget.update.category.toUpperCase(),
+                          style: const TextStyle(
+                            color: Color(0xFF2563EB),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                            letterSpacing: 1.5,
+                          ),
                         ),
                       ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  update.title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    height: 1.3,
+                      if (widget.update.createdAt != null)
+                        Text(
+                          DateFormat('MMM d, yyyy').format(widget.update.createdAt!),
+                          style: const TextStyle(
+                            color: Colors.white54,
+                            fontSize: 12,
+                          ),
+                        ),
+                    ],
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  update.shortDescription,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white70,
-                    height: 1.5,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 24),
-                const Row(
-                  children: [
-                    Text(
-                      'Read More',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  const SizedBox(height: 24),
+                  Text(
+                    widget.update.title,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      height: 1.3,
+                      letterSpacing: -0.5,
                     ),
-                    SizedBox(width: 8),
-                    Icon(Icons.arrow_forward, color: Colors.white, size: 16),
-                  ],
-                ),
-              ],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    widget.update.shortDescription,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: Colors.white70,
+                      height: 1.6,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      const Text(
+                        'Read More',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        transform: Matrix4.translationValues(_isHovered ? 4 : 0, 0, 0),
+                        child: const Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

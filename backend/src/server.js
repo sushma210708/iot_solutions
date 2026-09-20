@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const aboutRoutes = require('./routes/about.routes');
+const technologyRoutes = require('./routes/technology.routes');
 const healthRoutes = require('./routes/health.routes');
 const productRoutes = require('./routes/product.routes');
 const uploadRoutes = require('./routes/uploadRoutes');
@@ -32,12 +34,14 @@ const allowedOrigins = process.env.FRONTEND_URL
 
 app.use(cors({
   origin: allowedOrigins,
-  credentials: true
+  credentials: allowedOrigins !== '*'
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use('/api/about', aboutRoutes);
+app.use('/api/technology', technologyRoutes);
 app.use('/api/health', healthRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/projects', projectRoutes);

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../models/inquiry.dart';
@@ -162,7 +162,7 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 4),
-                              Text('${inquiry.email} • ${inquiry.phone}', style: const TextStyle(color: Colors.black54, fontSize: 13)),
+                              Text('${inquiry.email} â€¢ ${inquiry.phone}', style: const TextStyle(color: Colors.black54, fontSize: 13)),
                               const SizedBox(height: 4),
                               Text(
                                 inquiry.message,

@@ -38,7 +38,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     final project = widget.project;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F161B),
+      backgroundColor: const Color(0xFF0B1120),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -61,7 +61,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     return SliverAppBar(
       pinned: true,
       expandedHeight: isDesktop ? 600 : 400,
-      backgroundColor: _isScrolled ? const Color(0xFF0F161B) : Colors.transparent,
+      backgroundColor: _isScrolled ? const Color(0xFF0B1120) : Colors.transparent,
       elevation: _isScrolled ? 4 : 0,
       iconTheme: const IconThemeData(color: Colors.white),
       flexibleSpace: FlexibleSpaceBar(
@@ -79,8 +79,8 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF0F161B).withOpacity(0.9),
-                    const Color(0xFF0F161B).withOpacity(0.3),
+                    const Color(0xFF0B1120).withOpacity(0.9),
+                    const Color(0xFF0B1120).withOpacity(0.3),
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
@@ -98,14 +98,14 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF14B885).withOpacity(0.1),
-                      border: Border.all(color: const Color(0xFF14B885).withOpacity(0.3)),
+                      color: const Color(0xFF2563EB).withOpacity(0.1),
+                      border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.3)),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       project.category.toUpperCase(),
                       style: const TextStyle(
-                        color: Color(0xFF14B885),
+                        color: Color(0xFF2563EB),
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 2,
@@ -177,7 +177,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         const Text(
           'THE CHALLENGE',
           style: TextStyle(
-            color: Color(0xFF14B885),
+            color: Color(0xFF2563EB),
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
             fontSize: 14,
@@ -225,7 +225,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         const Text(
           'OUR SOLUTION',
           style: TextStyle(
-            color: Color(0xFF14B885),
+            color: Color(0xFF2563EB),
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
             fontSize: 14,
@@ -257,7 +257,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.check_circle, color: Color(0xFF14B885), size: 20),
+                    const Icon(Icons.check_circle, color: Color(0xFF2563EB), size: 20),
                     const SizedBox(width: 16),
                     Expanded(
                       child: Text(
@@ -275,7 +275,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
   Widget _buildWorkflowSection(Project project, bool isDesktop) {
     return Container(
-      color: const Color(0xFF161E24),
+      color: const Color(0xFF1E293B),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 100 : 24,
         vertical: isDesktop ? 100 : 64,
@@ -286,7 +286,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           const Text(
             'EXECUTION WORKFLOW',
             style: TextStyle(
-              color: Color(0xFF14B885),
+              color: Color(0xFF2563EB),
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
               fontSize: 14,
@@ -311,7 +311,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                 width: isDesktop ? 350 : double.infinity,
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F161B),
+                  color: const Color(0xFF0B1120),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: Colors.white12),
                 ),
@@ -391,7 +391,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                           style: TextStyle(
                             fontSize: isDesktop ? 64 : 40,
                             fontWeight: FontWeight.w900,
-                            color: const Color(0xFF14B885),
+                            color: const Color(0xFF2563EB),
                             height: 1.1,
                           ),
                         ),
@@ -427,7 +427,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
   Widget _buildGallerySection(Project project, bool isDesktop) {
     return Container(
-      color: const Color(0xFF161E24),
+      color: const Color(0xFF1E293B),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 100 : 24,
         vertical: isDesktop ? 100 : 64,
@@ -438,7 +438,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           const Text(
             'PROJECT GALLERY',
             style: TextStyle(
-              color: Color(0xFF14B885),
+              color: Color(0xFF2563EB),
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
               fontSize: 14,
@@ -466,7 +466,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                           fit: BoxFit.cover,
                         )
                       : null,
-                  color: const Color(0xFF0F161B),
+                  color: const Color(0xFF0B1120),
                 ),
               );
             },
@@ -498,7 +498,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF14B885),
+                backgroundColor: const Color(0xFF2563EB),
                 padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 20),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
               ),

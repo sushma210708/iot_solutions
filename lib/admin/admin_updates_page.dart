@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../models/update.dart';
@@ -161,7 +161,7 @@ class AdminUpdatesPageState extends State<AdminUpdatesPage> {
                 onPressed: () => showUpdateDialog(),
                 icon: const Icon(Icons.add),
                 label: const Text('Add Update'),
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885), foregroundColor: Colors.white),
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB), foregroundColor: Colors.white),
               ),
             ],
           ),
@@ -188,7 +188,7 @@ class AdminUpdatesPageState extends State<AdminUpdatesPage> {
                             children: [
                               Icon(
                                 update.status == 'Published' ? Icons.visibility : Icons.visibility_off,
-                                color: update.status == 'Published' ? const Color(0xFF14B885) : Colors.grey,
+                                color: update.status == 'Published' ? const Color(0xFF2563EB) : Colors.grey,
                               ),
                               const SizedBox(width: 8),
                               IconButton(

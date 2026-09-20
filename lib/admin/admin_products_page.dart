@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
@@ -92,7 +92,7 @@ class AdminProductsPageState extends State<AdminProductsPage> {
                 icon: const Icon(Icons.add, color: Colors.white),
                 label: const Text('Add Product', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF14B885),
+                  backgroundColor: const Color(0xFF2563EB),
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 ),
               ),
@@ -190,6 +190,5 @@ class AdminProductsPageState extends State<AdminProductsPage> {
     );
   }
 }
-
 
 

@@ -39,7 +39,7 @@ class _HeroSectionState extends State<HeroSection> {
     if (_isLoading) {
       return const SizedBox(
         height: 600,
-        child: Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+        child: Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
 
@@ -71,7 +71,7 @@ class _HeroSectionState extends State<HeroSection> {
                 width: 8,
                 height: 8,
                 decoration: const BoxDecoration(
-                  color: Color(0xFF14B885),
+                  color: Color(0xFF2563EB),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -102,7 +102,7 @@ class _HeroSectionState extends State<HeroSection> {
           style: TextStyle(
             fontSize: isDesktop ? 72 : 48,
             fontWeight: FontWeight.w900,
-            color: const Color(0xFF14B885),
+            color: const Color(0xFF2563EB),
             height: 1.1,
           ),
         ),
@@ -125,23 +125,39 @@ class _HeroSectionState extends State<HeroSection> {
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF14B885),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                backgroundColor: const Color(0xFF2563EB),
+                foregroundColor: const Color(0xFF0B1120),
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+                elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(40),
                 ),
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Contact Us',
+                    'Execute Action',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: 12),
                   Icon(Icons.arrow_forward, size: 18),
                 ],
+              ),
+            ),
+            OutlinedButton(
+              onPressed: () {},
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.white.withOpacity(0.2)),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40),
+                ),
+              ),
+              child: const Text(
+                'Learn More',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -243,7 +259,7 @@ class _HeroSectionState extends State<HeroSection> {
             style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF14B885),
+              color: Color(0xFF2563EB),
             ),
           ),
           const SizedBox(height: 8),
@@ -264,7 +280,7 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF14B885).withOpacity(0.05)
+      ..color = const Color(0xFF2563EB).withOpacity(0.05)
       ..strokeWidth = 1.0;
 
     final double step = 40.0;
@@ -281,7 +297,7 @@ class _GridPainter extends CustomPainter {
     
     // Draw subtle connection nodes
     final nodePaint = Paint()
-      ..color = const Color(0xFF14B885).withOpacity(0.3)
+      ..color = const Color(0xFF2563EB).withOpacity(0.3)
       ..style = PaintingStyle.fill;
       
     canvas.drawCircle(Offset(step * 2, step * 3), 4, nodePaint);

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
@@ -62,7 +62,7 @@ class AdminChallengesPageState extends State<AdminChallengesPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: const Color(0xFF161E24),
+              backgroundColor: const Color(0xFF1E293B),
               title: Text(challenge == null ? 'Add Challenge' : 'Edit Challenge', style: const TextStyle(color: Colors.white)),
               content: SizedBox(
                 width: 600,
@@ -85,7 +85,7 @@ class AdminChallengesPageState extends State<AdminChallengesPage> {
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
                         value: status,
-                        dropdownColor: const Color(0xFF161E24),
+                        dropdownColor: const Color(0xFF1E293B),
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -190,7 +190,7 @@ class AdminChallengesPageState extends State<AdminChallengesPage> {
                       }
                     }
                   },
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885)),
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                   child: isSaving
                       ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white))
                       : const Text('Save', style: TextStyle(color: Colors.white)),
@@ -207,7 +207,7 @@ class AdminChallengesPageState extends State<AdminChallengesPage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF161E24),
+        backgroundColor: const Color(0xFF1E293B),
         title: const Text('Confirm Delete', style: TextStyle(color: Colors.white)),
         content: const Text('Are you sure you want to delete this challenge?', style: TextStyle(color: Colors.white70)),
         actions: [
@@ -249,7 +249,7 @@ class AdminChallengesPageState extends State<AdminChallengesPage> {
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
-            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFF14B885))),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFF2563EB))),
           ),
         ),
       ],
@@ -258,7 +258,7 @@ class AdminChallengesPageState extends State<AdminChallengesPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) return const Center(child: CircularProgressIndicator(color: Color(0xFF14B885)));
+    if (_isLoading) return const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)));
     if (_error != null) return Center(child: Text('Error: $_error', style: const TextStyle(color: Colors.red)));
 
     return Padding(
@@ -281,7 +281,7 @@ class AdminChallengesPageState extends State<AdminChallengesPage> {
                 onPressed: () => showChallengeDialog(),
                 icon: const Icon(Icons.add, size: 16, color: Colors.white),
                 label: const Text('Add Challenge', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885)),
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
               ),
             ],
           ),

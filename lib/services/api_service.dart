@@ -14,6 +14,8 @@ import '../models/inquiry.dart';
 import '../models/challenge.dart';
 import '../models/testimonial.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/auth_service.dart';
 
 class ApiService {
   static const String _localUrl = 'http://localhost:5000/api';
@@ -33,10 +35,9 @@ class ApiService {
     throw Exception('Failed to load products');
   }
 
-  Future<Product> getProductById(String id, String token) async {
+  Future<Product> getProductById(String id) async {
     final response = await http.get(
       Uri.parse('$baseUrl/products/$id'),
-      headers: {'Authorization': 'Bearer $token'},
     );
 
     if (response.statusCode == 200) {
@@ -684,6 +685,74 @@ class ApiService {
     );
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Failed to delete inquiry');
+    }
+  }
+
+  // --- About Us ---
+  Future<Map<String, dynamic>?> getAboutUs() async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/about'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['data'];
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool> updateAboutUs(Map<String, dynamic> data) async {
+    final token = await AuthService().getIdToken();
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl/about'),
+        headers: {
+          'Content-Type': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+        body: json.encode(data),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e) {
+      throw Exception('Failed to update About Us: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>?> getTechnology() async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/technology'));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool> updateTechnology(Map<String, dynamic> data) async {
+    final token = await AuthService().getIdToken();
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl/technology'),
+        headers: {
+          'Content-Type': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+        body: json.encode(data),
+      );
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception(response.body);
+      }
+    } catch (e) {
+      throw Exception('Failed to update Technology: $e');
     }
   }
 }

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'admin/admin_layout.dart';
 import 'pages/login_page.dart';
+import 'pages/about_us_page.dart';
+import 'pages/products_page.dart';
+import 'pages/mentors_page.dart';
+import 'pages/technology_page.dart';
+import 'pages/contact_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,16 +36,18 @@ class GreenFusionApp extends StatelessWidget {
       title: 'Green Fusion',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFF161E24), // Dark background
-        primaryColor: const Color(0xFF14B885), // Green accent
+        scaffoldBackgroundColor: const Color(0xFF0B1120), // Execute Action Dark background
+        primaryColor: const Color(0xFF2563EB), // Green accent
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF14B885),
-          secondary: Color(0xFF14B885),
-          surface: Color(0xFF1E272D),
+          primary: Color(0xFF2563EB),
+          secondary: Color(0xFF2563EB),
+          surface: Color(0xFF1E293B),
         ),
-        textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.white70),
-          headlineLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        textTheme: GoogleFonts.interTextTheme(
+          Theme.of(context).textTheme,
+        ).apply(
+          bodyColor: Colors.white,
+          displayColor: Colors.white,
         ),
       ),
       initialRoute: '/',
@@ -47,6 +55,11 @@ class GreenFusionApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/admin': (context) => const AdminLayout(),
         '/login': (context) => const LoginPage(),
+        '/about': (context) => const AboutUsPage(),
+        '/solutions': (context) => const ProductsPage(),
+        '/mentors': (context) => const MentorsPage(),
+        '/technology': (context) => const TechnologyPage(),
+        '/contact': (context) => const ContactPage(),
       },
     );
   }

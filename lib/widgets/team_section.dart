@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/mentor.dart';
+import '../pages/mentor_details_page.dart';
 import 'custom_carousel.dart';
 
 class TeamSection extends StatefulWidget {
@@ -40,148 +41,220 @@ class _TeamSectionState extends State<TeamSection> {
     if (_isLoading) {
       return const Padding(
         padding: EdgeInsets.symmetric(horizontal: 64.0, vertical: 64.0),
-        child: Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+        child: Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
 
     final isDesktop = MediaQuery.of(context).size.width >= 900;
-    // Use only dynamic mentors
     final displayMentors = _mentors;
 
-    return Padding(
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF1E293B),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 64.0 : 24.0,
-        vertical: isDesktop ? 64.0 : 32.0,
+        vertical: isDesktop ? 120.0 : 80.0,
       ),
-      child: Column(
-        children: [
-          Text(
-            'Meet Our Mentors',
-            style: TextStyle(
-              fontSize: isDesktop ? 40 : 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Our diverse team brings together expertise in IoT, AI, and energy management to\ndeliver cutting-edge solutions.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: isDesktop ? 18 : 16,
-              color: Colors.white70,
-              height: 1.5,
-            ),
-          ),
-          SizedBox(height: isDesktop ? 48 : 32),
-          if (displayMentors.isEmpty)
-            Container(
-              height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.02),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white12, style: BorderStyle.solid),
-              ),
-              child: const Center(
-                child: Text(
-                  'No mentors have been added yet.',
-                  style: TextStyle(color: Colors.white54, fontSize: 16),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'OUR TEAM',
+                style: TextStyle(
+                  color: const Color(0xFF2563EB),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                  fontSize: isDesktop ? 14 : 12,
                 ),
               ),
-            )
-          else
-            CustomCarousel(
-              height: 480,
-              items: displayMentors.map((m) => _teamMemberCard(m)).toList(),
-            ),
-        ],
+              const SizedBox(height: 16),
+              Text(
+                'Meet Our Mentors',
+                style: TextStyle(
+                  fontSize: isDesktop ? 48 : 32,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: isDesktop ? 600 : double.infinity,
+                child: Text(
+                  'Our diverse team brings together expertise in IoT, AI, and energy management to deliver cutting-edge solutions.',
+                  style: TextStyle(
+                    fontSize: isDesktop ? 18 : 16,
+                    color: Colors.white70,
+                    height: 1.6,
+                  ),
+                ),
+              ),
+              SizedBox(height: isDesktop ? 64 : 48),
+              if (displayMentors.isEmpty)
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.02),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: Colors.white12, style: BorderStyle.solid),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'No mentors have been added yet.',
+                      style: TextStyle(color: Colors.white54, fontSize: 16),
+                    ),
+                  ),
+                )
+              else
+                CustomCarousel(
+                  height: 520,
+                  items: displayMentors.map((m) => MentorCard(mentor: m)).toList(),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
+}
 
-  Widget _teamMemberCard(Mentor mentor) {
-    return Container(
-      width: 280,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.02),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Image Placeholder or Network Image
-          Container(
-            height: 280,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E272D),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-              image: mentor.imageUrl.isNotEmpty
-                  ? DecorationImage(
-                      image: NetworkImage(mentor.imageUrl),
-                      fit: BoxFit.cover,
-                    )
-                  : null,
+class MentorCard extends StatefulWidget {
+  final Mentor mentor;
+  const MentorCard({super.key, required this.mentor});
+
+  @override
+  State<MentorCard> createState() => _MentorCardState();
+}
+
+class _MentorCardState extends State<MentorCard> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MentorDetailsPage(mentor: widget.mentor),
             ),
-            child: mentor.imageUrl.isEmpty
-                ? const Center(
-                    child: Icon(
-                      Icons.person_outline,
-                      size: 80,
-                      color: Colors.white24,
-                    ),
-                  )
-                : null,
+          );
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
+          width: 320,
+          decoration: BoxDecoration(
+            color: const Color(0xFF0B1120),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: _isHovered ? const Color(0xFF2563EB).withOpacity(0.5) : Colors.white12,
+              width: 1,
+            ),
+            boxShadow: [
+              if (_isHovered)
+                BoxShadow(
+                  color: const Color(0xFF2563EB).withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                )
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  mentor.name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Image Section
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(23)),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E272D),
+                      image: widget.mentor.imageUrl.isNotEmpty
+                          ? DecorationImage(
+                              image: NetworkImage(widget.mentor.imageUrl),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
+                    ),
+                    child: widget.mentor.imageUrl.isEmpty
+                        ? const Center(
+                            child: Icon(
+                              Icons.person_outline,
+                              size: 80,
+                              color: Colors.white24,
+                            ),
+                          )
+                        : null,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  mentor.role,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF14B885),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  width: 32,
-                  height: 2,
-                  color: Colors.white24,
-                ),
-                const SizedBox(height: 16),
-                const Row(
+              ),
+              // Content Section
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'View Profile',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white70,
+                      widget.mentor.name,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
                       ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(Icons.arrow_forward, size: 12, color: Colors.white70),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2563EB).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.2)),
+                      ),
+                      child: Text(
+                        widget.mentor.role.toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2563EB),
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        const Text(
+                          'View Profile',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white70,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          transform: Matrix4.translationValues(_isHovered ? 4 : 0, 0, 0),
+                          child: const Icon(Icons.arrow_forward, size: 16, color: Color(0xFF2563EB)),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

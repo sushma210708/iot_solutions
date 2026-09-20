@@ -44,56 +44,67 @@ class _AchievementsSectionState extends State<AchievementsSection> {
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width >= 900;
 
-    return Padding(
+    return Container(
+      width: double.infinity,
+      color: const Color(0xFF0B1120),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 64.0 : 24.0,
-        vertical: isDesktop ? 64.0 : 32.0,
+        vertical: isDesktop ? 120.0 : 80.0,
       ),
-      child: Column(
-        children: [
-          Text(
-            'OUR JOURNEY',
-            style: TextStyle(
-              color: const Color(0xFF14B885),
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
-              fontSize: isDesktop ? 14 : 12,
-            ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            children: [
+              Text(
+                'OUR JOURNEY',
+                style: TextStyle(
+                  color: const Color(0xFF2563EB),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                  fontSize: isDesktop ? 14 : 12,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Milestones of Innovation',
+                style: TextStyle(
+                  fontSize: isDesktop ? 48 : 32,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  letterSpacing: -0.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: isDesktop ? 600 : double.infinity,
+                child: Text(
+                  'A timeline of our commitment to engineering excellence and sustainable technology.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: isDesktop ? 18 : 16,
+                    color: Colors.white70,
+                    height: 1.6,
+                  ),
+                ),
+              ),
+              SizedBox(height: isDesktop ? 80 : 48),
+              if (_isLoading)
+                const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)))
+              else if (_error.isNotEmpty)
+                const Center(child: Text('Error loading achievements', style: TextStyle(color: Colors.red)))
+              else if (_achievements.isEmpty)
+                const Center(child: Text('Achievements will appear here as they are added.', style: TextStyle(color: Colors.white70)))
+              else
+                Column(
+                  children: List.generate(_achievements.length, (index) {
+                    return _buildTimelineItem(_achievements[index], index, isDesktop);
+                  }),
+                ),
+            ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            'Milestones of Innovation',
-            style: TextStyle(
-              fontSize: isDesktop ? 40 : 32,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-              fontFamily: 'Inter',
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'A timeline of our commitment to engineering excellence and sustainable technology.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: isDesktop ? 18 : 16,
-              color: Colors.white70,
-            ),
-          ),
-          SizedBox(height: isDesktop ? 80 : 48),
-          if (_isLoading)
-            const Center(child: CircularProgressIndicator(color: Color(0xFF14B885)))
-          else if (_error.isNotEmpty)
-            const Center(child: Text('Error loading achievements', style: TextStyle(color: Colors.red)))
-          else if (_achievements.isEmpty)
-            const Center(child: Text('Achievements will appear here as they are added.', style: TextStyle(color: Colors.white70)))
-          else
-            Column(
-              children: List.generate(_achievements.length, (index) {
-                return _buildTimelineItem(_achievements[index], index, isDesktop);
-              }),
-            ),
-        ],
+        ),
       ),
     );
   }
@@ -135,7 +146,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                   width: 16,
                   height: 16,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF14B885),
+                    color: const Color(0xFF2563EB),
                     shape: BoxShape.circle,
                     border: Border.all(color: const Color(0xFF0F161B), width: 4),
                   ),
@@ -162,14 +173,14 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF14B885).withOpacity(0.1),
+        color: const Color(0xFF2563EB).withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF14B885).withOpacity(0.3)),
+        border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.3)),
       ),
       child: Text(
         year,
         style: const TextStyle(
-          color: Color(0xFF14B885),
+          color: Color(0xFF2563EB),
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -181,7 +192,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
       height: isDesktop ? 300 : 200,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.02),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white12),
         image: imageUrl.isNotEmpty 
             ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)

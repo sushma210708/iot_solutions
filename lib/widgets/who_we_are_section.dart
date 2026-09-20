@@ -25,7 +25,7 @@ class WhoWeAreSection extends StatelessWidget {
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircleAvatar(radius: 4, backgroundColor: Color(0xFF14B885)),
+                CircleAvatar(radius: 4, backgroundColor: Color(0xFF2563EB)),
                 SizedBox(width: 8),
                 Text('From Ideas to Impact', style: TextStyle(color: Colors.white70)),
               ],
@@ -93,10 +93,10 @@ class WhoWeAreSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF14B885).withOpacity(0.1),
+              color: const Color(0xFF2563EB).withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, color: const Color(0xFF14B885), size: 32),
+            child: Icon(icon, color: const Color(0xFF2563EB), size: 32),
           ),
           const SizedBox(height: 24),
           Text(

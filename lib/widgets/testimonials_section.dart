@@ -65,7 +65,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
     if (_isLoading) {
       return const SizedBox(
         height: 400,
-        child: Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+        child: Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
 
@@ -99,12 +99,12 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
         children: [
           Row(
             children: [
-              Container(width: 40, height: 2, color: const Color(0xFF14B885)),
+              Container(width: 40, height: 2, color: const Color(0xFF2563EB)),
               const SizedBox(width: 16),
               const Text(
                 'TRUSTED BY INDUSTRY LEADERS',
                 style: TextStyle(
-                  color: Color(0xFF14B885),
+                  color: Color(0xFF2563EB),
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2,
                   fontSize: 12,
@@ -144,7 +144,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                           color: Color(0xFF0F161B),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.person, color: Color(0xFF14B885)),
+                        child: const Icon(Icons.person, color: Color(0xFF2563EB)),
                       ),
                       const SizedBox(width: 16),
                       Column(
@@ -184,7 +184,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                   width: _currentIndex == index ? 32 : 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: _currentIndex == index ? const Color(0xFF14B885) : Colors.white24,
+                    color: _currentIndex == index ? const Color(0xFF2563EB) : Colors.white24,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),

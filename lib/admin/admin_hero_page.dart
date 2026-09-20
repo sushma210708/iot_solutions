@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
@@ -206,7 +206,7 @@ class _AdminHeroPageState extends State<AdminHeroPage> {
                     const SizedBox(height: 32),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF14B885),
+                        backgroundColor: const Color(0xFF2563EB),
                         foregroundColor: Colors.white,
                         minimumSize: const Size(200, 50),
                       ),

@@ -16,6 +16,14 @@ const mentorSchema = new mongoose.Schema({
   cloudinaryPublicId: {
     type: String,
     default: '',
+  },
+  bio: {
+    type: String,
+    default: '',
+  },
+  contributions: {
+    type: [String],
+    default: [],
   }
 }, { timestamps: true });
 

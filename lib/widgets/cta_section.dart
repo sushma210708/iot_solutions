@@ -30,7 +30,7 @@ class _CtaSectionState extends State<CtaSection> {
         vertical: isDesktop ? 96.0 : 64.0,
       ),
       decoration: const BoxDecoration(
-        color: Color(0xFF14B885),
+        color: Color(0xFF2563EB),
       ),
       child: Column(
         children: [
@@ -56,17 +56,25 @@ class _CtaSectionState extends State<CtaSection> {
           ElevatedButton(
             onPressed: _showCollaborationDialog,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0F161B),
+              backgroundColor: const Color(0xFF0B1120),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
             ),
-            child: const Text(
-              'Start a Collaboration',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Start a Collaboration',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Icon(Icons.arrow_forward, size: 20),
+              ],
             ),
           ),
         ],
@@ -107,7 +115,7 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Thank you! Your collaboration request has been submitted.'),
-            backgroundColor: Color(0xFF14B885),
+            backgroundColor: Color(0xFF2563EB),
           ),
         );
       }
@@ -127,7 +135,8 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF0F161B),
+      backgroundColor: const Color(0xFF1E293B),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       title: const Text('Start a Collaboration', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       content: SizedBox(
         width: 400,
@@ -158,7 +167,7 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
         ),
         ElevatedButton(
           onPressed: _isSubmitting ? null : _submit,
-          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885)),
+          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
           child: _isSubmitting 
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
               : const Text('Submit', style: TextStyle(color: Colors.white)),
@@ -176,10 +185,10 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
       decoration: InputDecoration(
         labelText: label,
         labelStyle: const TextStyle(color: Colors.white54),
-        enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white24), borderRadius: BorderRadius.circular(8)),
-        focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF14B885)), borderRadius: BorderRadius.circular(8)),
-        errorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(8)),
-        focusedErrorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(8)),
+        enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white24), borderRadius: BorderRadius.circular(12)),
+        focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF2563EB)), borderRadius: BorderRadius.circular(12)),
+        errorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(12)),
+        focusedErrorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(12)),
       ),
       validator: (value) => value == null || value.trim().isEmpty ? 'Please enter your $label' : null,
     );

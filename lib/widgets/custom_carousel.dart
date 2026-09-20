@@ -119,7 +119,7 @@ class _CustomCarouselState extends State<CustomCarousel> {
                       borderRadius: BorderRadius.circular(4),
                       color: (Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
-                              : const Color(0xFF14B885))
+                              : const Color(0xFF2563EB))
                           .withOpacity(_currentIndex == entry.key ? 0.9 : 0.2),
                     ),
                   ),

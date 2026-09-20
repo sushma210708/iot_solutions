@@ -46,7 +46,7 @@ class _FooterSectionState extends State<FooterSection> {
           horizontal: isDesktop ? 64.0 : 24.0, 
           vertical: isDesktop ? 64.0 : 32.0,
         ),
-        child: const Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+        child: const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
 
@@ -65,7 +65,7 @@ class _FooterSectionState extends State<FooterSection> {
       children: [
         Row(
           children: [
-            const Icon(Icons.energy_savings_leaf, color: Color(0xFF14B885)),
+            const Icon(Icons.energy_savings_leaf, color: Color(0xFF2563EB)),
             const SizedBox(width: 8),
             const Text(
               'Green Fusion',
@@ -164,40 +164,65 @@ class _FooterSectionState extends State<FooterSection> {
     );
 
     return Container(
-      color: const Color(0xFF12181C), // Slightly darker background for footer
+      color: const Color(0xFF0B1120), // Dark background for footer
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 64.0 : 24.0, 
         vertical: isDesktop ? 64.0 : 48.0,
       ),
-      child: isDesktop 
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(flex: 2, child: brandColumn),
-                Expanded(flex: 2, child: contactColumn),
-                Expanded(flex: 2, child: followColumn),
-                Expanded(flex: 2, child: aboutColumn),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                brandColumn,
-                const SizedBox(height: 48),
-                contactColumn,
-                const SizedBox(height: 48),
-                followColumn,
-                const SizedBox(height: 48),
-                aboutColumn,
-              ],
-            ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            children: [
+              isDesktop 
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(flex: 2, child: brandColumn),
+                        Expanded(flex: 2, child: contactColumn),
+                        Expanded(flex: 2, child: followColumn),
+                        Expanded(flex: 2, child: aboutColumn),
+                      ],
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        brandColumn,
+                        const SizedBox(height: 48),
+                        contactColumn,
+                        const SizedBox(height: 48),
+                        followColumn,
+                        const SizedBox(height: 48),
+                        aboutColumn,
+                      ],
+                    ),
+              const SizedBox(height: 64),
+              const Divider(color: Colors.white12),
+              const SizedBox(height: 24),
+              const Center(
+                child: Text(
+                  '© 2026 Green Fusion. All rights reserved.',
+                  style: TextStyle(color: Colors.white54, fontSize: 14),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
   Widget _contactRow(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, color: const Color(0xFF14B885), size: 20),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: const Color(0xFF2563EB).withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: const Color(0xFF2563EB), size: 16),
+        ),
         const SizedBox(width: 12),
         Text(
           text,

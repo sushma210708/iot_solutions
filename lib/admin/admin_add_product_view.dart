@@ -23,6 +23,8 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
   final TextEditingController _shortDescController = TextEditingController();
   final TextEditingController _detailedDescController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
+  final TextEditingController _problemController = TextEditingController();
+  final TextEditingController _solutionController = TextEditingController();
   String _status = 'Active';
 
   List<TextEditingController> _benefitControllers = [TextEditingController()];
@@ -80,6 +82,13 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
           .where((e) => e['parameter']!.isNotEmpty && e['value']!.isNotEmpty)
           .toList();
 
+      if (_problemController.text.trim().isNotEmpty) {
+        specsList.insert(0, {'parameter': 'Problem', 'value': _problemController.text.trim()});
+      }
+      if (_solutionController.text.trim().isNotEmpty) {
+        specsList.insert(specsList.length > 0 ? 1 : 0, {'parameter': 'Solution', 'value': _solutionController.text.trim()});
+      }
+
       final token = await AuthService().getIdToken();
       if (token == null) throw Exception("Authentication required");
 
@@ -126,9 +135,9 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                     onTap: widget.onBack,
                     child: const Row(
                       children: [
-                        Icon(Icons.arrow_back, color: Color(0xFF14B885), size: 16),
+                        Icon(Icons.arrow_back, color: Color(0xFF2563EB), size: 16),
                         SizedBox(width: 4),
-                        Text('Back to Products', style: TextStyle(color: Color(0xFF14B885), fontWeight: FontWeight.bold)),
+                        Text('Back to Products', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -148,7 +157,7 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                   const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: _isUploading ? null : _saveProduct,
-                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885), padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)),
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB), padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)),
                     child: _isUploading
                         ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                         : const Text('Save Product', style: TextStyle(color: Colors.white)),
@@ -190,7 +199,11 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                               const SizedBox(height: 24),
                               _buildTextField('Short Description *', _shortDescController, maxLines: 3),
                               const SizedBox(height: 24),
-                              _buildTextField('Detailed Description', _detailedDescController, maxLines: 5, isRichText: true),
+                              _buildTextField('Detailed Description (Overview)', _detailedDescController, maxLines: 5, isRichText: true),
+                              const SizedBox(height: 24),
+                              _buildTextField('The Problem', _problemController, maxLines: 3),
+                              const SizedBox(height: 24),
+                              _buildTextField('The Solution', _solutionController, maxLines: 3),
                             ],
                           ),
                         ),
@@ -209,8 +222,8 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                               Center(
                                 child: TextButton.icon(
                                   onPressed: () => setState(() => _benefitControllers.add(TextEditingController())),
-                                  icon: const Icon(Icons.add, color: Color(0xFF14B885)),
-                                  label: const Text('Add Benefit', style: TextStyle(color: Color(0xFF14B885))),
+                                  icon: const Icon(Icons.add, color: Color(0xFF2563EB)),
+                                  label: const Text('Add Benefit', style: TextStyle(color: Color(0xFF2563EB))),
                                 ),
                               )
                             ],
@@ -231,8 +244,8 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                               Center(
                                 child: TextButton.icon(
                                   onPressed: () => setState(() => _parameterControllers.add(TextEditingController())),
-                                  icon: const Icon(Icons.add, color: Color(0xFF14B885)),
-                                  label: const Text('Add Parameter', style: TextStyle(color: Color(0xFF14B885))),
+                                  icon: const Icon(Icons.add, color: Color(0xFF2563EB)),
+                                  label: const Text('Add Parameter', style: TextStyle(color: Color(0xFF2563EB))),
                                 ),
                               )
                             ],
@@ -253,8 +266,8 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                               Center(
                                 child: TextButton.icon(
                                   onPressed: () => setState(() => _techControllers.add(TextEditingController())),
-                                  icon: const Icon(Icons.add, color: Color(0xFF14B885)),
-                                  label: const Text('Add Technology', style: TextStyle(color: Color(0xFF14B885))),
+                                  icon: const Icon(Icons.add, color: Color(0xFF2563EB)),
+                                  label: const Text('Add Technology', style: TextStyle(color: Color(0xFF2563EB))),
                                 ),
                               )
                             ],
@@ -284,7 +297,7 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                                     onPressed: _pickImages,
                                     icon: const Icon(Icons.add, color: Colors.white, size: 16),
                                     label: const Text('Add Images', style: TextStyle(color: Colors.white)),
-                                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885)),
+                                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                                   ),
                                 ],
                               ),
@@ -337,8 +350,8 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                               Center(
                                 child: TextButton.icon(
                                   onPressed: () => setState(() => _specControllers.add({'param': TextEditingController(), 'val': TextEditingController()})),
-                                  icon: const Icon(Icons.add, color: Color(0xFF14B885)),
-                                  label: const Text('Add Specification', style: TextStyle(color: Color(0xFF14B885))),
+                                  icon: const Icon(Icons.add, color: Color(0xFF2563EB)),
+                                  label: const Text('Add Specification', style: TextStyle(color: Color(0xFF2563EB))),
                                 ),
                               )
                             ],

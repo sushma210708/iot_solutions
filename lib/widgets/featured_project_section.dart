@@ -53,7 +53,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
     if (_isLoading) {
       return const SizedBox(
         height: 600,
-        child: Center(child: CircularProgressIndicator(color: Color(0xFF14B885))),
+        child: Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
     
@@ -78,7 +78,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFF0F161B),
+      color: const Color(0xFF0B1120),
       child: Stack(
         children: [
           // Dynamic Background Image
@@ -92,36 +92,39 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
               ),
             ),
           
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: isDesktop ? 100 : 24,
-              vertical: isDesktop ? 120 : 80,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Impact Stories',
-                  style: TextStyle(
-                    fontSize: isDesktop ? 48 : 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: 'Inter',
-                  ),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1200),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isDesktop ? 64 : 24,
+                  vertical: isDesktop ? 120 : 80,
                 ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: isDesktop ? 600 : double.infinity,
-                  child: Text(
-                    'Real challenges. Intelligent solutions. Measurable impact.\n\nExplore how Green Fusion is solving real-world problems and creating value across industries.',
-                    style: TextStyle(
-                      fontSize: isDesktop ? 18 : 16,
-                      color: Colors.white70,
-                      height: 1.5,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Impact Stories',
+                      style: TextStyle(
+                        fontSize: isDesktop ? 48 : 32,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: -0.5,
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 48),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: isDesktop ? 600 : double.infinity,
+                      child: Text(
+                        'Real challenges. Intelligent solutions. Measurable impact.\n\nExplore how Green Fusion is solving real-world problems and creating value across industries.',
+                        style: TextStyle(
+                          fontSize: isDesktop ? 18 : 16,
+                          color: Colors.white70,
+                          height: 1.6,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 48),
                 
                 // Categories
                 SingleChildScrollView(
@@ -136,10 +139,10 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                             decoration: BoxDecoration(
-                              color: isSelected ? const Color(0xFF14B885) : Colors.transparent,
+                              color: isSelected ? const Color(0xFF2563EB) : Colors.transparent,
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(
-                                color: isSelected ? const Color(0xFF14B885) : Colors.white24,
+                                color: isSelected ? const Color(0xFF2563EB) : Colors.white24,
                               ),
                             ),
                             child: Text(
@@ -168,7 +171,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                     separatorBuilder: (context, index) => const SizedBox(height: 32),
                     itemBuilder: (context, index) {
                       final project = filteredProjects[index];
-                      return _buildProjectCard(project, context);
+                      return ProjectCard(project: project);
                     },
                   ),
                 ],
@@ -195,6 +198,8 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
               ],
             ),
           ),
+        ),
+      ),
         ],
       ),
     );
@@ -206,7 +211,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
       final rowChildren = <Widget>[];
       for (int j = 0; j < 3; j++) {
         if (i + j < projects.length) {
-          rowChildren.add(Expanded(child: _buildProjectCard(projects[i + j], context)));
+          rowChildren.add(Expanded(child: ProjectCard(project: projects[i + j])));
         } else {
           rowChildren.add(const Expanded(child: SizedBox())); // Empty space
         }
@@ -222,17 +227,52 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
     }
     return rows;
   }
+}
 
-  Widget _buildProjectCard(Project project, BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: Container(
+class ProjectCard extends StatefulWidget {
+  final Project project;
+  const ProjectCard({super.key, required this.project});
+
+  @override
+  State<ProjectCard> createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<ProjectCard> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProjectDetailsPage(project: widget.project),
+            ),
+          );
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
+            color: const Color(0xFF1E293B),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: _isHovered ? const Color(0xFF2563EB).withOpacity(0.5) : Colors.white12,
+              width: 1,
+            ),
+            boxShadow: [
+              if (_isHovered)
+                BoxShadow(
+                  color: const Color(0xFF2563EB).withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                )
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,88 +281,87 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
               // Image Section
               AspectRatio(
                 aspectRatio: 16 / 9,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(23)),
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                    child: widget.project.imageUrl.isNotEmpty
+                        ? Image.network(
+                            widget.project.imageUrl,
+                            fit: BoxFit.cover,
+                          )
+                        : const Center(child: Icon(Icons.image, color: Colors.white24, size: 48)),
                   ),
-                  child: project.imageUrl.isNotEmpty
-                      ? Image.network(
-                          project.imageUrl,
-                          fit: BoxFit.cover,
-                        )
-                      : const Center(child: Icon(Icons.image, color: Colors.white24, size: 48)),
                 ),
               ),
               
               // Content Section
               Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(32.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF14B885).withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: const Color(0xFF14B885).withOpacity(0.3)),
+                        color: const Color(0xFF2563EB).withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.2)),
                       ),
                       child: Text(
-                        project.category,
+                        widget.project.category.toUpperCase(),
                         style: const TextStyle(
-                          color: Color(0xFF14B885),
+                          color: Color(0xFF2563EB),
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     Text(
-                      project.title,
+                      widget.project.title,
                       style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
                         color: Colors.white,
+                        letterSpacing: -0.3,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Text(
-                      project.shortDescription,
+                      widget.project.shortDescription,
                       style: const TextStyle(
-                        fontSize: 13,
+                        fontSize: 15,
                         color: Colors.white70,
-                        height: 1.5,
+                        height: 1.6,
                       ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 24),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProjectDetailsPage(project: project),
+                    const SizedBox(height: 32),
+                    Row(
+                      children: [
+                        const Text(
+                          'View Case Study',
+                          style: TextStyle(
+                            color: Color(0xFF2563EB),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
                           ),
-                        );
-                      },
-                      child: const Row(
-                        children: [
-                          Text(
-                            'View Case Study',
-                            style: TextStyle(
-                              color: Color(0xFF14B885),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(Icons.arrow_forward, color: Color(0xFF14B885), size: 16),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 8),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          transform: Matrix4.translationValues(_isHovered ? 4 : 0, 0, 0),
+                          child: const Icon(Icons.arrow_forward, color: Color(0xFF2563EB), size: 18),
+                        ),
+                      ],
                     ),
                   ],
                 ),

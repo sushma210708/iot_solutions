@@ -82,7 +82,7 @@ class AdminMentorsPageState extends State<AdminMentorsPage> {
                 icon: const Icon(Icons.add, color: Colors.white),
                 label: const Text('Add Mentor', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF14B885),
+                  backgroundColor: const Color(0xFF2563EB),
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 ),
               ),
@@ -172,6 +172,8 @@ class _MentorDialogState extends State<_MentorDialog> {
   final ApiService _apiService = ApiService();
   late TextEditingController _nameController;
   late TextEditingController _roleController;
+  late TextEditingController _bioController;
+  late TextEditingController _contributionsController;
   
   bool _isUploading = false;
   XFile? _newImage;
@@ -183,6 +185,8 @@ class _MentorDialogState extends State<_MentorDialog> {
     super.initState();
     _nameController = TextEditingController(text: widget.mentor?.name ?? '');
     _roleController = TextEditingController(text: widget.mentor?.role ?? '');
+    _bioController = TextEditingController(text: widget.mentor?.bio ?? '');
+    _contributionsController = TextEditingController(text: widget.mentor?.contributions.join(', ') ?? '');
     _existingImageUrl = widget.mentor?.imageUrl ?? '';
     _existingPublicId = widget.mentor?.cloudinaryPublicId ?? '';
   }
@@ -221,6 +225,8 @@ class _MentorDialogState extends State<_MentorDialog> {
       await widget.onSave({
         'name': _nameController.text,
         'role': _roleController.text,
+        'bio': _bioController.text,
+        'contributions': _contributionsController.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
         'imageUrl': imageUrl,
         'cloudinaryPublicId': publicId,
       });
@@ -255,6 +261,18 @@ class _MentorDialogState extends State<_MentorDialog> {
                 decoration: const InputDecoration(labelText: 'Role', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 16),
+              TextField(
+                controller: _bioController,
+                maxLines: 3,
+                decoration: const InputDecoration(labelText: 'Bio', border: OutlineInputBorder()),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _contributionsController,
+                maxLines: 2,
+                decoration: const InputDecoration(labelText: 'Contributions (comma separated)', border: OutlineInputBorder()),
+              ),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   ElevatedButton.icon(
@@ -277,7 +295,7 @@ class _MentorDialogState extends State<_MentorDialog> {
         TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
         ElevatedButton(
           onPressed: _isUploading ? null : _save,
-          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885)),
+          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
           child: _isUploading ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)) : const Text('Save', style: TextStyle(color: Colors.white)),
         ),
       ],

@@ -1,4 +1,4 @@
-import 'dart:typed_data';
+﻿import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
@@ -77,7 +77,7 @@ class AdminAchievementsPageState extends State<AdminAchievementsPage> {
                 icon: const Icon(Icons.add, color: Colors.white),
                 label: const Text('Add Achievement', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF14B885),
+                  backgroundColor: const Color(0xFF2563EB),
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 ),
               ),
@@ -282,7 +282,7 @@ class _AchievementDialogState extends State<_AchievementDialog> {
         TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
         ElevatedButton(
           onPressed: _isUploading ? null : _save,
-          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF14B885)),
+          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
           child: _isUploading ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)) : const Text('Save', style: TextStyle(color: Colors.white)),
         ),
       ],

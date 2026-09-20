@@ -64,8 +64,12 @@ class _LoginPageState extends State<LoginPage> {
           }
         }
       } catch (e) {
-        // User not found in MongoDB or API failed -> Treat as normal user
+        // User not found in MongoDB or API failed -> Show error so we can debug
         if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error fetching admin profile: $e', style: const TextStyle(color: Colors.white)), backgroundColor: Colors.red),
+          );
+          // Fallback to home page
           if (widget.redirectPage != null) {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => widget.redirectPage!));
           } else {
@@ -112,18 +116,20 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF161E24),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: Text(_isLogin ? 'Login' : 'Sign Up', style: const TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      backgroundColor: const Color(0xFF12181C),
+      extendBodyBehindAppBar: true,
+      backgroundColor: const Color(0xFF0B1120),
       body: Center(
         child: Container(
           width: 400,
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.all(48.0),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E272D),
-            borderRadius: BorderRadius.circular(16),
+            color: const Color(0xFF1E293B),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(color: Colors.white12),
           ),
           child: Column(
@@ -131,17 +137,17 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Text(
                 _isLogin ? 'Welcome Back' : 'Create Account',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: -0.5),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 48),
               TextField(
                 controller: _emailController,
                 style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Email',
-                  labelStyle: TextStyle(color: Colors.white70),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFF14B885))),
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white24), borderRadius: BorderRadius.circular(12)),
+                  focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF2563EB)), borderRadius: BorderRadius.circular(12)),
                 ),
               ),
               const SizedBox(height: 16),
@@ -149,11 +155,11 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _passwordController,
                 obscureText: true,
                 style: const TextStyle(color: Colors.white),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Password',
-                  labelStyle: TextStyle(color: Colors.white70),
-                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
-                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFF14B885))),
+                  labelStyle: const TextStyle(color: Colors.white70),
+                  enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white24), borderRadius: BorderRadius.circular(12)),
+                  focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF2563EB)), borderRadius: BorderRadius.circular(12)),
                 ),
               ),
               if (_isLogin)
@@ -161,19 +167,20 @@ class _LoginPageState extends State<LoginPage> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: _forgotPassword,
-                    child: const Text('Forgot Password?', style: TextStyle(color: Color(0xFF14B885))),
+                    child: const Text('Forgot Password?', style: TextStyle(color: Color(0xFF2563EB))),
                   ),
                 ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 32),
               _isLoading
-                  ? const CircularProgressIndicator(color: Color(0xFF14B885))
+                  ? const CircularProgressIndicator(color: Color(0xFF2563EB))
                   : ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF14B885),
-                        minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: const Color(0xFF2563EB),
+                        minimumSize: const Size(double.infinity, 56),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: _submit,
-                      child: Text(_isLogin ? 'Login' : 'Sign Up', style: const TextStyle(color: Colors.white, fontSize: 16)),
+                      child: Text(_isLogin ? 'Login' : 'Sign Up', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
               const SizedBox(height: 16),
               TextButton(
