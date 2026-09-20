@@ -46,14 +46,14 @@ class _ServicesSectionState extends State<ServicesSection> {
     else if (isTablet) crossAxisCount = 2;
 
     return Container(
-      color: const Color(0xFF0B1120), // Match website background
+      color: const Color(0xFFF8FAFC), // Match website background
       padding: EdgeInsets.symmetric(horizontal: isDesktop ? 100 : 24, vertical: 80),
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFF1E293B),
+              color: const Color(0xFFFFFFFF),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Text('SERVICES', style: TextStyle(color: Color(0xFF60A5FA), fontWeight: FontWeight.bold, letterSpacing: 1)),
@@ -64,7 +64,7 @@ class _ServicesSectionState extends State<ServicesSection> {
             style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Color(0xFF1E293B),
               height: 1.2,
             ),
             textAlign: TextAlign.center,
@@ -74,7 +74,7 @@ class _ServicesSectionState extends State<ServicesSection> {
             'From idea to impact — we design, build and deploy intelligent\nsolutions for a smarter tomorrow.',
             style: TextStyle(
               fontSize: 18,
-              color: Colors.white70,
+              color: Color(0xFF475569),
               height: 1.6,
             ),
             textAlign: TextAlign.center,
@@ -83,7 +83,7 @@ class _ServicesSectionState extends State<ServicesSection> {
           if (_isLoading)
             const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)))
           else if (_services.isEmpty)
-            const Center(child: Text('No services currently available.', style: TextStyle(color: Colors.white70)))
+            const Center(child: Text('No services currently available.', style: TextStyle(color: Color(0xFF475569))))
           else
             GridView.builder(
               shrinkWrap: true,
@@ -111,9 +111,9 @@ class _ServicesSectionState extends State<ServicesSection> {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B), // Dark card background
+        color: const Color(0xFFFFFFFF), // Dark card background
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white10),
+        border: Border.all(color: Color(0xFF1E293B)10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +149,7 @@ class _ServicesSectionState extends State<ServicesSection> {
             style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Color(0xFF1E293B),
             ),
           ),
           const SizedBox(height: 16),
@@ -158,7 +158,7 @@ class _ServicesSectionState extends State<ServicesSection> {
               service.description,
               style: const TextStyle(
                 fontSize: 15,
-                color: Colors.white70,
+                color: Color(0xFF475569),
                 height: 1.6,
               ),
             ),
@@ -190,16 +190,16 @@ class _ServicesSectionState extends State<ServicesSection> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.rocket_launch, color: Colors.white, size: 40),
+                const Icon(Icons.rocket_launch, color: Color(0xFF1E293B), size: 40),
                 const SizedBox(width: 24),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('LET\'S BUILD TOGETHER', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                    const Text('LET\'S BUILD TOGETHER', style: TextStyle(color: Color(0xFF475569), fontWeight: FontWeight.bold, letterSpacing: 1)),
                     const SizedBox(height: 8),
                     RichText(
                       text: const TextSpan(
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
                         children: [
                           TextSpan(text: 'Turning Ideas into '),
                           TextSpan(text: 'Real Solutions', style: TextStyle(color: Color(0xFF93C5FD))),
@@ -214,7 +214,7 @@ class _ServicesSectionState extends State<ServicesSection> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFF1E293B),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.arrow_forward, color: Color(0xFF2563EB)),

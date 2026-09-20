@@ -212,7 +212,7 @@ class _AdminHeroPageState extends State<AdminHeroPage> {
                       ),
                       onPressed: _isUploading ? null : _saveHero,
                       child: _isUploading 
-                          ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white))
+                          ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Color(0xFF1E293B)))
                           : const Text('Save Changes', style: TextStyle(fontSize: 16)),
                     ),
                   ],

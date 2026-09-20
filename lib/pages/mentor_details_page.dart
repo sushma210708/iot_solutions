@@ -17,7 +17,7 @@ class MentorDetailsPage extends StatelessWidget {
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: ColoredBox(
-          color: Color(0xFF0B1120), // Dark nav bar
+          color: Color(0xFFF8FAFC), // Dark nav bar
           child: NavBar(),
         ),
       ),
@@ -112,9 +112,9 @@ class MentorDetailsPage extends StatelessWidget {
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Get in Touch', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+              Text('Get in Touch', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 14)),
               SizedBox(width: 8),
-              Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+              Icon(Icons.arrow_forward, color: Color(0xFF1E293B), size: 16),
             ],
           ),
         ),

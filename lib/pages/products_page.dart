@@ -11,14 +11,14 @@ class ProductsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width >= 900;
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1120),
+      backgroundColor: const Color(0xFFF8FAFC),
       drawer: !isDesktop ? const AppDrawer() : null,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: false,
-            backgroundColor: const Color(0xFF0B1120).withOpacity(0.9),
+            backgroundColor: Color(0xFFF8FAFC).withValues(alpha: (0.9),
             elevation: 0,
             toolbarHeight: 88,
             titleSpacing: 0,

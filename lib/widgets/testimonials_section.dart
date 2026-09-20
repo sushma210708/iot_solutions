@@ -80,7 +80,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
         child: const Center(
           child: Text(
             'Testimonials will appear here once added from the Admin Dashboard.',
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(color: Color(0xFF475569), fontSize: 16),
           ),
         ),
       );
@@ -129,7 +129,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                     style: TextStyle(
                       fontSize: isDesktop ? 40 : 28,
                       fontWeight: FontWeight.w300,
-                      color: Colors.white,
+                      color: Color(0xFF1E293B),
                       height: 1.4,
                       fontFamily: 'Inter',
                     ),
@@ -155,7 +155,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                              color: Color(0xFF1E293B),
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -163,7 +163,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                             '${current.designation.isNotEmpty ? current.designation + ', ' : ''}${current.organization}',
                             style: const TextStyle(
                               fontSize: 14,
-                              color: Colors.white60,
+                              color: Color(0xFF64748B),
                             ),
                           ),
                         ],
@@ -184,7 +184,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
                   width: _currentIndex == index ? 32 : 8,
                   height: 8,
                   decoration: BoxDecoration(
-                    color: _currentIndex == index ? const Color(0xFF2563EB) : Colors.white24,
+                    color: _currentIndex == index ? const Color(0xFF2563EB) : Color(0xFFCBD5E1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),

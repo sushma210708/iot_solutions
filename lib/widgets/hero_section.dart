@@ -62,7 +62,7 @@ class _HeroSectionState extends State<HeroSection> {
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white24),
+            border: Border.all(color: Color(0x3D1E293B)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -79,7 +79,7 @@ class _HeroSectionState extends State<HeroSection> {
               Text(
                 badgeText,
                 style: const TextStyle(
-                  color: Colors.white70,
+                  color: Color(0xFF475569),
                   fontSize: 14,
                 ),
               ),
@@ -93,7 +93,7 @@ class _HeroSectionState extends State<HeroSection> {
           style: TextStyle(
             fontSize: isDesktop ? 72 : 48,
             fontWeight: FontWeight.w900,
-            color: Colors.white,
+            color: Color(0xFF1E293B),
             height: 1.1,
           ),
         ),
@@ -112,7 +112,7 @@ class _HeroSectionState extends State<HeroSection> {
           description,
           style: TextStyle(
             fontSize: isDesktop ? 18 : 16,
-            color: Colors.white60,
+            color: Color(0xFF64748B),
             height: 1.5,
           ),
         ),
@@ -135,7 +135,7 @@ class _HeroSectionState extends State<HeroSection> {
         // Dark overlay so text is readable over the image
         Positioned.fill(
           child: Container(
-            color: const Color(0xFF0D1115).withOpacity(0.7), // Semi-transparent dark overlay
+            color: Color(0xFF0D1115).withOpacity(0.7), // Semi-transparent dark overlay
           ),
         ),
 
@@ -172,7 +172,7 @@ class _HeroSectionState extends State<HeroSection> {
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.6), // Glassmorphism backdrop
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white24),
+        border: Border.all(color: Color(0x3D1E293B)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -189,7 +189,7 @@ class _HeroSectionState extends State<HeroSection> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: const TextStyle(color: Colors.white60, fontSize: 10, fontWeight: FontWeight.bold)),
+              Text(label, style: const TextStyle(color: Color(0xFF64748B), fontSize: 10, fontWeight: FontWeight.bold)),
               Text(value, style: TextStyle(color: color, fontSize: 14, fontWeight: FontWeight.bold)),
             ],
           ),
@@ -203,7 +203,7 @@ class _HeroSectionState extends State<HeroSection> {
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
       decoration: BoxDecoration(
         color: Colors.transparent,
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Color(0x1F1E293B)),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -222,7 +222,7 @@ class _HeroSectionState extends State<HeroSection> {
             subtitle,
             style: const TextStyle(
               fontSize: 14,
-              color: Colors.white54,
+              color: Color(0x8A1E293B),
             ),
           ),
         ],
@@ -235,7 +235,7 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF2563EB).withOpacity(0.05)
+      ..color = Color(0xFF2563EB).withOpacity(0.05)
       ..strokeWidth = 1.0;
 
     final double step = 40.0;
@@ -252,7 +252,7 @@ class _GridPainter extends CustomPainter {
     
     // Draw subtle connection nodes
     final nodePaint = Paint()
-      ..color = const Color(0xFF2563EB).withOpacity(0.3)
+      ..color = Color(0xFF2563EB).withOpacity(0.3)
       ..style = PaintingStyle.fill;
       
     canvas.drawCircle(Offset(step * 2, step * 3), 4, nodePaint);

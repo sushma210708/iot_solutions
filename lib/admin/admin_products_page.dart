@@ -89,8 +89,8 @@ class AdminProductsPageState extends State<AdminProductsPage> {
               ),
               ElevatedButton.icon(
                 onPressed: showAddProductDialog,
-                icon: const Icon(Icons.add, color: Colors.white),
-                label: const Text('Add Product', style: TextStyle(color: Colors.white)),
+                icon: const Icon(Icons.add, color: Color(0xFF1E293B)),
+                label: const Text('Add Product', style: TextStyle(color: Color(0xFF1E293B))),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -102,10 +102,10 @@ class AdminProductsPageState extends State<AdminProductsPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4)),
+                  BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4)),
                 ],
               ),
               child: Theme(

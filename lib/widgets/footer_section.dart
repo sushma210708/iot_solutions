@@ -72,7 +72,7 @@ class _FooterSectionState extends State<FooterSection> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Color(0xFF1E293B),
               ),
             ),
           ],
@@ -81,7 +81,7 @@ class _FooterSectionState extends State<FooterSection> {
         Text(
           footer.companyDescription,
           style: const TextStyle(
-            color: Colors.white60,
+            color: Color(0xFF64748B),
             height: 1.5,
           ),
         ),
@@ -96,7 +96,7 @@ class _FooterSectionState extends State<FooterSection> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color(0xFF1E293B),
           ),
         ),
         const SizedBox(height: 24),
@@ -124,17 +124,17 @@ class _FooterSectionState extends State<FooterSection> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color(0xFF1E293B),
           ),
         ),
         const SizedBox(height: 24),
         Row(
           children: [
-            const FaIcon(FontAwesomeIcons.instagram, color: Colors.white70, size: 20),
+            const FaIcon(FontAwesomeIcons.instagram, color: Color(0xFF475569), size: 20),
             const SizedBox(width: 8),
             Text(
               footer.instagram,
-              style: const TextStyle(color: Colors.white70),
+              style: const TextStyle(color: Color(0xFF475569)),
             ),
           ],
         ),
@@ -149,14 +149,14 @@ class _FooterSectionState extends State<FooterSection> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color(0xFF1E293B),
           ),
         ),
         const SizedBox(height: 24),
         Text(
           footer.aboutTeam,
           style: const TextStyle(
-            color: Colors.white70,
+            color: Color(0xFF475569),
             height: 1.5,
           ),
         ),
@@ -164,7 +164,7 @@ class _FooterSectionState extends State<FooterSection> {
     );
 
     return Container(
-      color: const Color(0xFF0B1120), // Dark background for footer
+      color: const Color(0xFFF8FAFC), // Dark background for footer
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 64.0 : 24.0, 
         vertical: isDesktop ? 64.0 : 48.0,
@@ -197,12 +197,12 @@ class _FooterSectionState extends State<FooterSection> {
                       ],
                     ),
               const SizedBox(height: 64),
-              const Divider(color: Colors.white12),
+              Divider(color: Color(0x1F1E293B)),
               const SizedBox(height: 24),
               const Center(
                 child: Text(
                   '© 2026 Green Fusion. All rights reserved.',
-                  style: TextStyle(color: Colors.white54, fontSize: 14),
+                  style: TextStyle(color: Color(0x8A1E293B), fontSize: 14),
                 ),
               ),
             ],
@@ -218,7 +218,7 @@ class _FooterSectionState extends State<FooterSection> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFF2563EB).withOpacity(0.1),
+            color: Color(0xFF2563EB).withOpacity(0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: const Color(0xFF2563EB), size: 16),
@@ -226,7 +226,7 @@ class _FooterSectionState extends State<FooterSection> {
         const SizedBox(width: 12),
         Text(
           text,
-          style: const TextStyle(color: Colors.white70),
+          style: const TextStyle(color: Color(0xFF475569)),
         ),
       ],
     );

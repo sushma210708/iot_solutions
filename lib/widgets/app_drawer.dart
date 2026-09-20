@@ -6,8 +6,8 @@ class AppDrawer extends StatelessWidget {
   Widget _drawerItem(BuildContext context, IconData icon, String title, String route) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-      leading: Icon(icon, color: Colors.white70),
-      title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)),
+      leading: Icon(icon, color: Color(0xFF475569)),
+      title: Text(title, style: const TextStyle(color: Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w500)),
       onTap: () {
         Navigator.pop(context);
         Navigator.pushNamed(context, route);
@@ -18,7 +18,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: const Color(0xFF0B1120),
+      backgroundColor: const Color(0xFFF8FAFC),
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +38,7 @@ class AppDrawer extends StatelessWidget {
                       child: Text(
                         'IoT',
                         style: TextStyle(
-                          color: Color(0xFF0B1120),
+                          color: Color(0xFFF8FAFC),
                           fontWeight: FontWeight.w900,
                           fontSize: 18,
                         ),
@@ -49,7 +49,7 @@ class AppDrawer extends StatelessWidget {
                   const Text(
                     'IoT Solutions',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF1E293B),
                       fontWeight: FontWeight.w800,
                       fontSize: 20,
                       letterSpacing: -0.5,
@@ -58,7 +58,7 @@ class AppDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            const Divider(color: Colors.white12),
+            Divider(color: Color(0x1F1E293B)),
             _drawerItem(context, Icons.home_outlined, 'Home', '/'),
             _drawerItem(context, Icons.inventory_2_outlined, 'Products', '/solutions'),
             _drawerItem(context, Icons.business_center_outlined, 'Services', '/services'),
@@ -72,7 +72,7 @@ class AppDrawer extends StatelessWidget {
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),
-                  foregroundColor: const Color(0xFF0B1120),
+                  foregroundColor: const Color(0xFFF8FAFC),
                   minimumSize: const Size(double.infinity, 56),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   elevation: 0,

@@ -179,8 +179,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         child: _isSubmitting 
-                          ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                          : const Text('Send Message', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                          ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Color(0xFF1E293B), strokeWidth: 2))
+                          : const Text('Send Message', style: TextStyle(color: Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ],
@@ -197,15 +197,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Scaffold(
-        backgroundColor: Color(0xFF0B1120),
+        backgroundColor: Color(0xFFF8FAFC),
         body: Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
 
     if (_product == null) {
       return const Scaffold(
-        backgroundColor: Color(0xFF0B1120),
-        body: Center(child: Text('Product not found.', style: TextStyle(color: Colors.white))),
+        backgroundColor: Color(0xFFF8FAFC),
+        body: Center(child: Text('Product not found.', style: TextStyle(color: Color(0xFF1E293B)))),
       );
     }
 
@@ -219,7 +219,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1120), // Main dark background
+      backgroundColor: const Color(0xFFF8FAFC), // Main dark background
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: NavBar(),
@@ -230,7 +230,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             // Hero Section
             Container(
               width: double.infinity,
-              color: const Color(0xFF1E293B), // Slightly lighter dark background
+              color: const Color(0xFFFFFFFF), // Slightly lighter dark background
               padding: EdgeInsets.symmetric(horizontal: isDesktop ? 64 : 24, vertical: 80),
               child: Center(
                 child: ConstrainedBox(
@@ -241,9 +241,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2563EB).withOpacity(0.1),
+                          color: Color(0xFF2563EB).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.2)),
+                          border: Border.all(color: Color(0xFF2563EB).withOpacity(0.2)),
                         ),
                         child: Text(
                           _product!.category.toUpperCase(),
@@ -256,14 +256,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         style: TextStyle(
                           fontSize: isDesktop ? 64 : 40,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          color: Color(0xFF1E293B),
                           letterSpacing: -1,
                         ),
                       ),
                       const SizedBox(height: 16),
                       Text(
                         _product!.shortDescription,
-                        style: const TextStyle(fontSize: 20, color: Colors.white70, height: 1.5),
+                        style: const TextStyle(fontSize: 20, color: Color(0xFF475569), height: 1.5),
                       ),
                       const SizedBox(height: 40),
                       Row(
@@ -277,16 +277,16 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                             child: const Row(
                               children: [
-                                Text('Get in Touch', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                Text('Get in Touch', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold)),
                                 SizedBox(width: 8),
-                                Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                                Icon(Icons.arrow_forward, color: Color(0xFF1E293B), size: 16),
                               ],
                             ),
                           ),
                           const SizedBox(width: 24),
                           TextButton(
                             onPressed: () {},
-                            child: const Text('Learn More', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
+                            child: const Text('Learn More', style: TextStyle(color: Color(0xFF475569), fontWeight: FontWeight.bold)),
                           ),
                         ],
                       ),
@@ -312,7 +312,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             // Two-Column Content Layout
             Container(
               width: double.infinity,
-              color: Colors.white,
+              color: Color(0xFF1E293B),
               padding: EdgeInsets.symmetric(horizontal: isDesktop ? 64 : 24, vertical: 80),
               child: Center(
                 child: ConstrainedBox(
@@ -407,10 +407,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             width: double.infinity,
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              color: Colors.white, 
+              color: Color(0xFF1E293B), 
               border: Border.all(color: Colors.black.withOpacity(0.05)),
               boxShadow: [
-                BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4)),
+                BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: Offset(0, 4)),
               ],
               borderRadius: BorderRadius.circular(16),
             ),
@@ -451,9 +451,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Enquire About This Product', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                Text('Enquire About This Product', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 16)),
                 SizedBox(width: 8),
-                Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                Icon(Icons.arrow_forward, color: Color(0xFF1E293B), size: 16),
               ],
             ),
           ),

@@ -58,8 +58,8 @@ class AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: const Color(0xFF1E293B),
-              title: Text(testimonial == null ? 'Add Testimonial' : 'Edit Testimonial', style: const TextStyle(color: Colors.white)),
+              backgroundColor: const Color(0xFFFFFFFF),
+              title: Text(testimonial == null ? 'Add Testimonial' : 'Edit Testimonial', style: const TextStyle(color: Color(0xFF1E293B))),
               content: SizedBox(
                 width: 600,
                 child: SingleChildScrollView(
@@ -75,15 +75,15 @@ class AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
                       const SizedBox(height: 16),
                       _buildTextField('Designation', desigCtrl),
                       const SizedBox(height: 16),
-                      const Text('Status', style: TextStyle(color: Colors.white70)),
+                      const Text('Status', style: TextStyle(color: Color(0xFF475569))),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
                         value: status,
-                        dropdownColor: const Color(0xFF1E293B),
-                        style: const TextStyle(color: Colors.white),
+                        dropdownColor: const Color(0xFFFFFFFF),
+                        style: const TextStyle(color: Color(0xFF1E293B)),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B))),
                         ),
                         items: const [
                           DropdownMenuItem(value: 'Active', child: Text('Active')),
@@ -98,7 +98,7 @@ class AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
               actions: [
                 TextButton(
                   onPressed: isSaving ? null : () => Navigator.pop(context),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+                  child: const Text('Cancel', style: TextStyle(color: Color(0xFF475569))),
                 ),
                 ElevatedButton(
                   onPressed: isSaving ? null : () async {
@@ -138,8 +138,8 @@ class AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                   child: isSaving
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white))
-                      : const Text('Save', style: TextStyle(color: Colors.white)),
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B)))
+                      : const Text('Save', style: TextStyle(color: Color(0xFF1E293B))),
                 ),
               ],
             );
@@ -153,15 +153,15 @@ class AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E293B),
-        title: const Text('Confirm Delete', style: TextStyle(color: Colors.white)),
-        content: const Text('Are you sure you want to delete this testimonial?', style: TextStyle(color: Colors.white70)),
+        backgroundColor: const Color(0xFFFFFFFF),
+        title: const Text('Confirm Delete', style: TextStyle(color: Color(0xFF1E293B))),
+        content: const Text('Are you sure you want to delete this testimonial?', style: TextStyle(color: Color(0xFF475569))),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel', style: TextStyle(color: Colors.white70))),
+          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel', style: TextStyle(color: Color(0xFF475569)))),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: const Text('Delete', style: TextStyle(color: Color(0xFF1E293B))),
           ),
         ],
       ),
@@ -186,15 +186,15 @@ class AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Colors.white70)),
+        Text(label, style: const TextStyle(color: Color(0xFF475569))),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
           maxLines: maxLines,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Color(0xFF1E293B)),
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B))),
             focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFF2563EB))),
           ),
         ),
@@ -225,8 +225,8 @@ class AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
               ),
               ElevatedButton.icon(
                 onPressed: () => showTestimonialDialog(),
-                icon: const Icon(Icons.add, size: 16, color: Colors.white),
-                label: const Text('Add Testimonial', style: TextStyle(color: Colors.white)),
+                icon: const Icon(Icons.add, size: 16, color: Color(0xFF1E293B)),
+                label: const Text('Add Testimonial', style: TextStyle(color: Color(0xFF1E293B))),
                 style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
               ),
             ],
@@ -237,9 +237,9 @@ class AdminTestimonialsPageState extends State<AdminTestimonialsPage> {
               width: double.infinity,
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4))],
               ),
               child: _testimonials.isEmpty
                   ? const Center(child: Text('No testimonials found.', style: TextStyle(color: Colors.black54)))

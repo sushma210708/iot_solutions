@@ -47,7 +47,7 @@ class _UpdatesSectionState extends State<UpdatesSection> {
     if (_isLoading) {
       return Container(
         height: 400,
-        color: const Color(0xFF1E293B),
+        color: const Color(0xFFFFFFFF),
         child: const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB))),
       );
     }
@@ -61,7 +61,7 @@ class _UpdatesSectionState extends State<UpdatesSection> {
         horizontal: isDesktop ? 64.0 : 24.0,
         vertical: isDesktop ? 96.0 : 48.0,
       ),
-      color: const Color(0xFF1E293B),
+      color: const Color(0xFFFFFFFF),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1200),
@@ -90,7 +90,7 @@ class _UpdatesSectionState extends State<UpdatesSection> {
                         style: TextStyle(
                           fontSize: isDesktop ? 48 : 32,
                           fontWeight: FontWeight.w900,
-                          color: Colors.white,
+                          color: Color(0xFF1E293B),
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -100,11 +100,11 @@ class _UpdatesSectionState extends State<UpdatesSection> {
                     OutlinedButton(
                       onPressed: () {},
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.white24),
+                        side: BorderSide(color: Color(0x3D1E293B)),
                         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       ),
-                      child: const Text('View All News', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      child: const Text('View All News', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold)),
                     ),
                 ],
               ),
@@ -114,14 +114,14 @@ class _UpdatesSectionState extends State<UpdatesSection> {
                   height: 200,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.02),
+                    color: Color(0xFF1E293B).withOpacity(0.02),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white12, style: BorderStyle.solid),
+                    border: Border.all(color: Color(0x1F1E293B), style: BorderStyle.solid),
                   ),
                   child: const Center(
                     child: Text(
                       'No updates have been published yet.',
-                      style: TextStyle(color: Colors.white54, fontSize: 16),
+                      style: TextStyle(color: Color(0x8A1E293B), fontSize: 16),
                     ),
                   ),
                 )
@@ -159,16 +159,16 @@ class _UpdateCardState extends State<UpdateCard> {
         curve: Curves.easeOut,
         transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
         decoration: BoxDecoration(
-          color: const Color(0xFF0B1120),
+          color: const Color(0xFFF8FAFC),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: _isHovered ? const Color(0xFF2563EB).withOpacity(0.5) : Colors.white12,
+            color: _isHovered ? Color(0xFF2563EB).withOpacity(0.5) : Color(0xFFE2E8F0),
             width: 1,
           ),
           boxShadow: [
             if (_isHovered)
               BoxShadow(
-                color: const Color(0xFF2563EB).withOpacity(0.15),
+                color: Color(0xFF2563EB).withOpacity(0.15),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               )
@@ -200,9 +200,9 @@ class _UpdateCardState extends State<UpdateCard> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2563EB).withOpacity(0.1),
+                          color: Color(0xFF2563EB).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.2)),
+                          border: Border.all(color: Color(0xFF2563EB).withOpacity(0.2)),
                         ),
                         child: Text(
                           widget.update.category.toUpperCase(),
@@ -218,7 +218,7 @@ class _UpdateCardState extends State<UpdateCard> {
                         Text(
                           DateFormat('MMM d, yyyy').format(widget.update.createdAt!),
                           style: const TextStyle(
-                            color: Colors.white54,
+                            color: Color(0x8A1E293B),
                             fontSize: 12,
                           ),
                         ),
@@ -230,7 +230,7 @@ class _UpdateCardState extends State<UpdateCard> {
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: Color(0xFF1E293B),
                       height: 1.3,
                       letterSpacing: -0.5,
                     ),
@@ -242,7 +242,7 @@ class _UpdateCardState extends State<UpdateCard> {
                     widget.update.shortDescription,
                     style: const TextStyle(
                       fontSize: 15,
-                      color: Colors.white70,
+                      color: Color(0xFF475569),
                       height: 1.6,
                     ),
                     maxLines: 2,
@@ -254,7 +254,7 @@ class _UpdateCardState extends State<UpdateCard> {
                       const Text(
                         'Read More',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Color(0xFF1E293B),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -262,7 +262,7 @@ class _UpdateCardState extends State<UpdateCard> {
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         transform: Matrix4.translationValues(_isHovered ? 4 : 0, 0, 0),
-                        child: const Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                        child: const Icon(Icons.arrow_forward, color: Color(0xFF1E293B), size: 16),
                       ),
                     ],
                   ),

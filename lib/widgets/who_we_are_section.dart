@@ -19,7 +19,7 @@ class WhoWeAreSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white24),
+              border: Border.all(color: Color(0x3D1E293B)),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Row(
@@ -27,7 +27,7 @@ class WhoWeAreSection extends StatelessWidget {
               children: [
                 CircleAvatar(radius: 4, backgroundColor: Color(0xFF2563EB)),
                 SizedBox(width: 8),
-                Text('From Ideas to Impact', style: TextStyle(color: Colors.white70)),
+                Text('From Ideas to Impact', style: TextStyle(color: Color(0xFF475569))),
               ],
             ),
           ),
@@ -38,7 +38,7 @@ class WhoWeAreSection extends StatelessWidget {
             style: TextStyle(
               fontSize: isDesktop ? 48 : 32,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Color(0xFF1E293B),
               height: 1.2,
             ),
           ),
@@ -48,7 +48,7 @@ class WhoWeAreSection extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: isDesktop ? 18 : 16,
-              color: Colors.white70,
+              color: Color(0xFF475569),
               height: 1.5,
             ),
           ),
@@ -83,9 +83,9 @@ class WhoWeAreSection extends StatelessWidget {
       width: isDesktop ? 320 : double.infinity,
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.02),
+        color: Color(0xFF1E293B).withOpacity(0.02),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Color(0x1F1E293B)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +93,7 @@ class WhoWeAreSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF2563EB).withOpacity(0.1),
+              color: Color(0xFF2563EB).withOpacity(0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, color: const Color(0xFF2563EB), size: 32),
@@ -104,7 +104,7 @@ class WhoWeAreSection extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Color(0xFF1E293B),
             ),
           ),
           const SizedBox(height: 16),
@@ -112,7 +112,7 @@ class WhoWeAreSection extends StatelessWidget {
             description,
             style: const TextStyle(
               fontSize: 14,
-              color: Colors.white60,
+              color: Color(0xFF64748B),
               height: 1.5,
             ),
           ),

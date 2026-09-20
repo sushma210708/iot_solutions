@@ -139,10 +139,10 @@ class _CustomCarouselState extends State<CustomCarousel> {
         decoration: BoxDecoration(
           color: const Color(0xFF161E24),
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white24),
+          border: Border.all(color: Color(0x3D1E293B)),
         ),
         child: IconButton(
-          icon: Icon(icon, color: Colors.white),
+          icon: Icon(icon, color: Color(0xFF1E293B)),
           onPressed: onPressed,
         ),
       ),

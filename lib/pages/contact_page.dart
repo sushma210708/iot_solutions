@@ -79,7 +79,7 @@ class _ContactPageState extends State<ContactPage> {
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: !isDesktop,
-            backgroundColor: const Color(0xFF0B1120),
+            backgroundColor: const Color(0xFFF8FAFC),
             elevation: 0,
             toolbarHeight: 88,
             titleSpacing: 0,
@@ -132,8 +132,8 @@ class _ContactPageState extends State<ContactPage> {
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                                   ),
                                   child: _isSubmitting
-                                      ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                                      : const Text('Send Enquiry →', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                                      ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Color(0xFF1E293B), strokeWidth: 2))
+                                      : const Text('Send Enquiry →', style: TextStyle(color: Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.bold)),
                                 ),
                               ],
                             ),

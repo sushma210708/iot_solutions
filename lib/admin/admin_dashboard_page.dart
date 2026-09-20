@@ -89,8 +89,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: const Color(0xFF1E293B),
-              title: const Text('Edit Hero Section', style: TextStyle(color: Colors.white)),
+              backgroundColor: const Color(0xFFFFFFFF),
+              title: const Text('Edit Hero Section', style: TextStyle(color: Color(0xFF1E293B))),
               content: SizedBox(
                 width: 600,
                 child: SingleChildScrollView(
@@ -106,7 +106,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       const SizedBox(height: 16),
                       _buildTextField('Description', descCtrl, maxLines: 3),
                       const SizedBox(height: 24),
-                      const Text('Hero Image', style: TextStyle(color: Colors.white70)),
+                      const Text('Hero Image', style: TextStyle(color: Color(0xFF475569))),
                       const SizedBox(height: 8),
                       Row(
                         children: [
@@ -115,7 +115,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           if (newImage != null)
                             Container(
                               width: 100, height: 100, color: Colors.grey,
-                              child: const Center(child: Icon(Icons.image, color: Colors.white)),
+                              child: const Center(child: Icon(Icons.image, color: Color(0xFF1E293B))),
                             ),
                           const SizedBox(width: 16),
                           ElevatedButton(
@@ -127,7 +127,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                               }
                             },
                             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
-                            child: const Text('Change Image', style: TextStyle(color: Colors.white)),
+                            child: const Text('Change Image', style: TextStyle(color: Color(0xFF1E293B))),
                           ),
                         ],
                       )
@@ -138,7 +138,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               actions: [
                 TextButton(
                   onPressed: isSaving ? null : () => Navigator.pop(context),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+                  child: const Text('Cancel', style: TextStyle(color: Color(0xFF475569))),
                 ),
                 ElevatedButton(
                   onPressed: isSaving ? null : () async {
@@ -176,8 +176,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                   child: isSaving
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white))
-                      : const Text('Save Changes', style: TextStyle(color: Colors.white)),
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B)))
+                      : const Text('Save Changes', style: TextStyle(color: Color(0xFF1E293B))),
                 ),
               ],
             );
@@ -206,8 +206,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: const Color(0xFF1E293B),
-              title: const Text('Edit Footer Section', style: TextStyle(color: Colors.white)),
+              backgroundColor: const Color(0xFFFFFFFF),
+              title: const Text('Edit Footer Section', style: TextStyle(color: Color(0xFF1E293B))),
               content: SizedBox(
                 width: 600,
                 child: SingleChildScrollView(
@@ -235,7 +235,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               actions: [
                 TextButton(
                   onPressed: isSaving ? null : () => Navigator.pop(context),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+                  child: const Text('Cancel', style: TextStyle(color: Color(0xFF475569))),
                 ),
                 ElevatedButton(
                   onPressed: isSaving ? null : () async {
@@ -267,8 +267,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                   child: isSaving
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white))
-                      : const Text('Save Changes', style: TextStyle(color: Colors.white)),
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B)))
+                      : const Text('Save Changes', style: TextStyle(color: Color(0xFF1E293B))),
                 ),
               ],
             );
@@ -304,8 +304,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: const Color(0xFF1E293B),
-              title: const Text('Add Admin', style: TextStyle(color: Colors.white)),
+              backgroundColor: const Color(0xFFFFFFFF),
+              title: const Text('Add Admin', style: TextStyle(color: Color(0xFF1E293B))),
               content: SizedBox(
                 width: 500,
                 child: SingleChildScrollView(
@@ -319,15 +319,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       const SizedBox(height: 16),
                       _buildTextField('Firebase UID (Required)', uidCtrl),
                       const SizedBox(height: 16),
-                      const Text('Role', style: TextStyle(color: Colors.white70)),
+                      const Text('Role', style: TextStyle(color: Color(0xFF475569))),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
                         value: role,
-                        dropdownColor: const Color(0xFF1E293B),
-                        style: const TextStyle(color: Colors.white),
+                        dropdownColor: const Color(0xFFFFFFFF),
+                        style: const TextStyle(color: Color(0xFF1E293B)),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B))),
                         ),
                         items: const [
                           DropdownMenuItem(value: 'super_admin', child: Text('Super Admin')),
@@ -344,10 +344,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         },
                       ),
                       const SizedBox(height: 16),
-                      const Text('Permissions', style: TextStyle(color: Colors.white70)),
+                      const Text('Permissions', style: TextStyle(color: Color(0xFF475569))),
                       const SizedBox(height: 8),
                       ...availablePermissions.map((p) => CheckboxListTile(
-                        title: Text(p, style: const TextStyle(color: Colors.white)),
+                        title: Text(p, style: const TextStyle(color: Color(0xFF1E293B))),
                         value: selectedPermissions.contains(p),
                         activeColor: const Color(0xFF2563EB),
                         checkColor: Colors.white,
@@ -359,15 +359,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         },
                       )),
                       const SizedBox(height: 16),
-                      const Text('Status', style: TextStyle(color: Colors.white70)),
+                      const Text('Status', style: TextStyle(color: Color(0xFF475569))),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
                         value: status,
-                        dropdownColor: const Color(0xFF1E293B),
-                        style: const TextStyle(color: Colors.white),
+                        dropdownColor: const Color(0xFFFFFFFF),
+                        style: const TextStyle(color: Color(0xFF1E293B)),
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B))),
                         ),
                         items: const [
                           DropdownMenuItem(value: 'active', child: Text('Active')),
@@ -382,7 +382,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               actions: [
                 TextButton(
                   onPressed: isSaving ? null : () => Navigator.pop(context),
-                  child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+                  child: const Text('Cancel', style: TextStyle(color: Color(0xFF475569))),
                 ),
                 ElevatedButton(
                   onPressed: isSaving ? null : () async {
@@ -417,8 +417,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                   child: isSaving
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white))
-                      : const Text('Add Admin', style: TextStyle(color: Colors.white)),
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B)))
+                      : const Text('Add Admin', style: TextStyle(color: Color(0xFF1E293B))),
                 ),
               ],
             );
@@ -432,15 +432,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: Colors.white70)),
+        Text(label, style: const TextStyle(color: Color(0xFF475569))),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
           maxLines: maxLines,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Color(0xFF1E293B)),
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B))),
             focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0xFF2563EB))),
           ),
         ),
@@ -473,9 +473,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   child: Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Color(0xFF1E293B),
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4))],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -486,8 +486,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                             const Text('Hero Section', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                             ElevatedButton.icon(
                               onPressed: _showEditHeroDialog,
-                              icon: const Icon(Icons.edit, size: 16, color: Colors.white),
-                              label: const Text('Edit Hero', style: TextStyle(color: Colors.white)),
+                              icon: const Icon(Icons.edit, size: 16, color: Color(0xFF1E293B)),
+                              label: const Text('Edit Hero', style: TextStyle(color: Color(0xFF1E293B))),
                               style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                             ),
                           ],
@@ -507,16 +507,16 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.1),
+                                  color: Color(0xFF1E293B).withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(_heroContent?.badge ?? '', style: const TextStyle(color: Color(0xFF2563EB), fontSize: 12)),
                               ),
                               const SizedBox(height: 16),
-                              Text(_heroContent?.titleLine1 ?? '', style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                              Text(_heroContent?.titleLine1 ?? '', style: const TextStyle(color: Color(0xFF1E293B), fontSize: 24, fontWeight: FontWeight.bold)),
                               Text(_heroContent?.titleLine2 ?? '', style: const TextStyle(color: Color(0xFF2563EB), fontSize: 24, fontWeight: FontWeight.bold)),
                               const SizedBox(height: 16),
-                              Text(_heroContent?.description ?? '', style: const TextStyle(color: Colors.white70, fontSize: 14)),
+                              Text(_heroContent?.description ?? '', style: const TextStyle(color: Color(0xFF475569), fontSize: 14)),
                             ],
                           ),
                         )
@@ -531,9 +531,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   child: Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Color(0xFF1E293B),
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4))],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -569,9 +569,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                color: Colors.white,
+                color: Color(0xFF1E293B),
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4))],
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4))],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -589,8 +589,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       ),
                       ElevatedButton.icon(
                         onPressed: _showAddAdminDialog,
-                        icon: const Icon(Icons.add, size: 16, color: Colors.white),
-                        label: const Text('Add Admin', style: TextStyle(color: Colors.white)),
+                        icon: const Icon(Icons.add, size: 16, color: Color(0xFF1E293B)),
+                        label: const Text('Add Admin', style: TextStyle(color: Color(0xFF1E293B))),
                         style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                       ),
                     ],

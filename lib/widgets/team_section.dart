@@ -50,7 +50,7 @@ class _TeamSectionState extends State<TeamSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFF1E293B),
+      color: const Color(0xFFFFFFFF),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 64.0 : 24.0,
         vertical: isDesktop ? 120.0 : 80.0,
@@ -76,7 +76,7 @@ class _TeamSectionState extends State<TeamSection> {
                 style: TextStyle(
                   fontSize: isDesktop ? 48 : 32,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white,
+                  color: Color(0xFF1E293B),
                   letterSpacing: -0.5,
                 ),
               ),
@@ -87,7 +87,7 @@ class _TeamSectionState extends State<TeamSection> {
                   'Our diverse team brings together expertise in IoT, AI, and energy management to deliver cutting-edge solutions.',
                   style: TextStyle(
                     fontSize: isDesktop ? 18 : 16,
-                    color: Colors.white70,
+                    color: Color(0xFF475569),
                     height: 1.6,
                   ),
                 ),
@@ -98,14 +98,14 @@ class _TeamSectionState extends State<TeamSection> {
                   height: 200,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.02),
+                    color: Color(0xFF1E293B).withOpacity(0.02),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white12, style: BorderStyle.solid),
+                    border: Border.all(color: Color(0x1F1E293B), style: BorderStyle.solid),
                   ),
                   child: const Center(
                     child: Text(
                       'No mentors have been added yet.',
-                      style: TextStyle(color: Colors.white54, fontSize: 16),
+                      style: TextStyle(color: Color(0x8A1E293B), fontSize: 16),
                     ),
                   ),
                 )
@@ -153,16 +153,16 @@ class _MentorCardState extends State<MentorCard> {
           transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
           width: 320,
           decoration: BoxDecoration(
-            color: const Color(0xFF0B1120),
+            color: const Color(0xFFF8FAFC),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: _isHovered ? const Color(0xFF2563EB).withOpacity(0.5) : Colors.white12,
+              color: _isHovered ? Color(0xFF2563EB).withOpacity(0.5) : Color(0xFFE2E8F0),
               width: 1,
             ),
             boxShadow: [
               if (_isHovered)
                 BoxShadow(
-                  color: const Color(0xFF2563EB).withOpacity(0.15),
+                  color: Color(0xFF2563EB).withOpacity(0.15),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 )
@@ -190,7 +190,7 @@ class _MentorCardState extends State<MentorCard> {
                             child: Icon(
                               Icons.person_outline,
                               size: 80,
-                              color: Colors.white24,
+                              color: Color(0x3D1E293B),
                             ),
                           )
                         : null,
@@ -208,7 +208,7 @@ class _MentorCardState extends State<MentorCard> {
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: Color(0xFF1E293B),
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -216,9 +216,9 @@ class _MentorCardState extends State<MentorCard> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2563EB).withOpacity(0.1),
+                        color: Color(0xFF2563EB).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.2)),
+                        border: Border.all(color: Color(0xFF2563EB).withOpacity(0.2)),
                       ),
                       child: Text(
                         widget.mentor.role.toUpperCase(),
@@ -238,7 +238,7 @@ class _MentorCardState extends State<MentorCard> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white70,
+                            color: Color(0xFF475569),
                           ),
                         ),
                         const SizedBox(width: 8),

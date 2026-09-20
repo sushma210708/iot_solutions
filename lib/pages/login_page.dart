@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
         if (mounted) {
           if (profile.status != 'active') {
             await _authService.signOut();
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Your account is disabled', style: TextStyle(color: Colors.white)), backgroundColor: Colors.red));
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Your account is disabled', style: TextStyle(color: Color(0xFF1E293B))), backgroundColor: Colors.red));
             return;
           }
 
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
         // User not found in MongoDB or API failed -> Show error so we can debug
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error fetching admin profile: $e', style: const TextStyle(color: Colors.white)), backgroundColor: Colors.red),
+            SnackBar(content: Text('Error fetching admin profile: $e', style: const TextStyle(color: Color(0xFF1E293B))), backgroundColor: Colors.red),
           );
           // Fallback to home page
           if (widget.redirectPage != null) {
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString(), style: const TextStyle(color: Colors.white)), backgroundColor: Colors.red),
+          SnackBar(content: Text(e.toString(), style: const TextStyle(color: Color(0xFF1E293B))), backgroundColor: Colors.red),
         );
       }
     } finally {
@@ -118,35 +118,35 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(_isLogin ? 'Login' : 'Sign Up', style: const TextStyle(color: Colors.white)),
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(_isLogin ? 'Login' : 'Sign Up', style: const TextStyle(color: Color(0xFF1E293B))),
+        iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
       ),
       extendBodyBehindAppBar: true,
-      backgroundColor: const Color(0xFF0B1120),
+      backgroundColor: const Color(0xFFF8FAFC),
       body: Center(
         child: Container(
           width: 400,
           padding: const EdgeInsets.all(48.0),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E293B),
+            color: const Color(0xFFFFFFFF),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.white12),
+            border: Border.all(color: Color(0x1F1E293B)),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _isLogin ? 'Welcome Back' : 'Create Account',
-                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: -0.5),
+                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Color(0xFF1E293B), letterSpacing: -0.5),
               ),
               const SizedBox(height: 48),
               TextField(
                 controller: _emailController,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Color(0xFF1E293B)),
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white24), borderRadius: BorderRadius.circular(12)),
+                  labelStyle: const TextStyle(color: Color(0xFF475569)),
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B)), borderRadius: BorderRadius.circular(12)),
                   focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF2563EB)), borderRadius: BorderRadius.circular(12)),
                 ),
               ),
@@ -154,11 +154,11 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 controller: _passwordController,
                 obscureText: true,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Color(0xFF1E293B)),
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  labelStyle: const TextStyle(color: Colors.white70),
-                  enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white24), borderRadius: BorderRadius.circular(12)),
+                  labelStyle: const TextStyle(color: Color(0xFF475569)),
+                  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B)), borderRadius: BorderRadius.circular(12)),
                   focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF2563EB)), borderRadius: BorderRadius.circular(12)),
                 ),
               ),
@@ -180,14 +180,14 @@ class _LoginPageState extends State<LoginPage> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       ),
                       onPressed: _submit,
-                      child: Text(_isLogin ? 'Login' : 'Sign Up', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: Text(_isLogin ? 'Login' : 'Sign Up', style: const TextStyle(color: Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () => setState(() => _isLogin = !_isLogin),
                 child: Text(
                   _isLogin ? 'Need an account? Sign Up' : 'Already have an account? Login',
-                  style: const TextStyle(color: Colors.white70),
+                  style: const TextStyle(color: Color(0xFF475569)),
                 ),
               ),
             ],

@@ -127,7 +127,7 @@ class AdminUpdatesPageState extends State<AdminUpdatesPage> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            child: const Text('Delete', style: TextStyle(color: Color(0xFF1E293B))),
           ),
         ],
       ),

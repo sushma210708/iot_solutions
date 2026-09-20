@@ -49,14 +49,14 @@ class _CtaSectionState extends State<CtaSection> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: isDesktop ? 20 : 16,
-              color: const Color(0xFF0F161B).withOpacity(0.8),
+              color: Color(0xFF0F161B).withOpacity(0.8),
             ),
           ),
           const SizedBox(height: 48),
           ElevatedButton(
             onPressed: _showCollaborationDialog,
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0B1120),
+              backgroundColor: const Color(0xFFF8FAFC),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
               elevation: 0,
@@ -135,9 +135,9 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF1E293B),
+      backgroundColor: const Color(0xFFFFFFFF),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      title: const Text('Start a Collaboration', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      title: const Text('Start a Collaboration', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold)),
       content: SizedBox(
         width: 400,
         child: Form(
@@ -146,7 +146,7 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text('Tell us about your project or inquiry. Our team will get back to you shortly.', style: TextStyle(color: Colors.white70)),
+                const Text('Tell us about your project or inquiry. Our team will get back to you shortly.', style: TextStyle(color: Color(0xFF475569))),
                 const SizedBox(height: 24),
                 _buildField(_nameController, 'Name'),
                 const SizedBox(height: 16),
@@ -163,14 +163,14 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.pop(context),
-          child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+          child: const Text('Cancel', style: TextStyle(color: Color(0xFF475569))),
         ),
         ElevatedButton(
           onPressed: _isSubmitting ? null : _submit,
           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
           child: _isSubmitting 
-              ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-              : const Text('Submit', style: TextStyle(color: Colors.white)),
+              ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B), strokeWidth: 2))
+              : const Text('Submit', style: TextStyle(color: Color(0xFF1E293B))),
         ),
       ],
     );
@@ -179,13 +179,13 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
   Widget _buildField(TextEditingController controller, String label, {int maxLines = 1, TextInputType? keyboardType}) {
     return TextFormField(
       controller: controller,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: Color(0xFF1E293B)),
       keyboardType: keyboardType,
       maxLines: maxLines,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: Colors.white54),
-        enabledBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.white24), borderRadius: BorderRadius.circular(12)),
+        labelStyle: TextStyle(color: Color(0x8A1E293B)),
+        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Color(0x3D1E293B)), borderRadius: BorderRadius.circular(12)),
         focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFF2563EB)), borderRadius: BorderRadius.circular(12)),
         errorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(12)),
         focusedErrorBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.redAccent), borderRadius: BorderRadius.circular(12)),

@@ -51,7 +51,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
     if (_challenges.isEmpty) {
       return Container(
         width: double.infinity,
-        color: const Color(0xFF0B1120),
+        color: const Color(0xFFF8FAFC),
         padding: EdgeInsets.symmetric(
           horizontal: isDesktop ? 64 : 24,
           vertical: isDesktop ? 120 : 80,
@@ -59,7 +59,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
         child: const Center(
           child: Text(
             'Challenges will appear here once added from the Admin Dashboard.',
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(color: Color(0xFF475569), fontSize: 16),
           ),
         ),
       );
@@ -67,7 +67,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFF0B1120),
+      color: const Color(0xFFF8FAFC),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 64 : 24,
         vertical: isDesktop ? 120 : 80,
@@ -93,7 +93,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
                 style: TextStyle(
                   fontSize: isDesktop ? 48 : 32,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white,
+                  color: Color(0xFF1E293B),
                   height: 1.1,
                   letterSpacing: -0.5,
                 ),
@@ -105,7 +105,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
                   'We work at the intersection of technology and real-world problems to deliver smarter, safer and more sustainable systems.',
                   style: TextStyle(
                     fontSize: isDesktop ? 18 : 16,
-                    color: Colors.white70,
+                    color: Color(0xFF475569),
                     height: 1.6,
                   ),
                 ),
@@ -181,16 +181,16 @@ class _ChallengeCardState extends State<ChallengeCard> {
         curve: Curves.easeOut,
         transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
         decoration: BoxDecoration(
-          color: const Color(0xFF1E293B),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: _isHovered ? const Color(0xFF2563EB).withOpacity(0.5) : Colors.white12,
+            color: _isHovered ? Color(0xFF2563EB).withOpacity(0.5) : Color(0xFFE2E8F0),
             width: 1,
           ),
           boxShadow: [
             if (_isHovered)
               BoxShadow(
-                color: const Color(0xFF2563EB).withOpacity(0.15),
+                color: Color(0xFF2563EB).withOpacity(0.15),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               )
@@ -208,7 +208,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                   width: 10,
                   height: 10,
                   decoration: BoxDecoration(
-                    color: _isHovered ? const Color(0xFF2563EB) : Colors.white24,
+                    color: _isHovered ? const Color(0xFF2563EB) : Color(0xFFCBD5E1),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -216,7 +216,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
                 Text(
                   widget.challenge.domain.toUpperCase(),
                   style: TextStyle(
-                    color: _isHovered ? Colors.white : Colors.white70,
+                    color: _isHovered ? Colors.white : Color(0xFF475569),
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.5,
                     fontSize: 12,
@@ -230,7 +230,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
               style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: Color(0xFF1E293B),
                 height: 1.3,
                 letterSpacing: -0.3,
               ),
@@ -240,7 +240,7 @@ class _ChallengeCardState extends State<ChallengeCard> {
               widget.challenge.description,
               style: const TextStyle(
                 fontSize: 15,
-                color: Colors.white60,
+                color: Color(0xFF64748B),
                 height: 1.6,
               ),
             ),

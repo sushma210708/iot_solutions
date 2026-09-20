@@ -33,7 +33,7 @@ class NavBar extends StatelessWidget {
         _buildLogo(),
         Builder(
           builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
+            icon: const Icon(Icons.menu, color: Color(0xFF1E293B)),
             onPressed: () => Scaffold.of(ctx).openDrawer(),
           ),
         ),
@@ -49,9 +49,9 @@ class NavBar extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05),
+            color: Color(0xFF1E293B).withOpacity(0.05),
             borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: Colors.white.withOpacity(0.1)),
+            border: Border.all(color: Color(0xFF1E293B).withOpacity(0.1)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -70,19 +70,19 @@ class NavBar extends StatelessWidget {
           children: [
             TextButton(
               onPressed: () => Navigator.pushNamed(context, '/login'),
-              child: const Text('Login', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              child: const Text('Login', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold)),
             ),
             const SizedBox(width: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2563EB),
-                foregroundColor: const Color(0xFF0B1120),
+                foregroundColor: const Color(0xFFF8FAFC),
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 elevation: 0,
               ),
               onPressed: onContactClick ?? () => Navigator.pushNamed(context, '/contact'),
-              child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white)),
+              child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF1E293B))),
             ),
           ],
         )
@@ -104,7 +104,7 @@ class NavBar extends StatelessWidget {
             child: Text(
               'IoT',
               style: TextStyle(
-                color: Color(0xFF0B1120),
+                color: Color(0xFFF8FAFC),
                 fontWeight: FontWeight.w900,
                 fontSize: 18,
               ),
@@ -115,7 +115,7 @@ class NavBar extends StatelessWidget {
         const Text(
           'IoT Solutions',
           style: TextStyle(
-            color: Colors.white,
+            color: Color(0xFF1E293B),
             fontWeight: FontWeight.w800,
             fontSize: 20,
             letterSpacing: -0.5,
@@ -134,7 +134,7 @@ class NavBar extends StatelessWidget {
         child: Text(
           title,
           style: const TextStyle(
-            color: Colors.white70,
+            color: Color(0xFF475569),
             fontSize: 14,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,

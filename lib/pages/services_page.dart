@@ -12,16 +12,16 @@ class ServicesPage extends StatelessWidget {
     final isDesktop = MediaQuery.of(context).size.width >= 900;
     
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1120),
+      backgroundColor: const Color(0xFFF8FAFC),
       drawer: !isDesktop ? const AppDrawer() : null,
       body: CustomScrollView(
         slivers: [
           const SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: false,
-            backgroundColor: Color(0xFF0B1120),
+            backgroundColor: Color(0xFFF8FAFC),
             elevation: 0,
-            iconTheme: IconThemeData(color: Colors.white),
+            iconTheme: IconThemeData(color: Color(0xFF1E293B)),
             toolbarHeight: 88,
             titleSpacing: 0,
             title: NavBar(isScrolled: true),

@@ -127,14 +127,14 @@ class _TechnologyPageState extends State<TechnologyPage> {
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1120),
+      backgroundColor: const Color(0xFFF8FAFC),
       drawer: !isDesktop ? const AppDrawer() : null,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: !isDesktop,
-            backgroundColor: const Color(0xFF0B1120).withOpacity(0.9),
+            backgroundColor: Color(0xFFF8FAFC).withValues(alpha: (0.9),
             elevation: 0,
             toolbarHeight: 88,
             titleSpacing: 0,
@@ -143,7 +143,7 @@ class _TechnologyPageState extends State<TechnologyPage> {
           if (_isLoading)
             const SliverFillRemaining(child: Center(child: CircularProgressIndicator()))
           else if (_tech == null)
-            const SliverFillRemaining(child: Center(child: Text('Technology content not found', style: TextStyle(color: Colors.white))))
+            const SliverFillRemaining(child: Center(child: Text('Technology content not found', style: TextStyle(color: Color(0xFF1E293B)))))
           else
             SliverToBoxAdapter(
               child: Column(
@@ -165,14 +165,14 @@ class _TechnologyPageState extends State<TechnologyPage> {
                             const SizedBox(height: 24),
                             Text(
                               _tech!.mainTitle,
-                              style: TextStyle(color: Colors.white, fontSize: isDesktop ? 64 : 40, fontWeight: FontWeight.w500, fontFamily: 'serif', height: 1.1),
+                              style: TextStyle(color: Color(0xFF1E293B), fontSize: isDesktop ? 64 : 40, fontWeight: FontWeight.w500, fontFamily: 'serif', height: 1.1),
                             ),
                             const SizedBox(height: 24),
                             SizedBox(
                               width: isDesktop ? 600 : double.infinity,
                               child: Text(
                                 _tech!.mainSubtitle,
-                                style: const TextStyle(color: Colors.white70, fontSize: 18, height: 1.6),
+                                style: const TextStyle(color: Color(0xFF475569), fontSize: 18, height: 1.6),
                               ),
                             ),
                           ],
@@ -184,7 +184,7 @@ class _TechnologyPageState extends State<TechnologyPage> {
                   // 2. Core Domains
                   Container(
                     width: double.infinity,
-                    color: Colors.white,
+                    color: Color(0xFF1E293B),
                     padding: padding,
                     child: Center(
                       child: ConstrainedBox(

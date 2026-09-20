@@ -46,7 +46,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFF0B1120),
+      color: const Color(0xFFF8FAFC),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 64.0 : 24.0,
         vertical: isDesktop ? 120.0 : 80.0,
@@ -71,7 +71,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                 style: TextStyle(
                   fontSize: isDesktop ? 48 : 32,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white,
+                  color: Color(0xFF1E293B),
                   letterSpacing: -0.5,
                 ),
                 textAlign: TextAlign.center,
@@ -84,7 +84,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: isDesktop ? 18 : 16,
-                    color: Colors.white70,
+                    color: Color(0xFF475569),
                     height: 1.6,
                   ),
                 ),
@@ -95,7 +95,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
               else if (_error.isNotEmpty)
                 const Center(child: Text('Error loading achievements', style: TextStyle(color: Colors.red)))
               else if (_achievements.isEmpty)
-                const Center(child: Text('Achievements will appear here as they are added.', style: TextStyle(color: Colors.white70)))
+                const Center(child: Text('Achievements will appear here as they are added.', style: TextStyle(color: Color(0xFF475569))))
               else
                 Column(
                   children: List.generate(_achievements.length, (index) {
@@ -154,7 +154,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
                 Container(
                   width: 2,
                   height: 200,
-                  color: Colors.white12,
+                  color: Color(0x1F1E293B),
                 ),
               ],
             ),
@@ -173,9 +173,9 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF2563EB).withOpacity(0.1),
+        color: Color(0xFF2563EB).withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.3)),
+        border: Border.all(color: Color(0xFF2563EB).withOpacity(0.3)),
       ),
       child: Text(
         year,
@@ -191,15 +191,15 @@ class _AchievementsSectionState extends State<AchievementsSection> {
     return Container(
       height: isDesktop ? 300 : 200,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.02),
+        color: Color(0xFF1E293B).withOpacity(0.02),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Color(0x1F1E293B)),
         image: imageUrl.isNotEmpty 
             ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
             : null,
       ),
       child: imageUrl.isEmpty 
-          ? const Center(child: Icon(Icons.emoji_events, size: 48, color: Colors.white24))
+          ? Center(child: Icon(Icons.emoji_events, size: 48, color: Color(0x3D1E293B)))
           : null,
     );
   }
@@ -216,7 +216,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
           style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color(0xFF1E293B),
             height: 1.2,
           ),
         ),
@@ -226,7 +226,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
           textAlign: isRightAlign ? TextAlign.right : TextAlign.left,
           style: const TextStyle(
             fontSize: 16,
-            color: Colors.white70,
+            color: Color(0xFF475569),
             height: 1.5,
           ),
         ),

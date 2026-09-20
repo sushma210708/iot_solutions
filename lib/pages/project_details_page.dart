@@ -38,7 +38,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     final project = widget.project;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B1120),
+      backgroundColor: const Color(0xFFF8FAFC),
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -61,9 +61,9 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     return SliverAppBar(
       pinned: true,
       expandedHeight: isDesktop ? 600 : 400,
-      backgroundColor: _isScrolled ? const Color(0xFF0B1120) : Colors.transparent,
+      backgroundColor: _isScrolled ? const Color(0xFFF8FAFC) : Colors.transparent,
       elevation: _isScrolled ? 4 : 0,
-      iconTheme: const IconThemeData(color: Colors.white),
+      iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           fit: StackFit.expand,
@@ -79,8 +79,8 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF0B1120).withOpacity(0.9),
-                    const Color(0xFF0B1120).withOpacity(0.3),
+                    Color(0xFFF8FAFC).withValues(alpha: (0.9),
+                    Color(0xFFF8FAFC).withValues(alpha: (0.3),
                     Colors.transparent,
                   ],
                   begin: Alignment.bottomCenter,
@@ -98,8 +98,8 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2563EB).withOpacity(0.1),
-                      border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.3)),
+                      color: Color(0xFF2563EB).withOpacity(0.1),
+                      border: Border.all(color: Color(0xFF2563EB).withOpacity(0.3)),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -118,7 +118,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                     style: TextStyle(
                       fontSize: isDesktop ? 56 : 32,
                       fontWeight: FontWeight.w900,
-                      color: Colors.white,
+                      color: Color(0xFF1E293B),
                       height: 1.1,
                       fontFamily: 'Inter',
                     ),
@@ -130,7 +130,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                       project.shortDescription,
                       style: TextStyle(
                         fontSize: isDesktop ? 20 : 16,
-                        color: Colors.white70,
+                        color: Color(0xFF475569),
                         height: 1.5,
                       ),
                     ),
@@ -188,7 +188,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           project.problem,
           style: const TextStyle(
             fontSize: 24,
-            color: Colors.white,
+            color: Color(0xFF1E293B),
             fontWeight: FontWeight.w300,
             height: 1.5,
           ),
@@ -198,7 +198,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           const Text(
             'WHY IT MATTERS',
             style: TextStyle(
-              color: Colors.white38,
+              color: Color(0x611E293B),
               fontWeight: FontWeight.bold,
               letterSpacing: 1,
               fontSize: 12,
@@ -209,7 +209,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             project.whyItMatters,
             style: const TextStyle(
               fontSize: 16,
-              color: Colors.white70,
+              color: Color(0xFF475569),
               height: 1.6,
             ),
           ),
@@ -236,7 +236,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           project.solution,
           style: const TextStyle(
             fontSize: 16,
-            color: Colors.white70,
+            color: Color(0xFF475569),
             height: 1.6,
           ),
         ),
@@ -245,7 +245,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           const Text(
             'KEY CAPABILITIES',
             style: TextStyle(
-              color: Colors.white38,
+              color: Color(0x611E293B),
               fontWeight: FontWeight.bold,
               letterSpacing: 1,
               fontSize: 12,
@@ -262,7 +262,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                     Expanded(
                       child: Text(
                         cap,
-                        style: const TextStyle(color: Colors.white, fontSize: 16, height: 1.4),
+                        style: const TextStyle(color: Color(0xFF1E293B), fontSize: 16, height: 1.4),
                       ),
                     ),
                   ],
@@ -275,7 +275,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
   Widget _buildWorkflowSection(Project project, bool isDesktop) {
     return Container(
-      color: const Color(0xFF1E293B),
+      color: const Color(0xFFFFFFFF),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 100 : 24,
         vertical: isDesktop ? 100 : 64,
@@ -298,7 +298,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Color(0xFF1E293B),
             ),
           ),
           const SizedBox(height: 64),
@@ -311,9 +311,9 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                 width: isDesktop ? 350 : double.infinity,
                 padding: const EdgeInsets.all(32),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0B1120),
+                  color: const Color(0xFFF8FAFC),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white12),
+                  border: Border.all(color: Color(0x1F1E293B)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,7 +323,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                       style: const TextStyle(
                         fontSize: 48,
                         fontWeight: FontWeight.w900,
-                        color: Colors.white12,
+                        color: Color(0x1F1E293B),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -332,7 +332,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Color(0xFF1E293B),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -340,7 +340,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                       step['description'] ?? '',
                       style: const TextStyle(
                         fontSize: 16,
-                        color: Colors.white60,
+                        color: Color(0xFF64748B),
                         height: 1.5,
                       ),
                     ),
@@ -369,7 +369,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               style: TextStyle(
                 fontSize: isDesktop ? 36 : 24,
                 fontWeight: FontWeight.w300,
-                color: Colors.white,
+                color: Color(0xFF1E293B),
                 fontStyle: FontStyle.italic,
                 height: 1.4,
               ),
@@ -402,7 +402,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Color(0xFF1E293B),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -411,7 +411,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Colors.white54,
+                            color: Color(0x8A1E293B),
                           ),
                         ),
                       ],
@@ -427,7 +427,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
   Widget _buildGallerySection(Project project, bool isDesktop) {
     return Container(
-      color: const Color(0xFF1E293B),
+      color: const Color(0xFFFFFFFF),
       padding: EdgeInsets.symmetric(
         horizontal: isDesktop ? 100 : 24,
         vertical: isDesktop ? 100 : 64,
@@ -466,7 +466,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                           fit: BoxFit.cover,
                         )
                       : null,
-                  color: const Color(0xFF0B1120),
+                  color: const Color(0xFFF8FAFC),
                 ),
               );
             },
@@ -491,7 +491,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Color(0xFF1E293B),
               ),
             ),
             const SizedBox(height: 32),
@@ -504,7 +504,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               ),
               child: const Text(
                 'Let\'s Build Together',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
               ),
             ),
           ],

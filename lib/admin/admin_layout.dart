@@ -130,7 +130,7 @@ class _AdminLayoutState extends State<AdminLayout> {
           // Sidebar
           Container(
             width: 250,
-            color: const Color(0xFF0B1120), // Navy Blue Sidebar
+            color: const Color(0xFFF8FAFC), // Navy Blue Sidebar
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -141,14 +141,14 @@ class _AdminLayoutState extends State<AdminLayout> {
                       const CircleAvatar(
                         radius: 16,
                         backgroundColor: Color(0xFF2563EB),
-                        child: Text('IoT', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                        child: Text('IoT', style: TextStyle(color: Color(0xFF1E293B), fontSize: 12, fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('NexusTech\nIoT Solutions', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
-                          Text(_currentUser?.role.toUpperCase() ?? 'ADMIN', style: const TextStyle(color: Colors.white54, fontSize: 10)),
+                          const Text('NexusTech\nIoT Solutions', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 14)),
+                          Text(_currentUser?.role.toUpperCase() ?? 'ADMIN', style: TextStyle(color: Color(0x8A1E293B), fontSize: 10)),
                         ],
                       )
                     ],
@@ -172,8 +172,8 @@ class _AdminLayoutState extends State<AdminLayout> {
                   padding: const EdgeInsets.all(24.0),
                   child: TextButton.icon(
                     onPressed: _logout,
-                    icon: const Icon(Icons.logout, color: Colors.white54, size: 20),
-                    label: const Text('Logout', style: TextStyle(color: Colors.white54)),
+                    icon: Icon(Icons.logout, color: Color(0x8A1E293B), size: 20),
+                    label: Text('Logout', style: TextStyle(color: Color(0x8A1E293B))),
                   ),
                 ),
               ],
@@ -201,7 +201,7 @@ class _AdminLayoutState extends State<AdminLayout> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF2563EB).withOpacity(0.1) : Colors.transparent,
+          color: isSelected ? Color(0xFF2563EB).withOpacity(0.1) : Colors.transparent,
           border: Border(
             right: BorderSide(
               color: isSelected ? const Color(0xFF2563EB) : Colors.transparent,
@@ -213,14 +213,14 @@ class _AdminLayoutState extends State<AdminLayout> {
           children: [
             Icon(
               icon,
-              color: isSelected ? const Color(0xFF2563EB) : Colors.white70,
+              color: isSelected ? const Color(0xFF2563EB) : Color(0xFF475569),
               size: 20,
             ),
             const SizedBox(width: 16),
             Text(
               title,
               style: TextStyle(
-                color: isSelected ? const Color(0xFF2563EB) : Colors.white70,
+                color: isSelected ? const Color(0xFF2563EB) : Color(0xFF475569),
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),

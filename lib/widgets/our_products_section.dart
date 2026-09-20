@@ -56,7 +56,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white24),
+              border: Border.all(color: Color(0x3D1E293B)),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Row(
@@ -64,7 +64,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
               children: [
                 CircleAvatar(radius: 4, backgroundColor: Color(0xFF2563EB)),
                 SizedBox(width: 8),
-                Text('Our Products', style: TextStyle(color: Colors.white70)),
+                Text('Our Products', style: TextStyle(color: Color(0xFF475569))),
               ],
             ),
           ),
@@ -74,7 +74,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
             style: TextStyle(
               fontSize: isDesktop ? 48 : 32,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Color(0xFF1E293B),
             ),
           ),
           Text(
@@ -90,7 +90,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
             'Explore our diverse portfolio of IoT and AI-powered solutions\ndesigned to optimize energy usage and drive efficiency.',
             style: TextStyle(
               fontSize: isDesktop ? 18 : 16,
-              color: Colors.white70,
+              color: Color(0xFF475569),
               height: 1.5,
             ),
           ),
@@ -103,7 +103,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                       child: Center(
                         child: Text(
                           'No products available yet. Add some from the Admin Panel!',
-                          style: TextStyle(color: Colors.white70, fontSize: 16),
+                          style: TextStyle(color: Color(0xFF475569), fontSize: 16),
                         ),
                       ),
                     )
@@ -171,7 +171,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
               decoration: BoxDecoration(
                 color: const Color(0xFF161E24), // Dark charcoal background
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.white12), // Subtle border
+                border: Border.all(color: Color(0x1F1E293B)), // Subtle border
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.5),
@@ -183,16 +183,16 @@ class _OurProductsSectionState extends State<OurProductsSection> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.lock_outline, size: 48, color: Colors.white54),
+                  Icon(Icons.lock_outline, size: 48, color: Color(0x8A1E293B)),
                   const SizedBox(height: 24),
                   const Text(
                     'Login Required',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
                   ),
                   const SizedBox(height: 16),
                   const Text(
                     'Please login to view complete product details.',
-                    style: TextStyle(color: Colors.white70, fontSize: 16),
+                    style: TextStyle(color: Color(0xFF475569), fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
@@ -202,11 +202,11 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                         child: OutlinedButton(
                           onPressed: () => Navigator.of(context).pop(),
                           style: OutlinedButton.styleFrom(
-                            side: const BorderSide(color: Colors.white24),
+                            side: BorderSide(color: Color(0x3D1E293B)),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
-                          child: const Text('Cancel', style: TextStyle(color: Colors.white)),
+                          child: const Text('Cancel', style: TextStyle(color: Color(0xFF1E293B))),
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -224,7 +224,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
-                          child: const Text('Login', style: TextStyle(color: Colors.white)),
+                          child: const Text('Login', style: TextStyle(color: Color(0xFF1E293B))),
                         ),
                       ),
                     ],
@@ -273,7 +273,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
           decoration: BoxDecoration(
             color: const Color(0xFF161E24), 
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white12),
+            border: Border.all(color: Color(0x1F1E293B)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,7 +304,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                       decoration: BoxDecoration(
                         color: const Color(0xFF161E24),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.white12),
+                        border: Border.all(color: Color(0x1F1E293B)),
                       ),
                       child: const Icon(Icons.bolt, color: Color(0xFF2563EB), size: 24),
                     ),
@@ -322,7 +322,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Color(0xFF1E293B),
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -332,7 +332,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                       product.shortDescription,
                       style: const TextStyle(
                         fontSize: 14,
-                        color: Colors.white60,
+                        color: Color(0xFF64748B),
                         height: 1.5,
                       ),
                       maxLines: 3,

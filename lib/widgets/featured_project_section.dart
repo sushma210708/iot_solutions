@@ -65,7 +65,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
         child: const Center(
           child: Text(
             'Case Studies will appear here once added from the Admin Dashboard.',
-            style: TextStyle(color: Colors.white70, fontSize: 16),
+            style: TextStyle(color: Color(0xFF475569), fontSize: 16),
           ),
         ),
       );
@@ -78,7 +78,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
 
     return Container(
       width: double.infinity,
-      color: const Color(0xFF0B1120),
+      color: const Color(0xFFF8FAFC),
       child: Stack(
         children: [
           // Dynamic Background Image
@@ -108,7 +108,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                       style: TextStyle(
                         fontSize: isDesktop ? 48 : 32,
                         fontWeight: FontWeight.w900,
-                        color: Colors.white,
+                        color: Color(0xFF1E293B),
                         letterSpacing: -0.5,
                       ),
                     ),
@@ -119,7 +119,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                         'Real challenges. Intelligent solutions. Measurable impact.\n\nExplore how Green Fusion is solving real-world problems and creating value across industries.',
                         style: TextStyle(
                           fontSize: isDesktop ? 18 : 16,
-                          color: Colors.white70,
+                          color: Color(0xFF475569),
                           height: 1.6,
                         ),
                       ),
@@ -142,13 +142,13 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                               color: isSelected ? const Color(0xFF2563EB) : Colors.transparent,
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(
-                                color: isSelected ? const Color(0xFF2563EB) : Colors.white24,
+                                color: isSelected ? const Color(0xFF2563EB) : Color(0xFFCBD5E1),
                               ),
                             ),
                             child: Text(
                               category,
                               style: TextStyle(
-                                color: isSelected ? Colors.white : Colors.white70,
+                                color: isSelected ? Colors.white : Color(0xFF475569),
                                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                               ),
                             ),
@@ -181,7 +181,7 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white38),
+                      side: BorderSide(color: Color(0x611E293B)),
                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     ),
@@ -259,16 +259,16 @@ class _ProjectCardState extends State<ProjectCard> {
           curve: Curves.easeOut,
           transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E293B),
+            color: const Color(0xFFFFFFFF),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: _isHovered ? const Color(0xFF2563EB).withOpacity(0.5) : Colors.white12,
+              color: _isHovered ? Color(0xFF2563EB).withOpacity(0.5) : Color(0xFFE2E8F0),
               width: 1,
             ),
             boxShadow: [
               if (_isHovered)
                 BoxShadow(
-                  color: const Color(0xFF2563EB).withOpacity(0.15),
+                  color: Color(0xFF2563EB).withOpacity(0.15),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 )
@@ -293,7 +293,7 @@ class _ProjectCardState extends State<ProjectCard> {
                             widget.project.imageUrl,
                             fit: BoxFit.cover,
                           )
-                        : const Center(child: Icon(Icons.image, color: Colors.white24, size: 48)),
+                        : Center(child: Icon(Icons.image, color: Color(0x3D1E293B), size: 48)),
                   ),
                 ),
               ),
@@ -307,9 +307,9 @@ class _ProjectCardState extends State<ProjectCard> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2563EB).withOpacity(0.1),
+                        color: Color(0xFF2563EB).withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFF2563EB).withOpacity(0.2)),
+                        border: Border.all(color: Color(0xFF2563EB).withOpacity(0.2)),
                       ),
                       child: Text(
                         widget.project.category.toUpperCase(),
@@ -327,7 +327,7 @@ class _ProjectCardState extends State<ProjectCard> {
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: Color(0xFF1E293B),
                         letterSpacing: -0.3,
                       ),
                       maxLines: 1,
@@ -338,7 +338,7 @@ class _ProjectCardState extends State<ProjectCard> {
                       widget.project.shortDescription,
                       style: const TextStyle(
                         fontSize: 15,
-                        color: Colors.white70,
+                        color: Color(0xFF475569),
                         height: 1.6,
                       ),
                       maxLines: 3,

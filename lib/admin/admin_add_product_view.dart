@@ -159,8 +159,8 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                     onPressed: _isUploading ? null : _saveProduct,
                     style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB), padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)),
                     child: _isUploading
-                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                        : const Text('Save Product', style: TextStyle(color: Colors.white)),
+                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B), strokeWidth: 2))
+                        : const Text('Save Product', style: TextStyle(color: Color(0xFF1E293B))),
                   ),
                 ],
               )
@@ -295,8 +295,8 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                                   const Text('Product Images (Carousel)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                                   ElevatedButton.icon(
                                     onPressed: _pickImages,
-                                    icon: const Icon(Icons.add, color: Colors.white, size: 16),
-                                    label: const Text('Add Images', style: TextStyle(color: Colors.white)),
+                                    icon: const Icon(Icons.add, color: Color(0xFF1E293B), size: 16),
+                                    label: const Text('Add Images', style: TextStyle(color: Color(0xFF1E293B))),
                                     style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
                                   ),
                                 ],
@@ -400,9 +400,9 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
       width: double.infinity,
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Color(0xFF1E293B),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: Offset(0, 4))],
       ),
       child: child,
     );
@@ -431,7 +431,7 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey[300]!),
               borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-              color: Colors.white,
+              color: Color(0xFF1E293B),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -503,7 +503,7 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
               onTap: onDelete,
               child: Container(
                 padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                decoration: const BoxDecoration(color: Color(0xFF1E293B), shape: BoxShape.circle),
                 child: const Icon(Icons.delete_outline, color: Colors.redAccent, size: 16),
               ),
             ),

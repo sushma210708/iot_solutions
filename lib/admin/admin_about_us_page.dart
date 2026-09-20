@@ -141,7 +141,7 @@ class _AdminAboutUsPageState extends State<AdminAboutUsPage> {
                   const Text('Manage About Us', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                   ElevatedButton.icon(
                     onPressed: _isSaving ? null : _saveAboutUs,
-                    icon: _isSaving ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)) : const Icon(Icons.save),
+                    icon: _isSaving ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B), strokeWidth: 2)) : const Icon(Icons.save),
                     label: const Text('Save Changes'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2563EB),
