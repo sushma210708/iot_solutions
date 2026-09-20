@@ -13,6 +13,7 @@ import '../models/footer.dart';
 import '../models/inquiry.dart';
 import '../models/challenge.dart';
 import '../models/testimonial.dart';
+import '../models/service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
@@ -753,6 +754,60 @@ class ApiService {
       }
     } catch (e) {
       throw Exception('Failed to update Technology: $e');
+    }
+  }
+  
+  // --- Services ---
+  Future<List<Service>> getServices() async {
+    final response = await http.get(Uri.parse('$baseUrl/services'));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((json) => Service.fromJson(json)).toList();
+    }
+    throw Exception('Failed to load services');
+  }
+
+  Future<Service> createService(Map<String, dynamic> data) async {
+    final token = await AuthService().getIdToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/services'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+      body: json.encode(data),
+    );
+    if (response.statusCode == 201) {
+      return Service.fromJson(json.decode(response.body));
+    }
+    throw Exception('Failed to create service: ${response.body}');
+  }
+
+  Future<void> updateService(String id, Map<String, dynamic> data) async {
+    final token = await AuthService().getIdToken();
+    final response = await http.put(
+      Uri.parse('$baseUrl/services/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+      body: json.encode(data),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update service: ${response.body}');
+    }
+  }
+
+  Future<void> deleteService(String id) async {
+    final token = await AuthService().getIdToken();
+    final response = await http.delete(
+      Uri.parse('$baseUrl/services/$id'),
+      headers: {
+        if (token != null) 'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception('Failed to delete service');
     }
   }
 }

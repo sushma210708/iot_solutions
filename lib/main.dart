@@ -11,6 +11,7 @@ import 'pages/products_page.dart';
 import 'pages/mentors_page.dart';
 import 'pages/technology_page.dart';
 import 'pages/contact_page.dart';
+import 'pages/services_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +61,7 @@ class GreenFusionApp extends StatelessWidget {
         '/mentors': (context) => const MentorsPage(),
         '/technology': (context) => const TechnologyPage(),
         '/contact': (context) => const ContactPage(),
+        '/services': (context) => const ServicesPage(),
       },
     );
   }

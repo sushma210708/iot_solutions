@@ -58,6 +58,7 @@ class NavBar extends StatelessWidget {
             children: [
               _navItem('Home', onTap: () => Navigator.pushNamed(context, '/')),
               _navItem('Products', onTap: () => Navigator.pushNamed(context, '/solutions')),
+              _navItem('Services', onTap: () => Navigator.pushNamed(context, '/services')),
               _navItem('Technology', onTap: () => Navigator.pushNamed(context, '/technology')),
               _navItem('Mentors', onTap: () => Navigator.pushNamed(context, '/mentors')),
               _navItem('About', onTap: () => Navigator.pushNamed(context, '/about')),

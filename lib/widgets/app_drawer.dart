@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -61,6 +61,7 @@ class AppDrawer extends StatelessWidget {
             const Divider(color: Colors.white12),
             _drawerItem(context, Icons.home_outlined, 'Home', '/'),
             _drawerItem(context, Icons.inventory_2_outlined, 'Products', '/solutions'),
+            _drawerItem(context, Icons.business_center_outlined, 'Services', '/services'),
             _drawerItem(context, Icons.memory_outlined, 'Technology', '/technology'),
             _drawerItem(context, Icons.group_outlined, 'Mentors', '/mentors'),
             _drawerItem(context, Icons.info_outline, 'About Us', '/about'),

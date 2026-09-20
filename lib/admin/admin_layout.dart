@@ -7,6 +7,7 @@ import 'admin_updates_page.dart';
 import 'admin_hero_page.dart';
 import 'admin_inquiries_page.dart';
 import 'admin_about_us_page.dart';
+import 'admin_services_page.dart';
 import '../pages/home_page.dart';
 import '../pages/login_page.dart';
 import '../services/auth_service.dart';
@@ -109,6 +110,7 @@ class _AdminLayoutState extends State<AdminLayout> {
       AdminMentorsPage(key: _mentorsKey), // 3. Mentors
       const AdminInquiriesPage(), // 4. Messages
       const AdminAboutUsPage(), // 5. About Us
+      const AdminServicesPage(), // 6. Services
     ];
   }
 
@@ -162,6 +164,7 @@ class _AdminLayoutState extends State<AdminLayout> {
                       _navItem(Icons.people_outline, 'Mentors', 3),
                       _navItem(Icons.message_outlined, 'Messages', 4),
                       _navItem(Icons.info_outline, 'About Us', 5),
+                      _navItem(Icons.business_center_outlined, 'Services', 6),
                     ],
                   ),
                 ),

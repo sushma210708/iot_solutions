@@ -17,6 +17,7 @@ const updateRoutes = require('./routes/update.routes');
 const inquiryRoutes = require('./routes/inquiry.routes');
 const testimonialRoutes = require('./routes/testimonial.routes');
 const challengeRoutes = require('./routes/challenge.routes');
+const serviceRoutes = require('./routes/service.routes');
 const errorHandler = require('./middleware/error.middleware');
 const connectDB = require('./config/db');
 const { connectCloudinary } = require('./config/cloudinary');
@@ -56,6 +57,7 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/inquiries', inquiryRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/challenges', challengeRoutes);
+app.use('/api/services', serviceRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {

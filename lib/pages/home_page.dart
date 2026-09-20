@@ -6,6 +6,7 @@ import '../widgets/featured_project_section.dart';
 import '../widgets/team_section.dart';
 import '../widgets/cta_section.dart';
 import '../widgets/footer_section.dart';
+import '../widgets/services_section.dart';
 import '../widgets/app_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey _solutionsKey = GlobalKey();
+  final GlobalKey _servicesKey = GlobalKey();
   final GlobalKey _projectsKey = GlobalKey();
   final GlobalKey _teamKey = GlobalKey();
   final GlobalKey _contactKey = GlobalKey();
@@ -86,6 +88,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const HeroSection(),
                 Container(key: _solutionsKey, child: const SolutionsSection()),
+                Container(key: _servicesKey, child: const ServicesSection()),
                 Container(key: _projectsKey, child: const FeaturedProjectSection()),
                 Container(key: _teamKey, child: const TeamSection()),
                 const CtaSection(),
