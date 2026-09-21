@@ -115,7 +115,7 @@ class _CollaborationDialogState extends State<_CollaborationDialog> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Thank you! Your collaboration request has been submitted.'),
-            backgroundcolor: Color(0xFF168BFF),
+            backgroundColor: Color(0xFF168BFF),
           ),
         );
       }
