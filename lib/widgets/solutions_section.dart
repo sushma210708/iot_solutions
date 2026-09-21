@@ -93,7 +93,7 @@ class _SolutionsSectionState extends State<SolutionsSection> {
                       textAlign: TextAlign.center, style: TextStyle(
                         fontSize: isDesktop ? 48 : 32,
                         fontWeight: FontWeight.w800,
-                        color: Color(0xFF1E293B),
+                        color: Colors.white,
                         height: 1.2,
                         letterSpacing: -0.5,
                       ),
@@ -220,7 +220,7 @@ class _ProductCardState extends State<_ProductCard> {
           width: widget.isDesktop ? 378.0 : double.infinity,
           height: 480,
           decoration: BoxDecoration(
-            color: Color(0xFF1E293B),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
