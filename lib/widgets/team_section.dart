@@ -1,3 +1,4 @@
+import 'section_badge.dart';
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/mentor.dart';
@@ -61,16 +62,7 @@ class _TeamSectionState extends State<TeamSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                'OUR TEAM',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: const Color(0xFF2563EB),
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                  fontSize: isDesktop ? 14 : 12,
-                ),
-              ),
+              SectionBadge(text: 'OUR TEAM'),
               const SizedBox(height: 16),
               Text(
                 'Meet Our Mentors',

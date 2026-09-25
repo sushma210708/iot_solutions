@@ -147,7 +147,7 @@ class _AdminLayoutState extends State<AdminLayout> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('NexusTech\nIoT Solutions', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 14)),
+                          const Text('NexusTech\nGfiotsolutions', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 14)),
                           Text(_currentUser?.role.toUpperCase() ?? 'ADMIN', style: TextStyle(color: Color(0x8A1E293B), fontSize: 10)),
                         ],
                       )

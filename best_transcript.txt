@@ -1,0 +1,1 @@
+'); let best = ''; for(let line of lines) { if (line.includes('write_to_file') && line.includes('solutions_section.dart') && line.includes('CodeContent')) { best = line; } } fs.writeFileSync('best_transcript.txt', best);\"

@@ -1,3 +1,4 @@
+import 'section_badge.dart';
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/achievement.dart';
@@ -56,15 +57,7 @@ class _AchievementsSectionState extends State<AchievementsSection> {
           constraints: const BoxConstraints(maxWidth: 1200),
           child: Column(
             children: [
-              Text(
-                'OUR JOURNEY',
-                style: TextStyle(
-                  color: const Color(0xFF2563EB),
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                  fontSize: isDesktop ? 14 : 12,
-                ),
-              ),
+              SectionBadge(text: 'OUR JOURNEY'),
               const SizedBox(height: 16),
               Text(
                 'Milestones of Innovation',

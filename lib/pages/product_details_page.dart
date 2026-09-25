@@ -278,9 +278,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                             child: const Row(
                               children: [
-                                Text('Get in Touch', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold)),
+                                Text('Get in Touch', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                 SizedBox(width: 8),
-                                Icon(Icons.arrow_forward, color: Color(0xFF1E293B), size: 16),
+                                Icon(Icons.arrow_forward, color: Colors.white, size: 16),
                               ],
                             ),
                           ),
@@ -313,7 +313,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             // Two-Column Content Layout
             Container(
               width: double.infinity,
-              color: Color(0xFF1E293B),
+              color: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: isDesktop ? 64 : 24, vertical: 80),
               child: Center(
                 child: ConstrainedBox(
@@ -408,7 +408,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             width: double.infinity,
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              color: Color(0xFF1E293B), 
+              color: Colors.white, 
               border: Border.all(color: Colors.black.withOpacity(0.05)),
               boxShadow: [
                 BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: Offset(0, 4)),
@@ -452,9 +452,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Enquire About This Product', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 16)),
+                Text('Enquire About This Product', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
                 SizedBox(width: 8),
-                Icon(Icons.arrow_forward, color: Color(0xFF1E293B), size: 16),
+                Icon(Icons.arrow_forward, color: Colors.white, size: 16),
               ],
             ),
           ),

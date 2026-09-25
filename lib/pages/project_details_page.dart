@@ -1,3 +1,4 @@
+import '../widgets/section_badge.dart';
 import '../widgets/interactive_grid_background.dart';
 import 'package:flutter/material.dart';
 import '../models/project.dart';
@@ -177,15 +178,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'THE CHALLENGE',
-          style: TextStyle(
-            color: Color(0xFF2563EB),
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-            fontSize: 14,
-          ),
-        ),
+        const SectionBadge(text: 'THE CHALLENGE'),
         const SizedBox(height: 24),
         Text(
           project.problem,
@@ -225,15 +218,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'OUR SOLUTION',
-          style: TextStyle(
-            color: Color(0xFF2563EB),
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-            fontSize: 14,
-          ),
-        ),
+        const SectionBadge(text: 'OUR SOLUTION'),
         const SizedBox(height: 24),
         Text(
           project.solution,
@@ -286,15 +271,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'EXECUTION WORKFLOW',
-            style: TextStyle(
-              color: Color(0xFF2563EB),
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
-              fontSize: 14,
-            ),
-          ),
+          const SectionBadge(text: 'EXECUTION WORKFLOW'),
           const SizedBox(height: 16),
           const Text(
             'How we delivered the solution',
@@ -438,15 +415,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'PROJECT GALLERY',
-            style: TextStyle(
-              color: Color(0xFF2563EB),
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2,
-              fontSize: 14,
-            ),
-          ),
+          const SectionBadge(text: 'PROJECT GALLERY'),
           const SizedBox(height: 48),
           GridView.builder(
             shrinkWrap: true,

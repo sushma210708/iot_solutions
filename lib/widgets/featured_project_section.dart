@@ -103,15 +103,21 @@ class _FeaturedProjectSectionState extends State<FeaturedProjectSection> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'Impact Stories',
+                    RichText(
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: isDesktop ? 48 : 32,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF1E293B),
-                        letterSpacing: -0.5,
-                      ),
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: isDesktop ? 48 : 32,
+                          fontWeight: FontWeight.w900,
+                          color: const Color(0xFF0F172A),
+                          letterSpacing: -0.5,
+                          fontFamily: 'Outfit'
+                        ),
+                        children: const [
+                          TextSpan(text: 'Impact '),
+                          TextSpan(text: 'Stories', style: TextStyle(color: Color(0xFF168BFF)))
+                        ]
+                      )
                     ),
                     const SizedBox(height: 16),
                     SizedBox(
@@ -271,15 +277,15 @@ class _ProjectCardState extends State<ProjectCard> {
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(23)),
                   child: Container(
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
                     ),
                     child: widget.project.imageUrl.isNotEmpty
                         ? Image.network(
                             widget.project.imageUrl,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                           )
-                        : Center(child: Icon(Icons.image, color: Color(0x3D1E293B), size: 48)),
+                        : const Center(child: Icon(Icons.image, color: Color(0x3D1E293B), size: 48)),
                   ),
                 ),
               ),

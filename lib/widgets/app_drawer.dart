@@ -47,7 +47,7 @@ class AppDrawer extends StatelessWidget {
                   ),
                   const SizedBox(width: 16),
                   const Text(
-                    'IoT Solutions',
+                    'Gfiotsolutions',
                     style: TextStyle(
                       color: Color(0xFF1E293B),
                       fontWeight: FontWeight.w800,

@@ -3,6 +3,7 @@ import 'dart:ui';
 import '../services/api_service.dart';
 import '../models/product.dart';
 import '../pages/product_details_page.dart';
+import 'section_badge.dart';
 
 class SolutionsSection extends StatefulWidget {
   const SolutionsSection({super.key});
@@ -78,24 +79,23 @@ class _SolutionsSectionState extends State<SolutionsSection> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      'OUR PRODUCTS',
-                      textAlign: TextAlign.center, style: TextStyle(
-                        color: Color(0xFF2563EB),
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2,
-                        fontSize: 14,
-                      ),
-                    ),
+                    const SectionBadge(text: 'OUR PRODUCTS'),
                     const SizedBox(height: 24),
-                    Text(
-                      'Products built for real-world impact.',
-                      textAlign: TextAlign.center, style: TextStyle(
-                        fontSize: isDesktop ? 48 : 32,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                        height: 1.2,
-                        letterSpacing: -0.5,
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: isDesktop ? 48 : 32,
+                          fontWeight: FontWeight.w800,
+                          color: const Color(0xFF0F172A),
+                          height: 1.2,
+                          letterSpacing: -0.5,
+                          fontFamily: 'Outfit'
+                        ),
+                        children: const [
+                          TextSpan(text: 'Products built for\n'),
+                          TextSpan(text: 'real-world impact.', style: TextStyle(color: Color(0xFF168BFF))),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -244,7 +244,7 @@ class _ProductCardState extends State<_ProductCard> {
                   image: widget.product.images.isNotEmpty && widget.product.images[0].url.isNotEmpty
                       ? DecorationImage(
                           image: NetworkImage(widget.product.images[0].url),
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         )
                       : null,
                 ),

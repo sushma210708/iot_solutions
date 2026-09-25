@@ -1,3 +1,4 @@
+import 'section_badge.dart';
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/update.dart';
@@ -75,15 +76,7 @@ class _UpdatesSectionState extends State<UpdatesSection> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'LATEST UPDATES',
-                        style: TextStyle(
-                          color: const Color(0xFF2563EB),
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2,
-                          fontSize: isDesktop ? 14 : 12,
-                        ),
-                      ),
+                      SectionBadge(text: 'LATEST UPDATES'),
                       const SizedBox(height: 16),
                       Text(
                         'News & Technical Developments',

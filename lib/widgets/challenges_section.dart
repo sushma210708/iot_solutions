@@ -1,3 +1,4 @@
+import 'section_badge.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../models/challenge.dart';
@@ -78,15 +79,7 @@ class _ChallengesSectionState extends State<ChallengesSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'CHALLENGES WE SOLVE',
-                style: TextStyle(
-                  color: const Color(0xFF2563EB),
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                  fontSize: isDesktop ? 14 : 12,
-                ),
-              ),
+              SectionBadge(text: 'CHALLENGES WE SOLVE'),
               const SizedBox(height: 16),
               Text(
                 'Engineering Solutions for\nReal-World Challenges',

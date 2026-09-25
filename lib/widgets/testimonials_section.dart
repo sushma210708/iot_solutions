@@ -1,3 +1,4 @@
+import 'section_badge.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/testimonial.dart';
@@ -101,15 +102,7 @@ class _TestimonialsSectionState extends State<TestimonialsSection> {
             children: [
               Container(width: 40, height: 2, color: const Color(0xFF2563EB)),
               const SizedBox(width: 16),
-              const Text(
-                'TRUSTED BY INDUSTRY LEADERS',
-                style: TextStyle(
-                  color: Color(0xFF2563EB),
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                  fontSize: 12,
-                ),
-              ),
+              const SectionBadge(text: 'TRUSTED BY INDUSTRY LEADERS'),
             ],
           ),
           const SizedBox(height: 64),

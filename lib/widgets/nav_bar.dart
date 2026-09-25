@@ -113,7 +113,7 @@ class NavBar extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         const Text(
-          'IoT Solutions',
+          'Gfiotsolutions',
           style: TextStyle(
             color: Color(0xFF0F161B),
             fontWeight: FontWeight.w800,
