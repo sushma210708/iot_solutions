@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['super_admin', 'content_admin', 'viewer'],
-      default: 'viewer',
+      enum: ['super_admin', 'content_admin', 'viewer', 'user'],
+      default: 'user',
     },
     permissions: [{
       type: String,
