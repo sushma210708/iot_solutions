@@ -39,6 +39,15 @@ class _LoginPageState extends State<LoginPage> {
       // 1. Get Firebase ID Token
       final token = await _authService.getIdToken();
       if (token == null) throw Exception("Failed to retrieve authentication token.");
+      
+      // If signing up, register the user in the backend DB (legacy)
+      if (!_isLogin) {
+        await _apiService.registerUser(_emailController.text.trim(), token);
+      }
+
+      // Sync user to automatically link accounts added by email in Manage Admins
+      // and to create the user role if they are new.
+      await _apiService.syncUser(token);
 
       // 2. Fetch MongoDB Profile
       try {
@@ -64,10 +73,10 @@ class _LoginPageState extends State<LoginPage> {
           }
         }
       } catch (e) {
-        // User not found in MongoDB or API failed -> Show error so we can debug
+        // User not found in MongoDB (normal user)
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error fetching admin profile: $e', style: const TextStyle(color: Color(0xFF1E293B))), backgroundColor: Colors.red),
+            const SnackBar(content: Text('Logged in successfully!', style: TextStyle(color: Colors.white)), backgroundColor: Colors.green),
           );
           // Fallback to home page
           if (widget.redirectPage != null) {

@@ -16,6 +16,7 @@ import '../models/admin_user.dart';
 
 import 'admin_challenges_page.dart';
 import 'admin_projects_page.dart';
+import 'admin_users_page.dart';
 
 class AdminLayout extends StatefulWidget {
   const AdminLayout({super.key});
@@ -111,6 +112,7 @@ class _AdminLayoutState extends State<AdminLayout> {
       const AdminInquiriesPage(), // 4. Messages
       const AdminAboutUsPage(), // 5. About Us
       const AdminServicesPage(), // 6. Services
+      const AdminUsersPage(), // 7. Users
     ];
   }
 
@@ -172,6 +174,7 @@ class _AdminLayoutState extends State<AdminLayout> {
                       _navItem(Icons.message_outlined, 'Messages', 4),
                       _navItem(Icons.info_outline, 'About Us', 5),
                       _navItem(Icons.business_center_outlined, 'Services', 6),
+                      _navItem(Icons.group_outlined, 'Users', 7),
                     ],
                   ),
                 ),

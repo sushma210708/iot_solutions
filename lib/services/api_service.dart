@@ -272,6 +272,70 @@ class ApiService {
     throw Exception('Failed to load user profile: ${response.statusCode} ${response.body}');
   }
 
+  // --- Users ---
+  Future<void> syncUser(String token) async {
+    try {
+      await http.post(
+        Uri.parse('$baseUrl/auth/sync'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+    } catch (e) {
+      // Ignore errors if endpoint doesn't exist yet
+    }
+  }
+
+  Future<void> registerUser(String email, String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/users/register'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({'email': email, 'role': 'user'}),
+    );
+    // Ignore errors for now if endpoint doesn't exist
+  }
+
+  Future<List<Map<String, dynamic>>> getUsers(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/users'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        final List<dynamic> usersJson = data['data'];
+        return usersJson.cast<Map<String, dynamic>>();
+      }
+    }
+    // Return empty list if endpoint doesn't exist yet rather than crashing
+    return [];
+  }
+
+  Future<void> updateUser(String id, Map<String, dynamic> data, String token) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/users/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(data),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update user: ${response.body}');
+    }
+  }
+
+  Future<void> deleteUser(String id, String token) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/users/$id'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete user: ${response.body}');
+    }
+  }
+
   // --- Admins ---
 
   Future<List<AdminUser>> getAdmins(String token) async {

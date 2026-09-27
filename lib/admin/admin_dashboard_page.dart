@@ -317,8 +317,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       const SizedBox(height: 16),
                       _buildTextField('Email', emailCtrl),
                       const SizedBox(height: 16),
-                      _buildTextField('Firebase UID (Required)', uidCtrl),
-                      const SizedBox(height: 16),
                       const Text('Role', style: TextStyle(color: Color(0xFF475569))),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
@@ -386,7 +384,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 ),
                 ElevatedButton(
                   onPressed: isSaving ? null : () async {
-                    if (nameCtrl.text.isEmpty || emailCtrl.text.isEmpty || uidCtrl.text.isEmpty) {
+                    if (nameCtrl.text.isEmpty || emailCtrl.text.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
                       return;
                     }
@@ -396,7 +394,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       if (currentToken == null) throw Exception("You must be logged in to add an admin.");
 
                       await _apiService.createAdmin({
-                        'firebaseUid': uidCtrl.text.trim(),
+                        'firebaseUid': emailCtrl.text.trim(), // Backend requires it, passing email instead
                         'name': nameCtrl.text.trim(),
                         'email': emailCtrl.text.trim(),
                         'role': role,
