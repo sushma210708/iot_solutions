@@ -142,8 +142,8 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xFF1E293B),
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4)),
                 ],

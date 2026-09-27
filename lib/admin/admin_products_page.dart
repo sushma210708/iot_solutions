@@ -1,4 +1,4 @@
-﻿import 'dart:typed_data';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/api_service.dart';
@@ -89,8 +89,8 @@ class AdminProductsPageState extends State<AdminProductsPage> {
               ),
               ElevatedButton.icon(
                 onPressed: showAddProductDialog,
-                icon: const Icon(Icons.add, color: Color(0xFF1E293B)),
-                label: const Text('Add Product', style: TextStyle(color: Color(0xFF1E293B))),
+                icon: const Icon(Icons.add, color: const Color(0xFF1E293B)),
+                label: const Text('Add Product', style: TextStyle(color: const Color(0xFF1E293B))),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -102,8 +102,8 @@ class AdminProductsPageState extends State<AdminProductsPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xFF1E293B),
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4)),
                 ],
@@ -146,8 +146,8 @@ class AdminProductsPageState extends State<AdminProductsPage> {
           Expanded(
             flex: 1,
             child: product.images.isNotEmpty
-                ? ClipRRect(borderRadius: BorderRadius.circular(4), child: Image.network(product.images.first.url, width: 60, height: 40, fit: BoxFit.cover))
-                : Container(width: 60, height: 40, color: Colors.grey[200], child: const Icon(Icons.image, color: Colors.grey)),
+                ? ClipRRect(borderRadius: BorderRadius.circular(4), child: Image.network(product.images.first.url, width: 80, height: 60, fit: BoxFit.contain))
+                : Container(width: 80, height: 60, color: Colors.grey[200], child: const Icon(Icons.image, color: Colors.grey)),
           ),
           Expanded(flex: 2, child: Text(product.title)),
           Expanded(flex: 2, child: Text(product.category)),

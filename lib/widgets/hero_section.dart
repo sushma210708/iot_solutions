@@ -51,10 +51,10 @@ class _HeroSectionState extends State<HeroSection> {
     final title2 = _heroContent?.titleLine2.isNotEmpty == true ? _heroContent!.titleLine2 : 'Live Better.';
     final description = _heroContent?.description.isNotEmpty == true 
         ? _heroContent!.description 
-        : 'Transforming industries through intelligent IoT, AI, and sustainable\nengineering solutions. Built for real-world impact.';
+        : 'Transforming industries through intelligent IoT, AI, and sustainable engineering solutions. Built for real-world impact.';
 
     final leftContent = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center,
       children: [
         // Intelligent Energy Solutions Badge
         Container(
@@ -90,6 +90,7 @@ class _HeroSectionState extends State<HeroSection> {
         // Heading
         Text(
           title1,
+          textAlign: isDesktop ? TextAlign.start : TextAlign.center,
           style: TextStyle(
             fontSize: isDesktop ? 72 : 48,
             fontWeight: FontWeight.w900,
@@ -99,6 +100,7 @@ class _HeroSectionState extends State<HeroSection> {
         ),
         Text(
           title2,
+          textAlign: isDesktop ? TextAlign.start : TextAlign.center,
           style: TextStyle(
             fontSize: isDesktop ? 72 : 48,
             fontWeight: FontWeight.w900,
@@ -110,6 +112,7 @@ class _HeroSectionState extends State<HeroSection> {
         // Subtitle
         Text(
           description,
+          textAlign: isDesktop ? TextAlign.start : TextAlign.center,
           style: TextStyle(
             fontSize: isDesktop ? 18 : 16,
             color: Color(0xFF64748B),

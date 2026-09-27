@@ -74,8 +74,8 @@ class AdminAchievementsPageState extends State<AdminAchievementsPage> {
               ),
               ElevatedButton.icon(
                 onPressed: () => showAchievementDialog(),
-                icon: const Icon(Icons.add, color: Color(0xFF1E293B)),
-                label: const Text('Add Achievement', style: TextStyle(color: Color(0xFF1E293B))),
+                icon: const Icon(Icons.add, color: const Color(0xFF1E293B)),
+                label: const Text('Add Achievement', style: TextStyle(color: const Color(0xFF1E293B))),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2563EB),
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -87,8 +87,8 @@ class AdminAchievementsPageState extends State<AdminAchievementsPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xFF1E293B),
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: Offset(0, 4)),
                 ],
@@ -283,7 +283,7 @@ class _AchievementDialogState extends State<_AchievementDialog> {
         ElevatedButton(
           onPressed: _isUploading ? null : _save,
           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB)),
-          child: _isUploading ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Color(0xFF1E293B), strokeWidth: 2)) : const Text('Save', style: TextStyle(color: Color(0xFF1E293B))),
+          child: _isUploading ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: const Color(0xFF1E293B), strokeWidth: 2)) : const Text('Save', style: TextStyle(color: const Color(0xFF1E293B))),
         ),
       ],
     );

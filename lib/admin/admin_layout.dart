@@ -123,7 +123,14 @@ class _AdminLayoutState extends State<AdminLayout> {
       );
     }
 
-    return Scaffold(
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textTheme: Theme.of(context).textTheme.apply(
+          bodyColor: const Color(0xFF1E293B),
+          displayColor: const Color(0xFF1E293B),
+        ),
+      ),
+      child: Scaffold(
       backgroundColor: const Color(0xFFF8F9FA), // Light theme for admin content
       body: Row(
         children: [
@@ -141,13 +148,13 @@ class _AdminLayoutState extends State<AdminLayout> {
                       const CircleAvatar(
                         radius: 16,
                         backgroundColor: Color(0xFF2563EB),
-                        child: Text('IoT', style: TextStyle(color: Color(0xFF1E293B), fontSize: 12, fontWeight: FontWeight.bold)),
+                        child: Text('IoT', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 12, fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('NexusTech\nGfiotsolutions', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 14)),
+                          const Text('Gfiotsolutions', style: TextStyle(color: const Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 14)),
                           Text(_currentUser?.role.toUpperCase() ?? 'ADMIN', style: TextStyle(color: Color(0x8A1E293B), fontSize: 10)),
                         ],
                       )
@@ -191,7 +198,7 @@ class _AdminLayoutState extends State<AdminLayout> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   Widget _navItem(IconData icon, String title, int index) {
