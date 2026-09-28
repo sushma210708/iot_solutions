@@ -62,8 +62,14 @@ class _LoginPageState extends State<LoginPage> {
           }
 
           if (profile.role == 'super_admin' || profile.role == 'content_admin' || profile.role == 'viewer') {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Welcome to Admin Panel, ${profile.name}!', style: const TextStyle(color: Colors.white)), backgroundColor: Colors.green),
+            );
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AdminLayout()));
           } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(_isLogin ? 'Logged in successfully!' : 'Signed up successfully!', style: const TextStyle(color: Colors.white)), backgroundColor: Colors.green),
+            );
             // Normal user (no admin roles)
             if (widget.redirectPage != null) {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => widget.redirectPage!));
@@ -76,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
         // User not found in MongoDB (normal user)
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Logged in successfully!', style: TextStyle(color: Colors.white)), backgroundColor: Colors.green),
+            SnackBar(content: Text(_isLogin ? 'Logged in successfully!' : 'Signed up successfully!', style: const TextStyle(color: Colors.white)), backgroundColor: Colors.green),
           );
           // Fallback to home page
           if (widget.redirectPage != null) {

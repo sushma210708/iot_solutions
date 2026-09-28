@@ -426,6 +426,92 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     );
   }
 
+  Future<void> _removeAdmin(String id) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: const Text('Confirm Remove', style: TextStyle(color: Color(0xFF1E293B))),
+        content: const Text('Are you sure you want to remove this admin?', style: TextStyle(color: Color(0xFF1E293B))),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Remove', style: TextStyle(color: Colors.red))),
+        ],
+      ),
+    );
+    if (confirm != true) return;
+
+    try {
+      final token = await _authService.getIdToken();
+      if (token != null) {
+        await _apiService.deleteAdmin(id, token);
+        _loadData();
+      }
+    } catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
+  }
+
+  void _editAdmin(AdminUser admin) {
+    String role = admin.role;
+    String status = admin.status;
+    
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          backgroundColor: Colors.white,
+          title: const Text('Edit Admin', style: TextStyle(color: Color(0xFF1E293B))),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<String>(
+                value: role,
+                items: const [
+                  DropdownMenuItem(value: 'super_admin', child: Text('Super Admin')),
+                  DropdownMenuItem(value: 'content_admin', child: Text('Content Admin')),
+                  DropdownMenuItem(value: 'viewer', child: Text('Viewer')),
+                ],
+                onChanged: (val) => setState(() => role = val!),
+                decoration: const InputDecoration(labelText: 'Role', border: OutlineInputBorder()),
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: status,
+                items: const [
+                  DropdownMenuItem(value: 'active', child: Text('Active')),
+                  DropdownMenuItem(value: 'disabled', child: Text('Disabled')),
+                ],
+                onChanged: (val) => setState(() => status = val!),
+                decoration: const InputDecoration(labelText: 'Status', border: OutlineInputBorder()),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  final token = await _authService.getIdToken();
+                  if (token != null) {
+                    await _apiService.updateAdmin(admin.id, {'role': role, 'status': status}, token);
+                    if (mounted) {
+                      Navigator.pop(ctx);
+                      _loadData();
+                    }
+                  }
+                } catch (e) {
+                  if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                }
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildTextField(String label, TextEditingController controller, {int maxLines = 1}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -620,8 +706,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                               DataCell(Text(admin.status, style: TextStyle(color: admin.status == 'active' ? Colors.green : Colors.red))),
                               DataCell(Row(
                                 children: [
-                                  TextButton(onPressed: () {}, child: const Text('Edit')),
-                                  TextButton(onPressed: () {}, child: const Text('Remove', style: TextStyle(color: Colors.red))),
+                                  TextButton(onPressed: () => _editAdmin(admin), child: const Text('Edit')),
+                                  TextButton(onPressed: () => _removeAdmin(admin.id), child: const Text('Remove', style: TextStyle(color: Colors.red))),
                                 ],
                               )),
                             ]
