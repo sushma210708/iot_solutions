@@ -1,9 +1,16 @@
-const fs = require('fs');
-let content = fs.readFileSync('lib/pages/project_details_page.dart', 'utf-8');
+import 'dart:io';
 
-const oldHeader = /  Widget _buildSliverAppBar\(Project project, bool isDesktop\) \{[\s\S]*?    \);\n  \}/;
-
-const newHeader = \  Widget _buildSliverAppBar(Project project, bool isDesktop) {
+void main() {
+  final file = File('lib/pages/project_details_page.dart');
+  final lines = file.readAsLinesSync();
+  
+  final startLine = 64; // 1-indexed
+  final endLine = 148; // 1-indexed
+  
+  final before = lines.sublist(0, startLine - 1);
+  final after = lines.sublist(endLine);
+  
+  final newHeader = '''  Widget _buildSliverAppBar(Project project, bool isDesktop) {
     return SliverAppBar(
       pinned: true,
       expandedHeight: isDesktop ? 500 : 600,
@@ -110,8 +117,8 @@ const newHeader = \  Widget _buildSliverAppBar(Project project, bool isDesktop) 
         ),
       ],
     );
-  }\;
+  }''';
 
-content = content.replace(oldHeader, newHeader);
-fs.writeFileSync('lib/pages/project_details_page.dart', content, 'utf-8');
-console.log('Replaced successfully');
+  file.writeAsStringSync([...before, newHeader, ...after].join('\n'));
+  print('Done!');
+}

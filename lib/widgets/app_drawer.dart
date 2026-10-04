@@ -27,33 +27,10 @@ class AppDrawer extends StatelessWidget {
               padding: const EdgeInsets.all(24.0),
               child: Row(
                 children: [
-                  Container(
-                    width: 44,
+                  Image.asset(
+                    'assets/logo.png',
                     height: 44,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2563EB),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'IoT',
-                        style: TextStyle(
-                          color: Color(0xFFF8FAFC),
-                          fontWeight: FontWeight.w900,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  const Text(
-                    'Gfiotsolutions',
-                    style: TextStyle(
-                      color: Color(0xFF1E293B),
-                      fontWeight: FontWeight.w800,
-                      fontSize: 20,
-                      letterSpacing: -0.5,
-                    ),
+                    fit: BoxFit.contain,
                   ),
                 ],
               ),

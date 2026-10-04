@@ -93,33 +93,10 @@ class NavBar extends StatelessWidget {
   Widget _buildLogo() {
     return Row(
       children: [
-        Container(
-          width: 44,
+        Image.asset(
+          'assets/logo.png',
           height: 44,
-          decoration: BoxDecoration(
-            color: const Color(0xFF60A5FA),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Center(
-            child: Text(
-              'IoT',
-              style: TextStyle(
-                color: Color(0xFF0B1120),
-                fontWeight: FontWeight.w900,
-                fontSize: 18,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
-        const Text(
-          'Gfiotsolutions',
-          style: TextStyle(
-            color: Color(0xFF0F161B),
-            fontWeight: FontWeight.w800,
-            fontSize: 20,
-            letterSpacing: -0.5,
-          ),
+          fit: BoxFit.contain,
         ),
       ],
     );

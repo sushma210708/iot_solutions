@@ -231,84 +231,37 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             // Hero Section
             Container(
               width: double.infinity,
-              color: const Color(0xFFFFFFFF), // Slightly lighter dark background
+              color: const Color(0xFFFFFFFF),
               padding: EdgeInsets.symmetric(horizontal: isDesktop ? 64 : 24, vertical: 80),
               child: Center(
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 1200),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF2563EB).withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Color(0xFF2563EB).withOpacity(0.2)),
-                        ),
-                        child: Text(
-                          _product!.category.toUpperCase(),
-                          style: const TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold, letterSpacing: 1.5, fontSize: 10),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        _product!.title,
-                        style: TextStyle(
-                          fontSize: isDesktop ? 64 : 40,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF1E293B),
-                          letterSpacing: -1,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        _product!.shortDescription,
-                        style: const TextStyle(fontSize: 20, color: Color(0xFF475569), height: 1.5),
-                      ),
-                      const SizedBox(height: 40),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () => _showEnquiryForm(context),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF2563EB),
-                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  child: isDesktop
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              flex: 5,
+                              child: _buildHeroTextContent(context, isDesktop),
                             ),
-                            child: const Row(
-                              children: [
-                                Text('Get in Touch', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                                SizedBox(width: 8),
-                                Icon(Icons.arrow_forward, color: Colors.white, size: 16),
-                              ],
+                            const SizedBox(width: 64),
+                            Expanded(
+                              flex: 5,
+                              child: _buildHeroImage(),
                             ),
-                          ),
-                          const SizedBox(width: 24),
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text('Learn More', style: TextStyle(color: Color(0xFF475569), fontWeight: FontWeight.bold)),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                          ],
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildHeroTextContent(context, isDesktop),
+                            const SizedBox(height: 48),
+                            _buildHeroImage(),
+                          ],
+                        ),
                 ),
               ),
             ),
-            
-            // Large Image Showcase
-            if (_product!.images.isNotEmpty && _product!.images[0].url.isNotEmpty)
-              Container(
-                width: double.infinity,
-                height: isDesktop ? 600 : 300,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(_product!.images[0].url),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
             
             // Two-Column Content Layout
             Container(
@@ -462,4 +415,77 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       ],
     );
   }
+  Widget _buildHeroTextContent(BuildContext context, bool isDesktop) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: Color(0xFF2563EB).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Color(0xFF2563EB).withOpacity(0.2)),
+          ),
+          child: Text(
+            _product!.category.toUpperCase(),
+            style: const TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold, letterSpacing: 1.5, fontSize: 10),
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text(
+          _product!.title,
+          style: TextStyle(
+            fontSize: isDesktop ? 64 : 40,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFF1E293B),
+            letterSpacing: -1,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          _product!.shortDescription,
+          style: const TextStyle(fontSize: 20, color: Color(0xFF475569), height: 1.5),
+        ),
+        const SizedBox(height: 40),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, '/contact'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2563EB),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              ),
+              child: const Row(
+                children: [
+                  Text('Get in Touch', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildHeroImage() {
+    if (_product!.images.isNotEmpty && _product!.images[0].url.isNotEmpty) {
+      return Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 400),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.network(
+              _product!.images[0].url,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      );
+    }
+    return const SizedBox();
+  }
+
 }

@@ -147,16 +147,15 @@ class _AdminLayoutState extends State<AdminLayout> {
                   padding: const EdgeInsets.all(24.0),
                   child: Row(
                     children: [
-                      const CircleAvatar(
-                        radius: 16,
-                        backgroundColor: Color(0xFF2563EB),
-                        child: Text('IoT', style: TextStyle(color: const Color(0xFF1E293B), fontSize: 12, fontWeight: FontWeight.bold)),
+                      Image.asset(
+                        'assets/logo.png',
+                        height: 32,
+                        fit: BoxFit.contain,
                       ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Gfiotsolutions', style: TextStyle(color: const Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 14)),
                           Text(_currentUser?.role.toUpperCase() ?? 'ADMIN', style: TextStyle(color: Color(0x8A1E293B), fontSize: 10)),
                         ],
                       )
