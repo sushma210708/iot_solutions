@@ -254,85 +254,90 @@ class _ProductCardState extends State<_ProductCard> {
               ),
               
               // Content
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Category Tag
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE0E7FF), // Light indigo/blue background
-                        borderRadius: BorderRadius.circular(4), // Slightly rounded corners like reference
-                      ),
-                      child: Text(
-                        widget.product.category.toUpperCase(),
-                        style: const TextStyle(
-                          color: Color(0xFF2563EB), // Blue text
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
-                          letterSpacing: 1,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Category Tag
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE0E7FF), // Light indigo/blue background
+                          borderRadius: BorderRadius.circular(4), // Slightly rounded corners like reference
+                        ),
+                        child: Text(
+                          widget.product.category.toUpperCase(),
+                          style: const TextStyle(
+                            color: Color(0xFF2563EB), // Blue text
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                            letterSpacing: 1,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Title
-                    Text(
-                      widget.product.title,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                      const SizedBox(height: 16),
+                      // Title
+                      Text(
+                        widget.product.title,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    // Description
-                    Text(
-                      widget.product.shortDescription,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                        height: 1.5,
+                      const SizedBox(height: 12),
+                      // Description
+                      Text(
+                        widget.product.shortDescription,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black54,
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    // Tags
-                    if (widget.product.technologies.isNotEmpty)
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: widget.product.technologies.take(3).map((tech) => Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF1F5F9), // Light gray/blue
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            tech.toUpperCase(),
-                            style: const TextStyle(
-                              color: Color(0xFF3B82F6), // Lighter blue for tech stack
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              letterSpacing: 0.5,
+                      const SizedBox(height: 24),
+                      // Tags
+                      if (widget.product.technologies.isNotEmpty)
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: widget.product.technologies.take(3).map((tech) => Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF1F5F9), // Light gray/blue
+                              borderRadius: BorderRadius.circular(4),
                             ),
-                          ),
-                        )).toList(),
+                            child: Text(
+                              tech.toUpperCase(),
+                              style: const TextStyle(
+                                color: Color(0xFF3B82F6), // Lighter blue for tech stack
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          )).toList(),
+                        ),
+                      
+                      const Spacer(), // Pushes the action link to the bottom
+                      
+                      // Action Link
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end, // Right aligned
+                        children: [
+                          const Text('Explore Product', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold, fontSize: 14)),
+                          const SizedBox(width: 4),
+                          const Icon(Icons.arrow_forward, color: Color(0xFF2563EB), size: 16),
+                        ],
                       ),
-                    const SizedBox(height: 16),
-                    
-                    // Action Link
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Explore Product', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold, fontSize: 14)),
-                        const SizedBox(width: 4),
-                        Icon(Icons.arrow_forward, color: Color(0xFF2563EB), size: 16),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],
