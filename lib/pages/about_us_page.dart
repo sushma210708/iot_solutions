@@ -246,7 +246,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                             ),
                           ),
                           OutlinedButton(
-                            onPressed: () => Navigator.pushNamed(context, '/'),
+                            onPressed: () => Navigator.pushNamed(context, '/solutions'),
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                               side: const BorderSide(color: Colors.black87),
