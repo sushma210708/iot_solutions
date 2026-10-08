@@ -25,6 +25,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   final TextEditingController _messageController = TextEditingController();
   bool _isSubmitting = false;
 
+  int _currentImageIndex = 0;
+  final PageController _pageController = PageController();
+
   @override
   void initState() {
     super.initState();
@@ -475,12 +478,58 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       return Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 400),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.network(
-              _product!.images[0].url,
-              fit: BoxFit.contain,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _product!.images.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentImageIndex = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      return Image.network(
+                        _product!.images[index].url,
+                        fit: BoxFit.contain,
+                      );
+                    },
+                  ),
+                ),
+              ),
+              if (_product!.images.length > 1) ...[
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    _product!.images.length,
+                    (index) => GestureDetector(
+                      onTap: () {
+                        _pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: _currentImageIndex == index ? 24 : 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: _currentImageIndex == index ? const Color(0xFF2563EB) : Colors.grey[300],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
       );

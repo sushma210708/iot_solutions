@@ -28,7 +28,6 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
   String _status = 'Active';
 
   List<TextEditingController> _benefitControllers = [TextEditingController()];
-  List<TextEditingController> _parameterControllers = [TextEditingController()];
   List<TextEditingController> _techControllers = [TextEditingController()];
   List<Map<String, TextEditingController>> _specControllers = [{'param': TextEditingController(), 'val': TextEditingController()}];
   
@@ -74,7 +73,6 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
       }
 
       List<String> benefitsList = _benefitControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
-      List<String> paramsList = _parameterControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
       List<String> techsList = _techControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
       
       List<Map<String, String>> specsList = _specControllers
@@ -103,7 +101,6 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
         'images': uploadedImages,
         'benefits': benefitsList,
         'specifications': specsList,
-        'parameters': paramsList,
         'technologies': techsList,
       }, token);
 
@@ -229,29 +226,6 @@ class _AdminAddProductViewState extends State<AdminAddProductView> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 24),
-                        _buildWhiteContainer(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Parameters', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                              const SizedBox(height: 24),
-                              ..._parameterControllers.asMap().entries.map((e) => _buildDynamicListItem(
-                                    TextField(controller: e.value, style: const TextStyle(color: Colors.black), decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Enter parameter', isDense: true, hintStyle: TextStyle(color: Colors.black38))),
-                                    () => setState(() => _parameterControllers.removeAt(e.key)),
-                                  )),
-                              const SizedBox(height: 16),
-                              Center(
-                                child: TextButton.icon(
-                                  onPressed: () => setState(() => _parameterControllers.add(TextEditingController())),
-                                  icon: const Icon(Icons.add, color: Color(0xFF2563EB)),
-                                  label: const Text('Add Parameter', style: TextStyle(color: Color(0xFF2563EB))),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 24),
                         _buildWhiteContainer(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

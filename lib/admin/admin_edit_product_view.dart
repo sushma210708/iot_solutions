@@ -30,7 +30,6 @@ class _AdminEditProductViewState extends State<AdminEditProductView> {
   late String _status;
 
   List<TextEditingController> _benefitControllers = [];
-  List<TextEditingController> _parameterControllers = [];
   List<TextEditingController> _techControllers = [];
   List<Map<String, TextEditingController>> _specControllers = [];
   
@@ -57,14 +56,6 @@ class _AdminEditProductViewState extends State<AdminEditProductView> {
     } else {
       for (var b in widget.product.benefits) {
         _benefitControllers.add(TextEditingController(text: b));
-      }
-    }
-
-    if (widget.product.parameters.isEmpty) {
-      _parameterControllers.add(TextEditingController());
-    } else {
-      for (var p in widget.product.parameters) {
-        _parameterControllers.add(TextEditingController(text: p));
       }
     }
 
@@ -136,7 +127,6 @@ class _AdminEditProductViewState extends State<AdminEditProductView> {
       }
 
       List<String> benefitsList = _benefitControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
-      List<String> paramsList = _parameterControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
       List<String> techsList = _techControllers.map((e) => e.text.trim()).where((e) => e.isNotEmpty).toList();
       
       List<Map<String, String>> specsList = _specControllers
@@ -165,7 +155,6 @@ class _AdminEditProductViewState extends State<AdminEditProductView> {
         'images': finalImages,
         'benefits': benefitsList,
         'specifications': specsList,
-        'parameters': paramsList,
         'technologies': techsList,
       }, token);
 
@@ -291,29 +280,6 @@ class _AdminEditProductViewState extends State<AdminEditProductView> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 24),
-                        _buildWhiteContainer(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Parameters', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                              const SizedBox(height: 24),
-                              ..._parameterControllers.asMap().entries.map((e) => _buildDynamicListItem(
-                                    TextField(controller: e.value, style: const TextStyle(color: Colors.black), decoration: const InputDecoration(border: OutlineInputBorder(), hintText: 'Enter parameter', isDense: true, hintStyle: TextStyle(color: Colors.black38))),
-                                    () => setState(() => _parameterControllers.removeAt(e.key)),
-                                  )),
-                              const SizedBox(height: 16),
-                              Center(
-                                child: TextButton.icon(
-                                  onPressed: () => setState(() => _parameterControllers.add(TextEditingController())),
-                                  icon: const Icon(Icons.add, color: Color(0xFF2563EB)),
-                                  label: const Text('Add Parameter', style: TextStyle(color: Color(0xFF2563EB))),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 24),
                         _buildWhiteContainer(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

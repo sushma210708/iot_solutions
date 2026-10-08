@@ -40,13 +40,26 @@ class _TechnologyPageState extends State<TechnologyPage> {
     final numberStr = (index + 1).toString().padLeft(2, '0');
     
     if (isDesktop) {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
+      return Container(
+        margin: const EdgeInsets.only(bottom: 64.0),
+        padding: const EdgeInsets.all(48.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(32),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 32,
+              offset: const Offset(0, 12),
+            ),
+          ],
+          border: Border.all(color: Colors.grey[100]!),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-              flex: 5,
+              flex: 6,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -90,22 +103,40 @@ class _TechnologyPageState extends State<TechnologyPage> {
                 ],
               ),
             ),
-            const SizedBox(width: 80),
+            const SizedBox(width: 64),
             Expanded(
-              flex: 6,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
+              flex: 4,
+              child: Container(
+                padding: const EdgeInsets.all(32),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: Colors.grey[100]!),
+                ),
                 child: domain.imageUrl.isNotEmpty
-                    ? Image.network(domain.imageUrl, fit: BoxFit.cover, width: double.infinity)
-                    : Container(color: Colors.grey[100], height: 400, child: const Icon(Icons.image, size: 64, color: Colors.grey)),
+                    ? Image.network(domain.imageUrl, fit: BoxFit.contain, height: 280)
+                    : Container(color: Colors.grey[100], height: 280, child: const Icon(Icons.image, size: 64, color: Colors.grey)),
               ),
             ),
           ],
         ),
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 64.0),
+      return Container(
+        margin: const EdgeInsets.only(bottom: 48.0),
+        padding: const EdgeInsets.all(32.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 24,
+              offset: const Offset(0, 8),
+            ),
+          ],
+          border: Border.all(color: Colors.grey[100]!),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -146,11 +177,17 @@ class _TechnologyPageState extends State<TechnologyPage> {
                   ),
                 )),
             const SizedBox(height: 32),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+            Container(
+              padding: const EdgeInsets.all(24),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey[50],
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.grey[100]!),
+              ),
               child: domain.imageUrl.isNotEmpty
-                  ? Image.network(domain.imageUrl, fit: BoxFit.cover, width: double.infinity)
-                  : Container(color: Colors.grey[100], height: 250, child: const Icon(Icons.image, size: 64, color: Colors.grey)),
+                  ? Image.network(domain.imageUrl, fit: BoxFit.contain, height: 200)
+                  : Container(color: Colors.grey[100], height: 200, child: const Icon(Icons.image, size: 64, color: Colors.grey)),
             ),
           ],
         ),

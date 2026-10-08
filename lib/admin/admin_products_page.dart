@@ -46,8 +46,22 @@ class AdminProductsPageState extends State<AdminProductsPage> {
     setState(() => _isAddingProduct = true);
   }
 
-  void _showEditProductDialog(Product product) {
-    setState(() => _editingProduct = product);
+  Future<void> _showEditProductDialog(Product product) async {
+    try {
+      if (mounted) setState(() => _isLoading = true);
+      final fullProduct = await _apiService.getProductById(product.id);
+      if (mounted) {
+        setState(() {
+          _editingProduct = fullProduct;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to load product details: $e')));
+      }
+    }
   }
 
   @override
