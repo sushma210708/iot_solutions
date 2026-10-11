@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../services/auth_service.dart';
 
 class ContactModal {
   static Future<void> show(BuildContext context) {
@@ -56,6 +57,20 @@ class _ContactFormCardState extends State<ContactFormCard> {
   String? _errorMessage;
 
   @override
+  void initState() {
+    super.initState();
+    final user = AuthService().currentUser;
+    if (user != null) {
+      if (user.displayName != null && user.displayName!.isNotEmpty) {
+        _nameCtrl.text = user.displayName!;
+      }
+      if (user.email != null && user.email!.isNotEmpty) {
+        _emailCtrl.text = user.email!;
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _nameCtrl.dispose();
     _emailCtrl.dispose();
@@ -97,13 +112,14 @@ class _ContactFormCardState extends State<ContactFormCard> {
     setState(() => _isSubmitting = true);
 
     try {
+      final token = await AuthService().getIdToken();
       await _apiService.createInquiry({
         'name': _nameCtrl.text.trim(),
         'email': _emailCtrl.text.trim(),
         'phone': _phoneCtrl.text.trim(),
         'message': _requirementsCtrl.text.trim(),
         'projectRequirements': _requirementsCtrl.text.trim(),
-      });
+      }, token: token);
 
       if (!mounted) return;
 

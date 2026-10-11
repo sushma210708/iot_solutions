@@ -273,6 +273,30 @@ class ApiService {
     throw Exception('Failed to load user profile: ${response.statusCode} ${response.body}');
   }
 
+  Future<AdminUser> updateProfile(String token, {String? name, bool? emailUpdates}) async {
+    final Map<String, dynamic> body = {};
+    if (name != null) body['name'] = name;
+    if (emailUpdates != null) body['emailUpdates'] = emailUpdates;
+
+    final response = await http.put(
+      Uri.parse('$baseUrl/auth/profile'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true && data['user'] != null) {
+        return AdminUser.fromJson(data['user']);
+      }
+    }
+    final errorMsg = _extractErrorMessage(response.body);
+    throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to update profile (${response.statusCode})');
+  }
+
   // --- Users ---
   Future<void> syncUser(String token) async {
     try {
@@ -704,16 +728,36 @@ class ApiService {
 
   // --- Inquiries ---
 
-  Future<void> createInquiry(Map<String, dynamic> data) async {
+  Future<void> createInquiry(Map<String, dynamic> data, {String? token}) async {
+    final headers = {'Content-Type': 'application/json'};
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
     final response = await http.post(
       Uri.parse('$baseUrl/inquiries'),
-      headers: {'Content-Type': 'application/json'},
+      headers: headers,
       body: json.encode(data),
     );
     if (response.statusCode != 200 && response.statusCode != 201) {
       final errorMsg = _extractErrorMessage(response.body);
       throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to submit inquiry (${response.statusCode})');
     }
+  }
+
+  Future<List<Inquiry>> getMyInquiries(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/inquiries/my'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true && data['inquiries'] != null) {
+        final List<dynamic> inquiriesJson = data['inquiries'];
+        return inquiriesJson.map((json) => Inquiry.fromJson(json)).toList();
+      }
+    }
+    final errorMsg = _extractErrorMessage(response.body);
+    throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to load your inquiries: ${response.body}');
   }
 
   Future<List<Inquiry>> getInquiries(String token, {String? search, String? status}) async {
@@ -762,6 +806,36 @@ class ApiService {
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Failed to delete inquiry');
     }
+  }
+
+  Future<Map<String, dynamic>> replyToInquiry(
+    String id,
+    String message,
+    String token, {
+    String? subject,
+    String? newStatus,
+  }) async {
+    final Map<String, dynamic> body = {
+      'message': message,
+    };
+    if (subject != null && subject.isNotEmpty) body['subject'] = subject;
+    if (newStatus != null && newStatus.isNotEmpty) body['newStatus'] = newStatus;
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/inquiries/$id/reply'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data;
+    }
+    final errorMsg = _extractErrorMessage(response.body);
+    throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to send reply (${response.statusCode})');
   }
 
   // --- Email Communications ---

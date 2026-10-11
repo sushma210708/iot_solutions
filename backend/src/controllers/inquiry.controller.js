@@ -1,12 +1,14 @@
 const Inquiry = require('../models/inquiry.model');
+const User = require('../models/user.model');
 const emailService = require('../services/emailService');
+const { getAuth } = require('firebase-admin/auth');
 
 // Email regex
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// @desc    Create a new project inquiry (Public)
+// @desc    Create a new project inquiry (Public or Authenticated Customer)
 // @route   POST /api/inquiries
-// @access  Public
+// @access  Public / Customer
 exports.createInquiry = async (req, res, next) => {
   try {
     const { name, email, phone, message, projectRequirements } = req.body;
@@ -45,13 +47,35 @@ exports.createInquiry = async (req, res, next) => {
       });
     }
 
+    // Determine ownership securely from verified token if provided (NEVER trust body fields)
+    let authenticatedUid = null;
+    let authenticatedUserId = null;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+      try {
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = await getAuth().verifyIdToken(token);
+        if (decoded && decoded.uid) {
+          authenticatedUid = decoded.uid;
+          const userDoc = await User.findOne({ firebaseUid: decoded.uid });
+          if (userDoc) {
+            authenticatedUserId = userDoc._id;
+          }
+        }
+      } catch (tokenErr) {
+        // Fall back gracefully for public submissions
+      }
+    }
+
     // Create inquiry
     const inquiry = await Inquiry.create({
       name: name.trim(),
       email: trimmedEmail,
       phone: trimmedPhone,
       message: requirements,
-      status: 'New'
+      status: 'Received',
+      firebaseUid: authenticatedUid,
+      userId: authenticatedUserId
     });
 
     // Send email notification to admin asynchronously with delivery status capture
@@ -86,11 +110,41 @@ exports.createInquiry = async (req, res, next) => {
   }
 };
 
+// @desc    Get enquiries submitted by the current authenticated customer
+// @route   GET /api/inquiries/my
+// @access  Private (Authenticated Customer)
+exports.getMyInquiries = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'Authentication required' });
+    }
+
+    const inquiries = await Inquiry.find({
+      $or: [
+        { firebaseUid: req.user.firebaseUid },
+        { userId: req.user._id }
+      ]
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: inquiries.length,
+      inquiries
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // @desc    Get all inquiries with search & filter
 // @route   GET /api/inquiries
 // @access  Private (Admins only)
 exports.getInquiries = async (req, res, next) => {
   try {
+    if (!req.user || !['super_admin', 'content_admin', 'viewer'].includes(req.user.role)) {
+      return res.status(403).json({ success: false, message: 'Access denied: Administrator privileges required' });
+    }
+
     const { search, status, sort } = req.query;
     const query = {};
 
@@ -132,9 +186,13 @@ exports.getInquiries = async (req, res, next) => {
 
 // @desc    Update inquiry status or internal notes
 // @route   PUT /api/inquiries/:id
-// @access  Private
+// @access  Private (Super/Content Admin only)
 exports.updateInquiry = async (req, res, next) => {
   try {
+    if (!req.user || !['super_admin', 'content_admin'].includes(req.user.role)) {
+      return res.status(403).json({ success: false, message: 'Access denied: Administrator privileges required' });
+    }
+
     const { status, internalNotes } = req.body;
     const updateFields = {};
 
@@ -159,9 +217,13 @@ exports.updateInquiry = async (req, res, next) => {
 
 // @desc    Delete an inquiry
 // @route   DELETE /api/inquiries/:id
-// @access  Private
+// @access  Private (Super/Content Admin only)
 exports.deleteInquiry = async (req, res, next) => {
   try {
+    if (!req.user || !['super_admin', 'content_admin'].includes(req.user.role)) {
+      return res.status(403).json({ success: false, message: 'Access denied: Administrator privileges required' });
+    }
+
     const inquiry = await Inquiry.findByIdAndDelete(req.params.id);
 
     if (!inquiry) {
@@ -169,6 +231,89 @@ exports.deleteInquiry = async (req, res, next) => {
     }
 
     res.status(200).json({ success: true, message: 'Inquiry deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Send email reply to customer and record message in inquiry responses
+// @route   POST /api/inquiries/:id/reply
+// @access  Private (Super/Content Admin only)
+exports.replyToInquiry = async (req, res, next) => {
+  try {
+    if (!req.user || !['super_admin', 'content_admin'].includes(req.user.role)) {
+      return res.status(403).json({ success: false, message: 'Access denied: Administrator privileges required' });
+    }
+
+    const { message, subject, newStatus } = req.body;
+
+    if (!message || !message.trim()) {
+      return res.status(400).json({ success: false, message: 'Reply message cannot be empty' });
+    }
+
+    const inquiry = await Inquiry.findById(req.params.id);
+    if (!inquiry) {
+      return res.status(404).json({ success: false, message: 'Inquiry not found' });
+    }
+
+    const senderName = req.user.name || 'Green Fusion Team';
+    const emailSubject = subject && subject.trim() ? subject.trim() : `Regarding your Project Inquiry (${inquiry.inquiryId}) — Green Fusion IoT Solutions`;
+
+    // Send email to customer
+    let emailSuccess = false;
+    let emailProvider = '';
+    let emailError = '';
+
+    try {
+      const sendResult = await emailService.sendCustomerInquiryReply({
+        to: inquiry.email,
+        customerName: inquiry.name,
+        inquiryId: inquiry.inquiryId,
+        message: message.trim(),
+        subject: emailSubject,
+        adminName: senderName
+      });
+      emailSuccess = sendResult.success;
+      emailProvider = sendResult.provider || '';
+      emailError = sendResult.error || '';
+    } catch (err) {
+      emailSuccess = false;
+      emailError = err.message || 'Email delivery failed';
+    }
+
+    // Add response to inquiry
+    const responseItem = {
+      message: message.trim(),
+      subject: emailSubject,
+      senderName,
+      senderRole: req.user.role,
+      sentAt: new Date(),
+      emailSent: emailSuccess,
+      emailProvider,
+      emailError
+    };
+
+    if (!inquiry.responses) {
+      inquiry.responses = [];
+    }
+    inquiry.responses.push(responseItem);
+
+    // Update status if provided or update from Received/New to Contacted
+    if (newStatus && typeof newStatus === 'string' && newStatus.trim()) {
+      inquiry.status = newStatus.trim();
+    } else if (inquiry.status === 'Received' || inquiry.status === 'New') {
+      inquiry.status = 'Contacted';
+    }
+
+    await inquiry.save();
+
+    res.status(200).json({
+      success: true,
+      message: emailSuccess ? 'Reply emailed to customer and saved to inquiry' : 'Reply saved to inquiry (Email notification encountered an issue)',
+      emailSent: emailSuccess,
+      response: responseItem,
+      inquiry
+    });
   } catch (error) {
     next(error);
   }

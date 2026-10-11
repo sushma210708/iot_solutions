@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../services/auth_service.dart';
 import 'contact_modal.dart';
 
 class NavBar extends StatelessWidget {
@@ -50,9 +52,9 @@ class NavBar extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           decoration: BoxDecoration(
-            color: Color(0xFF0F161B).withOpacity(0.05),
+            color: const Color(0xFF0F161B).withOpacity(0.05),
             borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: Color(0xFF0F161B).withOpacity(0.1)),
+            border: Border.all(color: const Color(0xFF0F161B).withOpacity(0.1)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -66,26 +68,78 @@ class NavBar extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          children: [
-            TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/login'),
-              child: const Text('Login', style: TextStyle(color: Color(0xFF0F161B), fontWeight: FontWeight.bold)),
-            ),
-            const SizedBox(width: 16),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2563EB),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                elevation: 0,
-              ),
-              onPressed: () => ContactModal.show(context),
-              child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
-            ),
-          ],
-        )
+        StreamBuilder<User?>(
+          stream: AuthService().authStateChanges,
+          builder: (context, snapshot) {
+            final user = snapshot.data;
+            if (user != null) {
+              return Row(
+                children: [
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF2563EB),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    ),
+                    onPressed: () => Navigator.pushNamed(context, '/dashboard'),
+                    icon: const Icon(Icons.dashboard_outlined, size: 18),
+                    label: const Text('My Dashboard', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  ),
+                  const SizedBox(width: 4),
+                  IconButton(
+                    tooltip: 'Logout',
+                    icon: const Icon(Icons.logout, color: Color(0xFF64748B), size: 20),
+                    onPressed: () async {
+                      await AuthService().signOut();
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Logged out successfully')),
+                        );
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2563EB),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                      elevation: 0,
+                    ),
+                    onPressed: () => ContactModal.show(context),
+                    child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
+                  ),
+                ],
+              );
+            }
+
+            return Row(
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pushNamed(context, '/login'),
+                  child: const Text('Login', style: TextStyle(color: Color(0xFF0F161B), fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(width: 4),
+                TextButton(
+                  onPressed: () => Navigator.pushNamed(context, '/register'),
+                  child: const Text('Register', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold)),
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2563EB),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    elevation: 0,
+                  ),
+                  onPressed: () => ContactModal.show(context),
+                  child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
+                ),
+              ],
+            );
+          },
+        ),
       ],
     );
   }
@@ -111,7 +165,7 @@ class NavBar extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-            color: Color(0xFF0F161B).withValues(alpha: 0.7),
+            color: const Color(0xFF0F161B).withValues(alpha: 0.7),
             fontSize: 14,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.5,
@@ -121,4 +175,3 @@ class NavBar extends StatelessWidget {
     );
   }
 }
-

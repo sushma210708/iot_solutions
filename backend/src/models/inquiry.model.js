@@ -30,8 +30,30 @@ const inquirySchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['New', 'Contacted', 'In Progress', 'Closed', 'Reviewed', 'Resolved'], // Includes legacy statuses for migration
-      default: 'New',
+      enum: [
+        'Received',
+        'Under Review',
+        'Contacted',
+        'In Discussion',
+        'Completed',
+        'Closed',
+        'New',
+        'In Progress',
+        'Reviewed',
+        'Resolved'
+      ],
+      default: 'Received',
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      index: true,
+      default: null
+    },
+    firebaseUid: {
+      type: String,
+      index: true,
+      default: null
     },
     internalNotes: {
       type: String,
@@ -43,7 +65,19 @@ const inquirySchema = new mongoose.Schema(
       recipient: { type: String, default: '' },
       sentAt: { type: Date },
       error: { type: String, default: '' }
-    }
+    },
+    responses: [
+      {
+        message: { type: String, required: true },
+        subject: { type: String, default: '' },
+        senderName: { type: String, default: 'Green Fusion Team' },
+        senderRole: { type: String, default: 'admin' },
+        sentAt: { type: Date, default: Date.now },
+        emailSent: { type: Boolean, default: true },
+        emailProvider: { type: String, default: '' },
+        emailError: { type: String, default: '' }
+      }
+    ]
   },
   {
     timestamps: true,

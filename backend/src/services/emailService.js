@@ -204,6 +204,74 @@ class EmailService {
   }
 
   /**
+   * Send email reply to customer regarding their project inquiry
+   */
+  async sendCustomerInquiryReply({ to, customerName, inquiryId, message, subject, adminName }) {
+    const emailSubject = subject || `Regarding your Project Inquiry (${inquiryId}) — GreenFusion IoT Solutions`;
+
+    const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${emailSubject}</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px; color: #1e293b; }
+    .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .header { background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%); padding: 28px; text-align: left; }
+    .header h1 { color: #ffffff; font-size: 22px; margin: 0 0 4px 0; font-weight: 700; letter-spacing: -0.5px; }
+    .header p { color: #dbeafe; font-size: 14px; margin: 0; }
+    .content { padding: 32px 28px; }
+    .badge { display: inline-block; background-color: #eff6ff; color: #1d4ed8; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 9999px; border: 1px solid #bfdbfe; margin-bottom: 20px; }
+    .message-box { background: #f8fafc; border-left: 4px solid #2563eb; padding: 18px 20px; border-radius: 4px 8px 8px 4px; margin: 20px 0; font-size: 15px; line-height: 1.6; color: #1e293b; white-space: pre-wrap; }
+    .portal-info { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 14px 16px; margin: 24px 0; font-size: 13px; color: #166534; line-height: 1.5; }
+    .btn { display: inline-block; background: #2563eb; color: #ffffff !important; text-decoration: none; font-weight: 600; font-size: 14px; padding: 12px 28px; border-radius: 6px; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2); }
+    .footer { background: #f8fafc; padding: 20px 28px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>GreenFusion IoT Solutions</h1>
+      <p>Project Inquiry Response</p>
+    </div>
+    <div class="content">
+      <span class="badge">Inquiry Reference: ${inquiryId}</span>
+      <p style="font-weight: 600; font-size: 16px; color: #0f172a; margin-top: 0;">Dear ${customerName || 'Valued Customer'},</p>
+      <p style="font-size: 14px; color: #475569; line-height: 1.5;">Thank you for connecting with GreenFusion IoT Solutions. Our team has reviewed your project inquiry and has sent you the following update:</p>
+      
+      <div class="message-box">${message}</div>
+
+      <div class="portal-info">
+        <strong>Track in Your Customer Portal:</strong> You can review this response, track status updates, and view your project history anytime on your Customer Portal at GreenFusion IoT Solutions.
+      </div>
+
+      <div style="text-align: center; margin: 28px 0 16px 0;">
+        <a href="${this.siteUrl}/#/login" class="btn">Open Customer Portal &rarr;</a>
+      </div>
+
+      <p style="margin-top: 24px; color: #64748b; font-size: 13px;">Best regards,<br/><strong>${adminName || 'Team GreenFusion IoT Solutions'}</strong><br/>GreenFusion IoT Solutions</p>
+    </div>
+    <div class="footer">
+      &copy; 2026 GreenFusion IoT Solutions. Industrial & Energy IoT Innovations.<br/>
+      Need assistance? Contact us at Gfiotsolutions@gmail.com
+    </div>
+  </div>
+</body>
+</html>
+    `;
+
+    return await this._sendEmail({
+      to,
+      subject: emailSubject,
+      html: htmlBody,
+      text: `Dear ${customerName},\n\nRegarding your inquiry (${inquiryId}):\n\n${message}\n\nYou can track this inquiry anytime on your Customer Portal at ${this.siteUrl}/#/dashboard.\n\nBest regards,\n${adminName || 'Team GreenFusion IoT Solutions'}`,
+      type: 'customer_inquiry_reply',
+      metadata: { inquiryId, recipientEmail: to }
+    });
+  }
+
+  /**
    * Internal dispatcher: Google Apps Script Webhook -> Nodemailer / SMTP -> Simulated fallback
    */
   async _sendEmail({ to, subject, html, text, type, metadata = {} }) {

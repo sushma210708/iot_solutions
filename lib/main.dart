@@ -6,6 +6,8 @@ import 'firebase_options.dart';
 import 'pages/home_page.dart';
 import 'admin/admin_layout.dart';
 import 'pages/login_page.dart';
+import 'pages/register_page.dart';
+import 'pages/customer_dashboard_page.dart';
 import 'pages/about_us_page.dart';
 import 'pages/products_page.dart';
 import 'pages/mentors_page.dart';
@@ -56,6 +58,8 @@ class GreenFusionApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/admin': (context) => const AdminLayout(),
         '/login': (context) => const LoginPage(),
+        '/register': (context) => const RegisterPage(),
+        '/dashboard': (context) => const CustomerDashboardPage(),
         '/about': (context) => const AboutUsPage(),
         '/solutions': (context) => const ProductsPage(),
         '/mentors': (context) => const MentorsPage(),

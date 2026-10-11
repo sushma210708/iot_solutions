@@ -293,6 +293,49 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
                     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF059669))),
                   ),
                 ),
+
+                // Company Responses / Communications Timeline
+                if (inquiry.responses.isNotEmpty) ...[
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      const Icon(Icons.mark_email_read_outlined, size: 18, color: Color(0xFF2563EB)),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Company Email Responses (${inquiry.responses.length}):',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF1E293B)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  ...inquiry.responses.map((resp) => Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFBFDBFE)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(resp.senderName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1D4ED8))),
+                            Text(DateFormat('MMM d, yyyy • h:mm a').format(resp.sentAt), style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                          ],
+                        ),
+                        if (resp.subject.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          Text('Subject: ${resp.subject}', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF475569))),
+                        ],
+                        const SizedBox(height: 6),
+                        Text(resp.message, style: const TextStyle(fontSize: 13, color: Color(0xFF1E293B), height: 1.4)),
+                      ],
+                    ),
+                  )),
+                ],
               ],
             ),
           ),
@@ -305,9 +348,9 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
             style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFF475569)),
           ),
           ElevatedButton.icon(
-            onPressed: () => _openEmailDraft(inquiry),
+            onPressed: () => _showReplyDialog(inquiry),
             icon: const Icon(Icons.reply, size: 16),
-            label: const Text('Send Email Response'),
+            label: const Text('Reply & Email Customer'),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF059669),
               foregroundColor: Colors.white,
@@ -315,6 +358,157 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showReplyDialog(Inquiry inq) {
+    final subjectCtrl = TextEditingController(
+      text: 'Regarding your Project Inquiry (${inq.inquiryId}) — GreenFusion IoT Solutions',
+    );
+    final msgCtrl = TextEditingController();
+    String updatedStatus = (inq.status == 'New' || inq.status == 'Received') ? 'Contacted' : inq.status;
+    bool isSending = false;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Text('Reply to ${inq.name}', style: const TextStyle(color: Color(0xFF0F172A), fontWeight: FontWeight.bold, fontSize: 18)),
+          content: SizedBox(
+            width: 550,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF8FAFC),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.email_outlined, size: 16, color: Color(0xFF64748B)),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Recipient: ${inq.email} (Inquiry: ${inq.inquiryId})',
+                            style: const TextStyle(fontSize: 12, color: Color(0xFF334155), fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: subjectCtrl,
+                    decoration: const InputDecoration(
+                      labelText: 'Email Subject',
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  Row(
+                    children: [
+                      const Text('Update Status to: ', style: TextStyle(fontSize: 13, color: Color(0xFF475569))),
+                      const SizedBox(width: 8),
+                      DropdownButton<String>(
+                        value: ['New', 'Contacted', 'In Progress', 'Closed'].contains(updatedStatus) ? updatedStatus : 'Contacted',
+                        items: const [
+                          DropdownMenuItem(value: 'Contacted', child: Text('Contacted')),
+                          DropdownMenuItem(value: 'In Progress', child: Text('In Progress')),
+                          DropdownMenuItem(value: 'Closed', child: Text('Closed')),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) setDialogState(() => updatedStatus = val);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  TextField(
+                    controller: msgCtrl,
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                      labelText: 'Reply Message / Next Steps *',
+                      hintText: 'Enter your message to the customer. This will be sent to their email and displayed on their customer dashboard...',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B))),
+            ),
+            OutlinedButton(
+              onPressed: () => _openEmailDraft(inq),
+              child: const Text('Open Mail Client'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF059669),
+                foregroundColor: Colors.white,
+              ),
+              onPressed: isSending ? null : () async {
+                final message = msgCtrl.text.trim();
+                if (message.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please enter a reply message.')),
+                  );
+                  return;
+                }
+
+                setDialogState(() => isSending = true);
+                try {
+                  final token = await _authService.getIdToken();
+                  if (token == null) throw Exception('Auth token required');
+
+                  await _apiService.replyToInquiry(
+                    inq.id,
+                    message,
+                    token,
+                    subject: subjectCtrl.text.trim(),
+                    newStatus: updatedStatus,
+                  );
+
+                  if (context.mounted) {
+                    Navigator.pop(ctx);
+                    if (mounted) {
+                      Navigator.of(context, rootNavigator: true).pop();
+                      _fetchInquiries();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Reply sent successfully! It is now visible on the customer portal.'),
+                          backgroundColor: Color(0xFF059669),
+                        ),
+                      );
+                    }
+                  }
+                } catch (e) {
+                  setDialogState(() => isSending = false);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+                    );
+                  }
+                }
+              },
+              child: isSending
+                  ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                  : const Text('Send Email & Post to Portal'),
+            ),
+          ],
+        ),
       ),
     );
   }

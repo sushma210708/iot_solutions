@@ -4,7 +4,6 @@ import 'admin_products_page.dart';
 import 'admin_technology_page.dart';
 import 'admin_mentors_page.dart';
 import 'admin_updates_page.dart';
-import 'admin_hero_page.dart';
 import 'admin_inquiries_page.dart';
 import 'admin_about_us_page.dart';
 import 'admin_services_page.dart';
@@ -14,8 +13,6 @@ import '../services/auth_service.dart';
 import '../services/api_service.dart';
 import '../models/admin_user.dart';
 
-import 'admin_challenges_page.dart';
-import 'admin_projects_page.dart';
 import 'admin_users_page.dart';
 import 'admin_footer_page.dart';
 import 'admin_emails_page.dart';
@@ -87,7 +84,15 @@ class _AdminLayoutState extends State<AdminLayout> {
         });
         _initPages();
       } else {
-        if (mounted) Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomePage()));
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Access restricted to administrators. Redirected to customer dashboard.', style: TextStyle(color: Colors.white)),
+              backgroundColor: Colors.orange,
+            ),
+          );
+          Navigator.pushReplacementNamed(context, '/dashboard');
+        }
       }
     } catch (e) {
       if (mounted) Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomePage()));
