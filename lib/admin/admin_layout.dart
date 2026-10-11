@@ -17,6 +17,8 @@ import '../models/admin_user.dart';
 import 'admin_challenges_page.dart';
 import 'admin_projects_page.dart';
 import 'admin_users_page.dart';
+import 'admin_footer_page.dart';
+import 'admin_emails_page.dart';
 
 class AdminLayout extends StatefulWidget {
   const AdminLayout({super.key});
@@ -109,10 +111,12 @@ class _AdminLayoutState extends State<AdminLayout> {
       AdminProductsPage(key: _productsKey), // 1. Products
       const AdminTechnologyPage(), // 2. Technology
       AdminMentorsPage(key: _mentorsKey), // 3. Mentors
-      const AdminInquiriesPage(), // 4. Messages
+      const AdminInquiriesPage(), // 4. Inquiries
       const AdminAboutUsPage(), // 5. About Us
       const AdminServicesPage(), // 6. Services
       const AdminUsersPage(), // 7. Users
+      const AdminFooterPage(), // 8. Footer
+      const AdminEmailsPage(), // 9. Email Communications
     ];
   }
 
@@ -170,10 +174,12 @@ class _AdminLayoutState extends State<AdminLayout> {
                       _navItem(Icons.inventory_2_outlined, 'Products', 1),
                       _navItem(Icons.memory_outlined, 'Technology', 2),
                       _navItem(Icons.people_outline, 'Mentors', 3),
-                      _navItem(Icons.message_outlined, 'Messages', 4),
+                      _navItem(Icons.mark_email_unread_outlined, 'Inquiries', 4),
                       _navItem(Icons.info_outline, 'About Us', 5),
                       _navItem(Icons.business_center_outlined, 'Services', 6),
                       _navItem(Icons.group_outlined, 'Users', 7),
+                      _navItem(Icons.space_dashboard_outlined, 'Footer', 8),
+                      _navItem(Icons.mail_outline, 'Emails', 9),
                     ],
                   ),
                 ),

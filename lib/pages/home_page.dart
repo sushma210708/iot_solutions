@@ -9,6 +9,7 @@ import '../widgets/cta_section.dart';
 import '../widgets/footer_section.dart';
 import '../widgets/services_section.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/contact_modal.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
               onSolutionsClick: () => _scrollTo(_solutionsKey),
               onProjectsClick: () => _scrollTo(_projectsKey),
               onMentorsClick: () => _scrollTo(_teamKey),
-              onContactClick: () => _scrollTo(_contactKey),
+              onContactClick: () => ContactModal.show(context),
             ),
           ),
           SliverToBoxAdapter(

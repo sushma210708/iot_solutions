@@ -218,25 +218,25 @@ class _ProductCardState extends State<_ProductCard> {
           duration: const Duration(milliseconds: 200),
           transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
           width: widget.isDesktop ? 378.0 : double.infinity,
-          height: 480,
+          height: 520,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(_isHovered ? 0.1 : 0.05),
+                color: Colors.black.withValues(alpha: _isHovered ? 0.1 : 0.05),
                 blurRadius: _isHovered ? 30 : 20,
                 offset: Offset(0, _isHovered ? 12 : 4),
               ),
             ],
-            border: Border.all(color: Colors.black.withOpacity(0.05)),
+            border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Image
               Container(
-                height: 220,
+                height: 200,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey[100],
@@ -256,7 +256,7 @@ class _ProductCardState extends State<_ProductCard> {
               // Content
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -277,19 +277,19 @@ class _ProductCardState extends State<_ProductCard> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
                       // Title
                       Text(
                         widget.product.title,
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: Colors.black87,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
                       // Description
                       Text(
                         widget.product.shortDescription,
@@ -301,9 +301,9 @@ class _ProductCardState extends State<_ProductCard> {
                           height: 1.5,
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      // Tags
-                      if (widget.product.technologies.isNotEmpty)
+                      if (widget.product.technologies.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        // Tags
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
@@ -324,6 +324,7 @@ class _ProductCardState extends State<_ProductCard> {
                             ),
                           )).toList(),
                         ),
+                      ],
                       
                       const Spacer(), // Pushes the action link to the bottom
                       

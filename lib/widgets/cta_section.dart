@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import 'contact_modal.dart';
 
 class CtaSection extends StatefulWidget {
   const CtaSection({super.key});
@@ -12,11 +13,7 @@ class _CtaSectionState extends State<CtaSection> {
   final ApiService _apiService = ApiService();
 
   void _showCollaborationDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const _CollaborationDialog(),
-    );
+    ContactModal.show(context);
   }
 
   @override

@@ -5,6 +5,7 @@ import '../services/api_service.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/footer_section.dart';
+import '../widgets/contact_modal.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage({super.key});
@@ -229,19 +230,20 @@ class _AboutUsPageState extends State<AboutUsPage> {
                         runSpacing: 24,
                         children: [
                           ElevatedButton(
-                            onPressed: () => Navigator.pushNamed(context, '/contact'),
+                            onPressed: () => ContactModal.show(context),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF2563EB),
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                               elevation: 0,
                             ),
                             child: const Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text('Contact Us', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 16)),
+                                Text('Get in Touch', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
                                 SizedBox(width: 8),
-                                Icon(Icons.arrow_forward, color: Color(0xFF1E293B), size: 16),
+                                Icon(Icons.arrow_forward, color: Colors.white, size: 16),
                               ],
                             ),
                           ),

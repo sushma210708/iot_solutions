@@ -5,16 +5,16 @@ const {
   updateInquiry,
   deleteInquiry
 } = require('../controllers/inquiry.controller');
-const { protectFirebase, protect } = require('../middleware/auth.middleware');
+const { protect } = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
 router.route('/')
   .post(createInquiry) // Public route for submission
-  .get(protectFirebase, protect, getInquiries); // Admin route to read
+  .get(protect, getInquiries); // Admin route to read
 
 router.route('/:id')
-  .put(protectFirebase, protect, updateInquiry)
-  .delete(protectFirebase, protect, deleteInquiry);
+  .put(protect, updateInquiry)
+  .delete(protect, deleteInquiry);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/service.dart';
 import '../services/api_service.dart';
+import 'contact_modal.dart';
 
 class ServicesSection extends StatefulWidget {
   const ServicesSection({super.key});
@@ -170,7 +171,7 @@ class _ServicesSectionState extends State<ServicesSection> {
 
   Widget _buildCtaBar(BuildContext context, bool isDesktop) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, '/contact'),
+      onTap: () => ContactModal.show(context),
       borderRadius: BorderRadius.circular(16),
       child: Container(
         width: double.infinity,

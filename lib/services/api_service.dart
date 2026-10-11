@@ -14,6 +14,7 @@ import '../models/inquiry.dart';
 import '../models/challenge.dart';
 import '../models/testimonial.dart';
 import '../models/service.dart';
+import '../models/email_campaign.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
@@ -709,14 +710,20 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: json.encode(data),
     );
-    if (response.statusCode != 201) {
-      throw Exception('Failed to submit inquiry: ${response.body}');
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      final errorMsg = _extractErrorMessage(response.body);
+      throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to submit inquiry (${response.statusCode})');
     }
   }
 
-  Future<List<Inquiry>> getInquiries(String token) async {
+  Future<List<Inquiry>> getInquiries(String token, {String? search, String? status}) async {
+    final Map<String, String> queryParams = {};
+    if (search != null && search.trim().isNotEmpty) queryParams['search'] = search.trim();
+    if (status != null && status != 'All') queryParams['status'] = status;
+
+    final uri = Uri.parse('$baseUrl/inquiries').replace(queryParameters: queryParams.isNotEmpty ? queryParams : null);
     final response = await http.get(
-      Uri.parse('$baseUrl/inquiries'),
+      uri,
       headers: {'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {
@@ -729,18 +736,22 @@ class ApiService {
     throw Exception('Failed to load inquiries: ${response.body}');
   }
 
-  Future<void> updateInquiryStatus(String id, String status, String token) async {
+  Future<void> updateInquiry(String id, Map<String, dynamic> data, String token) async {
     final response = await http.put(
       Uri.parse('$baseUrl/inquiries/$id'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: json.encode({'status': status}),
+      body: json.encode(data),
     );
     if (response.statusCode != 200) {
       throw Exception('Failed to update inquiry: ${response.body}');
     }
+  }
+
+  Future<void> updateInquiryStatus(String id, String status, String token) async {
+    await updateInquiry(id, {'status': status}, token);
   }
 
   Future<void> deleteInquiry(String id, String token) async {
@@ -750,6 +761,63 @@ class ApiService {
     );
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Failed to delete inquiry');
+    }
+  }
+
+  // --- Email Communications ---
+
+  Future<List<EmailRecipient>> getEmailRecipients(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/emails/recipients'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true && data['users'] != null) {
+        final List<dynamic> usersJson = data['users'];
+        return usersJson.map((j) => EmailRecipient.fromJson(j)).toList();
+      }
+    }
+    throw Exception('Failed to load email recipients');
+  }
+
+  Future<Map<String, dynamic>> sendEmailCampaign(Map<String, dynamic> campaignData, String token) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/emails/send'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(campaignData),
+    );
+    final data = json.decode(response.body);
+    if (response.statusCode == 200 && data['success'] == true) {
+      return data;
+    }
+    throw Exception(data['message'] ?? 'Failed to dispatch email campaign');
+  }
+
+  Future<List<EmailCampaign>> getEmailCampaigns(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/emails/campaigns'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true && data['campaigns'] != null) {
+        final List<dynamic> listJson = data['campaigns'];
+        return listJson.map((j) => EmailCampaign.fromJson(j)).toList();
+      }
+    }
+    throw Exception('Failed to load campaigns history');
+  }
+
+  String _extractErrorMessage(String body) {
+    try {
+      final parsed = json.decode(body);
+      return parsed['message'] ?? '';
+    } catch (_) {
+      return '';
     }
   }
 

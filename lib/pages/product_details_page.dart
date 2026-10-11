@@ -4,6 +4,7 @@ import '../services/api_service.dart';
 import '../models/product.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/footer_section.dart';
+import '../widgets/contact_modal.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final String productId;
@@ -453,9 +454,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         Row(
           children: [
             ElevatedButton(
-              onPressed: () => Navigator.pushNamed(context, '/contact'),
+              onPressed: () => ContactModal.show(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF2563EB),
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
               ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/mentor.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/footer_section.dart';
+import '../widgets/contact_modal.dart';
 
 class MentorDetailsPage extends StatelessWidget {
   final Mentor mentor;
@@ -102,20 +103,21 @@ class MentorDetailsPage extends StatelessWidget {
         const SizedBox(height: 24),
         ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/contact'); // Navigate to contact page
+            ContactModal.show(context);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF2563EB),
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             elevation: 0,
           ),
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Get in Touch', style: TextStyle(color: Color(0xFF1E293B), fontWeight: FontWeight.bold, fontSize: 14)),
+              Text('Get in Touch', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
               SizedBox(width: 8),
-              Icon(Icons.arrow_forward, color: Color(0xFF1E293B), size: 16),
+              Icon(Icons.arrow_forward, color: Colors.white, size: 16),
             ],
           ),
         ),

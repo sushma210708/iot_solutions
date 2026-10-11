@@ -108,7 +108,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
                       ),
                     )
                   : SizedBox(
-                      height: 440,
+                      height: 480,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: _products.length,
@@ -314,7 +314,7 @@ class _OurProductsSectionState extends State<OurProductsSection> {
               const SizedBox(height: 32),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0), // Added vertical padding
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

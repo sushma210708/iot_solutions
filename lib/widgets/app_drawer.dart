@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'contact_modal.dart';
+
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
 
@@ -42,7 +44,15 @@ class AppDrawer extends StatelessWidget {
             _drawerItem(context, Icons.memory_outlined, 'Technology', '/technology'),
             _drawerItem(context, Icons.group_outlined, 'Mentors', '/mentors'),
             _drawerItem(context, Icons.info_outline, 'About Us', '/about'),
-            _drawerItem(context, Icons.mail_outlined, 'Contact', '/contact'),
+            ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+              leading: const Icon(Icons.chat_bubble_outline, color: Color(0xFF2563EB)),
+              title: const Text('Get in Touch', style: TextStyle(color: Color(0xFF2563EB), fontSize: 16, fontWeight: FontWeight.bold)),
+              onTap: () {
+                Navigator.pop(context);
+                ContactModal.show(context);
+              },
+            ),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.all(24.0),

@@ -1,4 +1,6 @@
 require('dotenv').config();
+const dns = require('dns');
+try { dns.setServers(['8.8.8.8', '1.1.1.1']); } catch (_) {}
 const express = require('express');
 const cors = require('cors');
 const aboutRoutes = require('./routes/about.routes');
@@ -19,6 +21,7 @@ const testimonialRoutes = require('./routes/testimonial.routes');
 const challengeRoutes = require('./routes/challenge.routes');
 const serviceRoutes = require('./routes/service.routes');
 const userRoutes = require('./routes/user.routes');
+const emailRoutes = require('./routes/email.routes');
 const errorHandler = require('./middleware/error.middleware');
 const connectDB = require('./config/db');
 const { connectCloudinary } = require('./config/cloudinary');
@@ -60,6 +63,7 @@ app.use('/api/testimonials', testimonialRoutes);
 app.use('/api/challenges', challengeRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/emails', emailRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {

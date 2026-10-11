@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'contact_modal.dart';
 
 class NavBar extends StatelessWidget {
   final VoidCallback? onSolutionsClick;
@@ -62,7 +63,6 @@ class NavBar extends StatelessWidget {
               _navItem('Technology', onTap: () => Navigator.pushNamed(context, '/technology')),
               _navItem('Mentors', onTap: () => Navigator.pushNamed(context, '/mentors')),
               _navItem('About', onTap: () => Navigator.pushNamed(context, '/about')),
-              _navItem('Contact', onTap: () => Navigator.pushNamed(context, '/contact')),
             ],
           ),
         ),
@@ -75,14 +75,14 @@ class NavBar extends StatelessWidget {
             const SizedBox(width: 16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF60A5FA),
-                foregroundColor: const Color(0xFF0B1120),
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                backgroundColor: const Color(0xFF2563EB),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 18),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 elevation: 0,
               ),
-              onPressed: onContactClick ?? () => Navigator.pushNamed(context, '/contact'),
-              child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF0B1120))),
+              onPressed: () => ContactModal.show(context),
+              child: const Text('Get in Touch', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
             ),
           ],
         )
