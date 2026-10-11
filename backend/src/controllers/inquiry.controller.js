@@ -119,17 +119,57 @@ exports.getMyInquiries = async (req, res, next) => {
       return res.status(401).json({ success: false, message: 'Authentication required' });
     }
 
+    const userEmail = (req.user.email || '').toLowerCase().trim();
+
     const inquiries = await Inquiry.find({
       $or: [
         { firebaseUid: req.user.firebaseUid },
-        { userId: req.user._id }
+        { userId: req.user._id },
+        { email: userEmail }
       ]
     }).sort({ createdAt: -1 });
 
+    // Also fetch any email campaigns / direct messages sent to this customer
+    const EmailCampaign = require('../models/emailCampaign.model');
+    const campaigns = await EmailCampaign.find({
+      'recipients.email': userEmail
+    }).sort({ createdAt: 1 });
+
+    const formattedInquiries = inquiries.map(inq => {
+      const inqObj = inq.toObject();
+      let responses = inqObj.responses || [];
+
+      // Merge campaign messages sent to this customer
+      for (const camp of campaigns) {
+        const alreadyExists = responses.some(r => r.message === camp.message);
+        if (!alreadyExists) {
+          responses.push({
+            message: camp.message,
+            subject: camp.subject,
+            senderName: camp.sentByName || 'Green Fusion Team',
+            senderRole: 'admin',
+            sentAt: camp.createdAt,
+            emailSent: true,
+            emailProvider: 'email_service',
+            emailError: ''
+          });
+        }
+      }
+
+      responses.sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt));
+      inqObj.responses = responses;
+
+      if (responses.length > 0 && (inqObj.status === 'Received' || inqObj.status === 'New')) {
+        inqObj.status = 'Contacted';
+      }
+
+      return inqObj;
+    });
+
     res.status(200).json({
       success: true,
-      count: inquiries.length,
-      inquiries
+      count: formattedInquiries.length,
+      inquiries: formattedInquiries
     });
   } catch (error) {
     next(error);

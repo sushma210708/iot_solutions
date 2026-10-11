@@ -450,13 +450,13 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
   // ==========================================
   Widget _buildOverviewTab(bool isDesktop) {
     final totalCount = _myInquiries.length;
-    final inProgressCount = _myInquiries.where((i) {
-      final s = i.status.toLowerCase();
-      return s == 'received' || s == 'under review' || s == 'new' || s == 'in progress';
-    }).length;
     final contactedCount = _myInquiries.where((i) {
       final s = i.status.toLowerCase();
-      return s == 'contacted' || s == 'in discussion' || s == 'reviewed';
+      return s == 'contacted' || s == 'in discussion' || s == 'reviewed' || i.hasCompanyReply;
+    }).length;
+    final inProgressCount = _myInquiries.where((i) {
+      final s = i.status.toLowerCase();
+      return (s == 'received' || s == 'under review' || s == 'new' || s == 'in progress') && !i.hasCompanyReply;
     }).length;
     final completedCount = _myInquiries.where((i) {
       final s = i.status.toLowerCase();
@@ -940,21 +940,21 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                   if (inquiry.hasCompanyReply) ...[
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
                         color: const Color(0xFFEFF6FF),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFBFDBFE)),
+                        border: Border.all(color: const Color(0xFF2563EB), width: 1.2),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.mark_email_read_outlined, size: 12, color: Color(0xFF2563EB)),
+                          const Text('✨', style: TextStyle(fontSize: 12)),
                           const SizedBox(width: 4),
                           Text(
-                            '${inquiry.responses.length} Company Reply',
+                            '${inquiry.responses.length} Company ${inquiry.responses.length == 1 ? "Reply" : "Replies"}',
                             style: const TextStyle(
-                              color: Color(0xFF2563EB),
+                              color: Color(0xFF1D4ED8),
                               fontWeight: FontWeight.bold,
                               fontSize: 11,
                             ),
@@ -986,35 +986,60 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
           ),
 
           // Latest Company Reply Highlight Card
-          if (inquiry.hasCompanyReply) ...[
-            const SizedBox(height: 12),
+          if (inquiry.hasCompanyReply && inquiry.latestResponse != null) ...[
+            const SizedBox(height: 14),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: const Color(0xFFF0FDF4),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: const Color(0xFFBBF7D0)),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFF86EFAC), width: 1.2),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.reply, size: 15, color: Color(0xFF16A34A)),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Latest Response from ${inquiry.latestResponse?.senderName ?? "Green Fusion Team"}:',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Color(0xFF15803D)),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFDCFCE7),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Icon(Icons.mark_email_read, size: 14, color: Color(0xFF15803D)),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Latest Response from ${inquiry.latestResponse!.senderName} (${DateFormat('MMM dd, yyyy').format(inquiry.latestResponse!.sentAt)}):',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Color(0xFF15803D),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    inquiry.latestResponse!.message,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13, color: Color(0xFF166534), height: 1.4),
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFBBF7D0)),
+                    ),
+                    child: Text(
+                      inquiry.latestResponse!.message,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF166534),
+                        height: 1.5,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ],
               ),

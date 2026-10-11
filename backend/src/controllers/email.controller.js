@@ -94,6 +94,33 @@ exports.sendCampaign = async (req, res, next) => {
 
     await campaign.save();
 
+    // Also record responses on any inquiries for these recipients
+    try {
+      const Inquiry = require('../models/inquiry.model');
+      for (const rec of recipientList) {
+        await Inquiry.updateMany(
+          { email: rec.email.toLowerCase() },
+          {
+            $push: {
+              responses: {
+                message: message.trim(),
+                subject: subject.trim(),
+                senderName: req.user ? req.user.name : 'Green Fusion Team',
+                senderRole: 'admin',
+                sentAt: new Date(),
+                emailSent: true,
+                emailProvider: 'email_campaign',
+                emailError: ''
+              }
+            },
+            $set: { status: 'Contacted' }
+          }
+        );
+      }
+    } catch (inqErr) {
+      console.warn('Could not sync campaign to inquiries:', inqErr.message);
+    }
+
     res.status(200).json({
       success: true,
       message: `Emails processed: ${sendResults.successful} delivered, ${sendResults.failed} failed.`,
