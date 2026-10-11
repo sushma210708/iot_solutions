@@ -12,6 +12,7 @@
     }
   },
   "hosting": {
+    "site": "greenfusioniotsolutions",
     "public": "build/web",
     "ignore": [
       "firebase.json",
