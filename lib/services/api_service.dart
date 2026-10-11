@@ -838,6 +838,65 @@ class ApiService {
     throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to send reply (${response.statusCode})');
   }
 
+  Future<Map<String, dynamic>> getInquiryNotificationSettings(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/inquiries/settings/notifications'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true) {
+        return {
+          'emails': (data['emails'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? <String>[],
+          'defaultEmail': data['defaultEmail']?.toString() ?? 'Gfiotsolutions@gmail.com',
+          'updatedAt': data['updatedAt']?.toString(),
+          'updatedBy': data['updatedBy']?.toString(),
+        };
+      }
+    }
+    final errorMsg = _extractErrorMessage(response.body);
+    throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to fetch notification settings');
+  }
+
+  Future<List<String>> updateInquiryNotificationSettings(List<String> emails, String token) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/inquiries/settings/notifications'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({'emails': emails}),
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['success'] == true && data['emails'] != null) {
+        return (data['emails'] as List<dynamic>).map((e) => e.toString()).toList();
+      }
+    }
+    final errorMsg = _extractErrorMessage(response.body);
+    throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to update notification settings');
+  }
+
+  Future<Map<String, dynamic>> sendTestInquiryNotification(String token, {String? targetEmail}) async {
+    final Map<String, dynamic> body = {};
+    if (targetEmail != null && targetEmail.trim().isNotEmpty) {
+      body['targetEmail'] = targetEmail.trim();
+    }
+    final response = await http.post(
+      Uri.parse('$baseUrl/inquiries/settings/notifications/test'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(body),
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    final errorMsg = _extractErrorMessage(response.body);
+    throw Exception(errorMsg.isNotEmpty ? errorMsg : 'Failed to send test notification');
+  }
+
   // --- Email Communications ---
 
   Future<List<EmailRecipient>> getEmailRecipients(String token) async {

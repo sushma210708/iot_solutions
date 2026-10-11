@@ -12,27 +12,52 @@ exports.getAdmins = async (req, res, next) => {
   }
 };
 
-// @desc    Create an admin
+// @desc    Create / Grant an admin or viewer role
 // @route   POST /api/admins
-// @access  Private (Require manage_admins permission)
+// @access  Private (Require manage_admins or super_admin / content_admin)
 exports.createAdmin = async (req, res, next) => {
   try {
     const { firebaseUid, name, email, role, permissions, status } = req.body;
     
-    if (!firebaseUid || !name || !email) {
-      return res.status(400).json({ success: false, message: 'Please provide firebaseUid, name, and email' });
+    if (!email || !email.trim()) {
+      return res.status(400).json({ success: false, message: 'Please provide an email address' });
     }
 
+    const trimmedEmail = email.trim().toLowerCase();
+    const assignedRole = role || 'viewer';
+    const assignedName = (name && name.trim()) ? name.trim() : trimmedEmail.split('@')[0];
+
+    // Check if user already exists
+    let existingUser = await User.findOne({ email: trimmedEmail });
+    if (existingUser) {
+      existingUser.role = assignedRole;
+      if (name && name.trim()) existingUser.name = assignedName;
+      if (permissions && Array.isArray(permissions)) existingUser.permissions = permissions;
+      if (status) existingUser.status = status;
+      await existingUser.save();
+      return res.status(200).json({
+        success: true,
+        message: `Admin/Portal access updated for ${trimmedEmail} (${assignedRole})`,
+        data: existingUser
+      });
+    }
+
+    // Pre-authorize new team email with unique pending UID
+    const pendingUid = firebaseUid || ('pending_' + Buffer.from(trimmedEmail).toString('hex'));
     const admin = await User.create({
-      firebaseUid,
-      name,
-      email,
-      role: role || 'viewer',
+      firebaseUid: pendingUid,
+      name: assignedName,
+      email: trimmedEmail,
+      role: assignedRole,
       permissions: permissions || [],
       status: status || 'active'
     });
 
-    res.status(201).json({ success: true, data: admin });
+    res.status(201).json({
+      success: true,
+      message: `Access granted for ${trimmedEmail} (${assignedRole}). They can now log in using this email.`,
+      data: admin
+    });
   } catch (error) {
     next(error);
   }
@@ -60,7 +85,7 @@ exports.updateAdmin = async (req, res, next) => {
   }
 };
 
-// @desc    Delete an admin
+// @desc    Revoke admin access / Delete admin
 // @route   DELETE /api/admins/:id
 // @access  Private (Require manage_admins permission)
 exports.deleteAdmin = async (req, res, next) => {
@@ -70,8 +95,18 @@ exports.deleteAdmin = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Admin not found' });
     }
 
-    await admin.deleteOne();
-    res.status(200).json({ success: true, data: {} });
+    if (admin.email.toLowerCase() === 'gfiotsolutions@gmail.com') {
+      return res.status(400).json({ success: false, message: 'Cannot remove primary super admin account.' });
+    }
+
+    if (admin.firebaseUid && admin.firebaseUid.startsWith('pending_')) {
+      await admin.deleteOne();
+    } else {
+      admin.role = 'user';
+      await admin.save();
+    }
+
+    res.status(200).json({ success: true, message: `Admin access revoked for ${admin.email}` });
   } catch (error) {
     next(error);
   }

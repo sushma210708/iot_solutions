@@ -32,9 +32,21 @@ class EmailService {
   }
 
   /**
-   * Send notification to admin when new project inquiry arrives
+   * Send notification to admin/team recipients when new project inquiry arrives
    */
-  async sendAdminInquiryNotification(inquiry) {
+  async sendAdminInquiryNotification(inquiry, recipientEmails = null) {
+    let targets = [];
+    if (Array.isArray(recipientEmails) && recipientEmails.length > 0) {
+      targets = recipientEmails
+        .map(e => (typeof e === 'string' ? e.trim() : ''))
+        .filter(e => e.length > 0);
+    }
+    if (targets.length === 0) {
+      targets = [this.adminEmail];
+    }
+    // Deduplicate
+    targets = [...new Set(targets)];
+
     const subject = 'New Project Inquiry — GreenFusion IoT Solutions';
     const submissionDate = new Date(inquiry.createdAt || Date.now()).toLocaleString('en-IN', {
       timeZone: 'Asia/Kolkata',
@@ -104,21 +116,48 @@ class EmailService {
     </div>
     <div class="footer">
       GreenFusion IoT Solutions &bull; Industrial & Energy IoT Innovations<br/>
-      Automated System Notification &bull; Replies to this email will not reach the customer directly.
+      Automated System Notification &bull; Delivered to configured team recipients.
     </div>
   </div>
 </body>
 </html>
     `;
 
-    return await this._sendEmail({
-      to: this.adminEmail,
-      subject,
-      html: htmlBody,
-      text: `New Project Inquiry from ${inquiry.name} (${inquiry.email}, ${inquiry.phone}):\n\n${inquiry.message}\n\nID: ${inquiry.inquiryId || inquiry._id}`,
-      type: 'inquiry_notification',
-      metadata: { inquiryId: inquiry.inquiryId || inquiry._id }
-    });
+    const textBody = `New Project Inquiry from ${inquiry.name} (${inquiry.email}, ${inquiry.phone}):\n\n${inquiry.message || inquiry.projectRequirements || 'No description provided.'}\n\nID: ${inquiry.inquiryId || inquiry._id}\nView at: ${this.siteUrl}/#/admin`;
+
+    let successCount = 0;
+    let lastProvider = 'unknown';
+    let lastError = '';
+
+    for (const target of targets) {
+      try {
+        const sendResult = await this._sendEmail({
+          to: target,
+          subject,
+          html: htmlBody,
+          text: textBody,
+          type: 'inquiry_notification',
+          metadata: { inquiryId: inquiry.inquiryId || inquiry._id, recipientEmail: target }
+        });
+
+        if (sendResult.success) {
+          successCount++;
+          lastProvider = sendResult.provider || lastProvider;
+        } else if (sendResult.error) {
+          lastError = sendResult.error;
+        }
+      } catch (err) {
+        lastError = err.message;
+      }
+    }
+
+    return {
+      success: successCount > 0,
+      recipients: targets,
+      sentCount: successCount,
+      provider: lastProvider,
+      error: lastError
+    };
   }
 
   /**

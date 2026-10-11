@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../models/inquiry.dart';
+import '../models/admin_user.dart';
 
 class AdminInquiriesPage extends StatefulWidget {
   const AdminInquiriesPage({super.key});
@@ -62,6 +63,17 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
         );
       }
     }
+  }
+
+  void _openTeamAccessAndNotificationSettings() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => TeamAccessAndSettingsDialog(
+        apiService: _apiService,
+        authService: _authService,
+      ),
+    );
   }
 
   Future<void> _updateStatus(Inquiry inquiry, String newStatus) async {
@@ -578,9 +590,35 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
-          const Text('Contact Inquiries', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
-          const SizedBox(height: 6),
-          const Text('Manage all customer collaboration inquiries, track notification delivery, and record follow-ups.', style: TextStyle(color: Color(0xFF64748B), fontSize: 14)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text('Contact Inquiries', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF0F172A))),
+                    SizedBox(height: 6),
+                    Text('Manage all customer collaboration inquiries, track notification delivery, and record follow-ups.', style: TextStyle(color: Color(0xFF64748B), fontSize: 14)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              ElevatedButton.icon(
+                onPressed: _openTeamAccessAndNotificationSettings,
+                icon: const Icon(Icons.mark_email_unread_outlined, size: 18),
+                label: const Text('Email Alerts & Team Access'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF0F172A),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  elevation: 0,
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 24),
 
           // Filters and Search Bar
@@ -777,6 +815,768 @@ class _AdminInquiriesPageState extends State<AdminInquiriesPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TeamAccessAndSettingsDialog extends StatefulWidget {
+  final ApiService apiService;
+  final AuthService authService;
+
+  const TeamAccessAndSettingsDialog({
+    super.key,
+    required this.apiService,
+    required this.authService,
+  });
+
+  @override
+  State<TeamAccessAndSettingsDialog> createState() => _TeamAccessAndSettingsDialogState();
+}
+
+class _TeamAccessAndSettingsDialogState extends State<TeamAccessAndSettingsDialog> {
+  bool _isLoading = true;
+  String _defaultEmail = 'Gfiotsolutions@gmail.com';
+  List<String> _notificationEmails = [];
+  List<AdminUser> _teamMembers = [];
+
+  final TextEditingController _newEmailCtrl = TextEditingController();
+  final TextEditingController _grantEmailCtrl = TextEditingController();
+  final TextEditingController _grantNameCtrl = TextEditingController();
+  String _selectedRole = 'viewer';
+
+  bool _isSavingNotifications = false;
+  bool _isSendingTest = false;
+  bool _isGrantingAccess = false;
+
+  final RegExp _emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  @override
+  void dispose() {
+    _newEmailCtrl.dispose();
+    _grantEmailCtrl.dispose();
+    _grantNameCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadData() async {
+    setState(() => _isLoading = true);
+    try {
+      final token = await widget.authService.getIdToken();
+      if (token == null) throw Exception('Auth required');
+
+      // 1. Load notification settings
+      try {
+        final notifData = await widget.apiService.getInquiryNotificationSettings(token);
+        _notificationEmails = List<String>.from(notifData['emails'] ?? []);
+        _defaultEmail = notifData['defaultEmail'] ?? 'Gfiotsolutions@gmail.com';
+        if (_notificationEmails.isEmpty) {
+          _notificationEmails = [_defaultEmail];
+        }
+      } catch (_) {
+        _notificationEmails = [_defaultEmail];
+      }
+
+      // 2. Load admin users
+      try {
+        final admins = await widget.apiService.getAdmins(token);
+        _teamMembers = admins;
+      } catch (_) {
+        _teamMembers = [];
+      }
+
+      if (mounted) setState(() => _isLoading = false);
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading settings: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  void _addNotificationEmail() {
+    final email = _newEmailCtrl.text.trim().toLowerCase();
+    if (email.isEmpty) return;
+
+    if (!_emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid email address (e.g. team@domain.com)')),
+      );
+      return;
+    }
+
+    if (_notificationEmails.contains(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('This email is already in the recipient list.')),
+      );
+      return;
+    }
+
+    setState(() {
+      _notificationEmails.add(email);
+      _newEmailCtrl.clear();
+    });
+  }
+
+  void _removeNotificationEmail(String email) {
+    if (email.toLowerCase() == _defaultEmail.toLowerCase() && _notificationEmails.length <= 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('At least one notification email is required.')),
+      );
+      return;
+    }
+    setState(() {
+      _notificationEmails.remove(email);
+    });
+  }
+
+  Future<void> _saveNotificationEmails() async {
+    if (_notificationEmails.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please add at least one notification email address.')),
+      );
+      return;
+    }
+
+    setState(() => _isSavingNotifications = true);
+    try {
+      final token = await widget.authService.getIdToken();
+      if (token == null) throw Exception('Auth token required');
+
+      final updated = await widget.apiService.updateInquiryNotificationSettings(_notificationEmails, token);
+      if (mounted) {
+        setState(() {
+          _notificationEmails = updated;
+          _isSavingNotifications = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Notification recipient list updated successfully!'),
+            backgroundColor: Color(0xFF059669),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isSavingNotifications = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  Future<void> _sendTestAlert() async {
+    setState(() => _isSendingTest = true);
+    try {
+      final token = await widget.authService.getIdToken();
+      if (token == null) throw Exception('Auth token required');
+
+      final res = await widget.apiService.sendTestInquiryNotification(token);
+      if (mounted) {
+        setState(() => _isSendingTest = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(res['message'] ?? 'Test notification email dispatched successfully!'),
+            backgroundColor: const Color(0xFF059669),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isSendingTest = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Test delivery failed: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  Future<void> _grantTeamAccess() async {
+    final email = _grantEmailCtrl.text.trim().toLowerCase();
+    final name = _grantNameCtrl.text.trim();
+
+    if (email.isEmpty || !_emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please provide a valid team member email address.')),
+      );
+      return;
+    }
+
+    setState(() => _isGrantingAccess = true);
+    try {
+      final token = await widget.authService.getIdToken();
+      if (token == null) throw Exception('Auth token required');
+
+      await widget.apiService.createAdmin({
+        'email': email,
+        'name': name.isNotEmpty ? name : email.split('@')[0],
+        'role': _selectedRole,
+      }, token);
+
+      if (mounted) {
+        _grantEmailCtrl.clear();
+        _grantNameCtrl.clear();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Portal access granted for $email ($_selectedRole)!'),
+            backgroundColor: const Color(0xFF059669),
+          ),
+        );
+      }
+      await _loadData();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to grant access: $e'), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isGrantingAccess = false);
+    }
+  }
+
+  Future<void> _revokeTeamAccess(AdminUser user) async {
+    if (user.email.toLowerCase() == _defaultEmail.toLowerCase()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cannot revoke primary super admin account.')),
+      );
+      return;
+    }
+
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Revoke Access?'),
+        content: Text('Are you sure you want to revoke admin portal access for ${user.email}?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Revoke Access', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+
+    try {
+      final token = await widget.authService.getIdToken();
+      if (token == null) throw Exception('Auth token required');
+
+      await widget.apiService.deleteAdmin(user.id, token);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Access revoked for ${user.email}')),
+        );
+      }
+      await _loadData();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to revoke access: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: Colors.white,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 760, maxHeight: 660),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator(color: Color(0xFF059669)))
+            : DefaultTabController(
+                length: 2,
+                child: Column(
+                  children: [
+                    // Header Bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEFF6FF),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(Icons.tune_rounded, color: Color(0xFF2563EB), size: 22),
+                          ),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  'Inquiry Alerts & Team Access Settings',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                  'Configure email notification recipients & manage team dashboard access.',
+                                  style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Color(0xFF64748B), size: 20),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(height: 1),
+
+                    // Tab Bar
+                    Container(
+                      color: const Color(0xFFF8FAFC),
+                      child: const TabBar(
+                        labelColor: Color(0xFF059669),
+                        unselectedLabelColor: Color(0xFF64748B),
+                        indicatorColor: Color(0xFF059669),
+                        indicatorWeight: 3,
+                        labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                        tabs: [
+                          Tab(
+                            icon: Icon(Icons.mark_email_unread_outlined, size: 18),
+                            text: 'Inquiry Email Alerts',
+                          ),
+                          Tab(
+                            icon: Icon(Icons.shield_outlined, size: 18),
+                            text: 'Team Portal Access',
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Tab Content
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          _buildNotificationEmailsTab(),
+                          _buildTeamAccessTab(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationEmailsTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Info banner
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFECFDF5),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFFA7F3D0)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Icon(Icons.info_outline, color: Color(0xFF059669), size: 20),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Incoming Inquiry Alerts: Whenever a client or visitor submits an inquiry on the website, real-time email notifications with full requirements will be delivered to every email address configured below.',
+                    style: TextStyle(fontSize: 13, color: Color(0xFF065F46), height: 1.4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Add recipient input
+          const Text('Add Recipient Email Address:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1E293B))),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _newEmailCtrl,
+                  keyboardType: TextInputType.emailAddress,
+                  onSubmitted: (_) => _addNotificationEmail(),
+                  decoration: InputDecoration(
+                    hintText: 'e.g. sales@greenfusion.com, partner@gmail.com',
+                    prefixIcon: const Icon(Icons.mail_outline, size: 18, color: Color(0xFF64748B)),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Color(0xFF059669))),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              ElevatedButton.icon(
+                onPressed: _addNotificationEmail,
+                icon: const Icon(Icons.add, size: 18),
+                label: const Text('Add Recipient'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF059669),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Active Recipients List
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Active Notification Inboxes (${_notificationEmails.length})',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A)),
+              ),
+              Text(
+                'Default: $_defaultEmail',
+                style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
+            ),
+            child: _notificationEmails.isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: Center(child: Text('No recipient emails configured.', style: TextStyle(color: Color(0xFF64748B)))),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _notificationEmails.length,
+                    separatorBuilder: (_, index) => const Divider(height: 1, color: Color(0xFFE2E8F0)),
+                    itemBuilder: (ctx, idx) {
+                      final email = _notificationEmails[idx];
+                      final isDefault = email.toLowerCase() == _defaultEmail.toLowerCase();
+                      return ListTile(
+                        dense: true,
+                        leading: CircleAvatar(
+                          radius: 16,
+                          backgroundColor: isDefault ? const Color(0xFFD1FAE5) : const Color(0xFFE2E8F0),
+                          child: Icon(
+                            isDefault ? Icons.star_rounded : Icons.email_outlined,
+                            size: 16,
+                            color: isDefault ? const Color(0xFF059669) : const Color(0xFF475569),
+                          ),
+                        ),
+                        title: Text(
+                          email,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: isDefault ? FontWeight.bold : FontWeight.w500,
+                            color: const Color(0xFF0F172A),
+                          ),
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (isDefault)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFECFDF5),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: const Color(0xFFA7F3D0)),
+                                ),
+                                child: const Text(
+                                  'Primary Default',
+                                  style: TextStyle(fontSize: 11, color: Color(0xFF059669), fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            if (!isDefault || _notificationEmails.length > 1) ...[
+                              const SizedBox(width: 8),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline, size: 18, color: Colors.redAccent),
+                                tooltip: 'Remove from notification list',
+                                onPressed: () => _removeNotificationEmail(email),
+                              ),
+                            ],
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+          ),
+          const SizedBox(height: 24),
+
+          // Action row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OutlinedButton.icon(
+                onPressed: _isSendingTest ? null : _sendTestAlert,
+                icon: _isSendingTest
+                    ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.send_outlined, size: 16),
+                label: const Text('Send Test Alert Email'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF2563EB),
+                  side: const BorderSide(color: Color(0xFFBFDBFE)),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+              ),
+              ElevatedButton.icon(
+                onPressed: _isSavingNotifications ? null : _saveNotificationEmails,
+                icon: _isSavingNotifications
+                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                    : const Icon(Icons.check, size: 18),
+                label: const Text('Save Recipient List'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF059669),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTeamAccessTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Info banner
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFF6FF),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFFBFDBFE)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Icon(Icons.shield_outlined, color: Color(0xFF2563EB), size: 20),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Admin Portal Access: Authorize colleagues to log in with their email address at /login to view, filter, track inquiries, and reply to customers. Once authorized, they can log in immediately.',
+                    style: TextStyle(fontSize: 13, color: Color(0xFF1E40AF), height: 1.4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Grant access form
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Grant Access to New Team Member', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A))),
+                const SizedBox(height: 12),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextField(
+                        controller: _grantEmailCtrl,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          labelText: 'Colleague Email *',
+                          hintText: 'teammember@domain.com',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      flex: 2,
+                      child: TextField(
+                        controller: _grantNameCtrl,
+                        decoration: const InputDecoration(
+                          labelText: 'Name (Optional)',
+                          hintText: 'Full Name',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      flex: 2,
+                      child: DropdownButtonFormField<String>(
+                        value: _selectedRole,
+                        decoration: const InputDecoration(
+                          labelText: 'Portal Role',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        ),
+                        items: const [
+                          DropdownMenuItem(value: 'viewer', child: Text('Viewer')),
+                          DropdownMenuItem(value: 'content_admin', child: Text('Content Admin')),
+                          DropdownMenuItem(value: 'super_admin', child: Text('Super Admin')),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) setState(() => _selectedRole = val);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton.icon(
+                    onPressed: _isGrantingAccess ? null : _grantTeamAccess,
+                    icon: _isGrantingAccess
+                        ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                        : const Icon(Icons.person_add_alt_1, size: 16),
+                    label: const Text('Grant Portal Access'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2563EB),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Current team members list
+          Text(
+            'Authorized Team Members (${_teamMembers.length})',
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF0F172A)),
+          ),
+          const SizedBox(height: 10),
+
+          Container(
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
+            ),
+            child: _teamMembers.isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: Center(child: Text('No team members found.', style: TextStyle(color: Color(0xFF64748B)))),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _teamMembers.length,
+                    separatorBuilder: (_, index) => const Divider(height: 1, color: Color(0xFFE2E8F0)),
+                    itemBuilder: (ctx, idx) {
+                      final member = _teamMembers[idx];
+                      final isPrimary = member.email.toLowerCase() == _defaultEmail.toLowerCase();
+                      return ListTile(
+                        dense: true,
+                        leading: CircleAvatar(
+                          radius: 16,
+                          backgroundColor: const Color(0xFFE2E8F0),
+                          child: Text(
+                            member.name.isNotEmpty ? member.name[0].toUpperCase() : member.email[0].toUpperCase(),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF334155)),
+                          ),
+                        ),
+                        title: Row(
+                          children: [
+                            Text(
+                              member.name.isNotEmpty ? member.name : member.email.split('@')[0],
+                              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                            ),
+                            const SizedBox(width: 8),
+                            _buildRoleBadge(member.role),
+                          ],
+                        ),
+                        subtitle: Text(member.email, style: const TextStyle(fontSize: 12, color: Color(0xFF64748B))),
+                        trailing: isPrimary
+                            ? const Text('Primary Admin', style: TextStyle(fontSize: 11, color: Color(0xFF059669), fontWeight: FontWeight.bold))
+                            : IconButton(
+                                icon: const Icon(Icons.delete_outline, size: 18, color: Colors.redAccent),
+                                tooltip: 'Revoke portal access',
+                                onPressed: () => _revokeTeamAccess(member),
+                              ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRoleBadge(String role) {
+    Color bg;
+    Color fg;
+    String label;
+    switch (role.toLowerCase()) {
+      case 'super_admin':
+        bg = const Color(0xFFF3E8FF);
+        fg = const Color(0xFF9333EA);
+        label = 'SUPER ADMIN';
+        break;
+      case 'content_admin':
+        bg = const Color(0xFFEFF6FF);
+        fg = const Color(0xFF2563EB);
+        label = 'CONTENT ADMIN';
+        break;
+      case 'viewer':
+        bg = const Color(0xFFFEF3C7);
+        fg = const Color(0xFFD97706);
+        label = 'VIEWER';
+        break;
+      default:
+        bg = const Color(0xFFF1F5F9);
+        fg = const Color(0xFF64748B);
+        label = role.toUpperCase();
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(4)),
+      child: Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: fg)),
     );
   }
 }

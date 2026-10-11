@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
+import 'admin_inquiries_page.dart';
 
 class AdminUsersPage extends StatefulWidget {
   const AdminUsersPage({super.key});
@@ -142,16 +143,41 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
                   Text('View users who have signed up on the user web.', style: TextStyle(color: Color(0x991E293B))),
                 ],
               ),
-              ElevatedButton.icon(
-                onPressed: _loadUsers,
-                icon: const Icon(Icons.refresh, size: 18),
-                label: const Text('Refresh'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF2563EB),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                ),
+              Row(
+                children: [
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (ctx) => TeamAccessAndSettingsDialog(
+                          apiService: _apiService,
+                          authService: _authService,
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.mark_email_unread_outlined, size: 18),
+                    label: const Text('Email Alerts & Team Access'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: const Color(0xFF0F172A),
+                      side: const BorderSide(color: Color(0xFFCBD5E1)),
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  ElevatedButton.icon(
+                    onPressed: _loadUsers,
+                    icon: const Icon(Icons.refresh, size: 18),
+                    label: const Text('Refresh'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2563EB),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

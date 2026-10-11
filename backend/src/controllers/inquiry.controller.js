@@ -1,5 +1,6 @@
 const Inquiry = require('../models/inquiry.model');
 const User = require('../models/user.model');
+const Setting = require('../models/setting.model');
 const emailService = require('../services/emailService');
 const { getAuth } = require('firebase-admin/auth');
 
@@ -78,13 +79,25 @@ exports.createInquiry = async (req, res, next) => {
       userId: authenticatedUserId
     });
 
-    // Send email notification to admin asynchronously with delivery status capture
+    // Retrieve configured inquiry notification recipients
+    let notificationEmails = [emailService.adminEmail];
     try {
-      const emailResult = await emailService.sendAdminInquiryNotification(inquiry);
+      const notifSetting = await Setting.findOne({ key: 'inquiry_notification_emails' });
+      if (notifSetting && Array.isArray(notifSetting.value) && notifSetting.value.length > 0) {
+        notificationEmails = notifSetting.value;
+      }
+    } catch (settingErr) {
+      console.error('[InquiryController] Error fetching notification settings:', settingErr.message);
+    }
+
+    // Send email notification to configured recipients asynchronously with delivery status capture
+    try {
+      const emailResult = await emailService.sendAdminInquiryNotification(inquiry, notificationEmails);
       inquiry.emailNotification = {
         sent: emailResult.success,
         provider: emailResult.provider || 'unknown',
-        recipient: emailService.adminEmail,
+        recipient: notificationEmails.join(', '),
+        recipients: notificationEmails,
         sentAt: new Date(),
         error: emailResult.error || ''
       };
@@ -93,7 +106,8 @@ exports.createInquiry = async (req, res, next) => {
       console.error('[InquiryController] Email notification error:', emailErr.message);
       inquiry.emailNotification = {
         sent: false,
-        recipient: emailService.adminEmail,
+        recipient: notificationEmails.join(', '),
+        recipients: notificationEmails,
         error: emailErr.message
       };
       await inquiry.save();
@@ -358,3 +372,122 @@ exports.replyToInquiry = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get configured inquiry notification recipient emails
+// @route   GET /api/inquiries/settings/notifications
+// @access  Private (Admin / Viewer)
+exports.getNotificationSettings = async (req, res, next) => {
+  try {
+    const setting = await Setting.findOne({ key: 'inquiry_notification_emails' });
+    const defaultEmail = emailService.adminEmail || 'Gfiotsolutions@gmail.com';
+    let emails = [defaultEmail];
+
+    if (setting && Array.isArray(setting.value) && setting.value.length > 0) {
+      emails = setting.value;
+    }
+
+    res.status(200).json({
+      success: true,
+      emails,
+      defaultEmail,
+      updatedAt: setting ? setting.updatedAt : null,
+      updatedBy: setting ? setting.updatedBy : 'System Default'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Update configured inquiry notification recipient emails
+// @route   PUT /api/inquiries/settings/notifications
+// @access  Private (Admin: super_admin, content_admin)
+exports.updateNotificationSettings = async (req, res, next) => {
+  try {
+    const { emails } = req.body;
+    if (!Array.isArray(emails) || emails.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide at least one valid notification email address.'
+      });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const cleanedEmails = [...new Set(
+      emails
+        .filter(e => typeof e === 'string')
+        .map(e => e.trim().toLowerCase())
+        .filter(e => emailRegex.test(e))
+    )];
+
+    if (cleanedEmails.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'No valid email addresses provided.'
+      });
+    }
+
+    const setting = await Setting.findOneAndUpdate(
+      { key: 'inquiry_notification_emails' },
+      {
+        value: cleanedEmails,
+        description: 'Recipient email addresses for new project inquiries',
+        updatedBy: req.user ? req.user.email : 'Admin'
+      },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Inquiry notification recipient emails updated successfully',
+      emails: setting.value,
+      updatedAt: setting.updatedAt,
+      updatedBy: setting.updatedBy
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Send a test inquiry notification email to verify delivery
+// @route   POST /api/inquiries/settings/notifications/test
+// @access  Private (Admin: super_admin, content_admin)
+exports.sendTestNotification = async (req, res, next) => {
+  try {
+    const { targetEmail } = req.body;
+    const testInquiry = {
+      _id: 'TEST-' + Date.now().toString().slice(-4),
+      inquiryId: 'INQ-TEST',
+      name: 'Test Project Inquiry (System Verification)',
+      email: targetEmail || (req.user ? req.user.email : 'admin@greenfusion.com'),
+      phone: '+91 98765 43210',
+      message: 'This is a test notification verifying that inquiry email alerts are properly configured and delivered to your designated team inbox.',
+      createdAt: new Date()
+    };
+
+    let recipients = [];
+    if (targetEmail && typeof targetEmail === 'string' && targetEmail.trim()) {
+      recipients = [targetEmail.trim().toLowerCase()];
+    } else {
+      const setting = await Setting.findOne({ key: 'inquiry_notification_emails' });
+      if (setting && Array.isArray(setting.value) && setting.value.length > 0) {
+        recipients = setting.value;
+      } else {
+        recipients = [emailService.adminEmail];
+      }
+    }
+
+    const emailResult = await emailService.sendAdminInquiryNotification(testInquiry, recipients);
+
+    res.status(200).json({
+      success: emailResult.success,
+      message: emailResult.success
+        ? `Test notification sent successfully to: ${recipients.join(', ')}`
+        : `Delivery notice: ${emailResult.error || 'Check provider logs'}`,
+      recipients,
+      provider: emailResult.provider
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
