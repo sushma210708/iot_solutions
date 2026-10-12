@@ -29,7 +29,10 @@ class _AdminUsersPageState extends State<AdminUsersPage> {
       if (token != null) {
         final users = await _apiService.getUsers(token);
         setState(() {
-          _users = users;
+          _users = users.where((u) {
+            final role = (u['role'] ?? '').toString().toLowerCase();
+            return role != 'super_admin' && role != 'content_admin' && role != 'viewer' && role != 'admin';
+          }).toList();
         });
       }
     } catch (e) {

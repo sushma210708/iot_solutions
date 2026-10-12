@@ -1,12 +1,14 @@
 const User = require('../models/user.model');
 
-// @desc    Get all users (role = user)
+// @desc    Get all registered customers / regular users (strictly excludes admins)
 // @route   GET /api/users
 // @access  Private/Admin
 exports.getUsers = async (req, res) => {
   try {
-    const users = await User.find({ role: 'user' });
-    res.status(200).json({ success: true, data: users });
+    const users = await User.find({
+      role: { $nin: ['super_admin', 'content_admin', 'viewer', 'admin'] }
+    }).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, count: users.length, data: users });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
   }

@@ -89,6 +89,15 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
       // Fetch user profile
       try {
         _profile = await _apiService.getCurrentUserProfile(token);
+
+        // Admins cannot see or have access to customer portal
+        if (_profile != null && (_profile!.role == 'super_admin' || _profile!.role == 'content_admin' || _profile!.role == 'viewer')) {
+          if (mounted) {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AdminLayout()));
+          }
+          return;
+        }
+
         _profileNameCtrl.text = _profile?.name ?? '';
         _inquiryNameCtrl.text = _profile?.name ?? '';
         _inquiryEmailCtrl.text = _profile?.email ?? (user.email ?? '');
@@ -343,27 +352,6 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
           ),
           const SizedBox(width: 12),
         ],
-        if (_profile != null && (_profile!.role == 'super_admin' || _profile!.role == 'content_admin' || _profile!.role == 'viewer')) ...[
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF1E293B),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              elevation: 0,
-            ),
-            onPressed: () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const AdminLayout()),
-            ),
-            icon: const Icon(Icons.admin_panel_settings, size: 16, color: Color(0xFFF59E0B)),
-            label: Text(
-              isDesktop ? 'Admin Panel' : 'Admin',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(width: 8),
-        ],
         // User badge
         Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
@@ -502,97 +490,6 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Admin Privilege Alert Banner (if logged in with admin role)
-              if (_profile != null && (_profile!.role == 'super_admin' || _profile!.role == 'content_admin' || _profile!.role == 'viewer')) ...[
-                Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 20),
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEF3C7),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: const Color(0xFFFDE68A), width: 1.5),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFD97706).withOpacity(0.08),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: LayoutBuilder(
-                    builder: (context, abConstraints) {
-                      final isNarrow = abConstraints.maxWidth < 600;
-                      final alertContent = Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFDE68A),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(Icons.admin_panel_settings, color: Color(0xFFB45309), size: 20),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Logged in with Administrative Role: ${_profile!.role.replaceAll('_', ' ').toUpperCase()}',
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF92400E)),
-                                ),
-                                const SizedBox(height: 2),
-                                const Text(
-                                  'You have full admin access to manage products, inquiries, and team members.',
-                                  style: TextStyle(fontSize: 12, color: Color(0xFFB45309)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-
-                      final switchButton = ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFB45309),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          elevation: 0,
-                        ),
-                        onPressed: () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => const AdminLayout()),
-                        ),
-                        icon: const Icon(Icons.launch, size: 14),
-                        label: const Text('Open Admin Panel', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                      );
-
-                      if (isNarrow) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            alertContent,
-                            const SizedBox(height: 12),
-                            SizedBox(width: double.infinity, child: switchButton),
-                          ],
-                        );
-                      }
-
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(child: alertContent),
-                          const SizedBox(width: 16),
-                          switchButton,
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-
               // Welcome Banner
               Container(
                 width: double.infinity,
@@ -2212,54 +2109,6 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Admin Privileges Banner inside Profile (if admin)
-              if (_profile != null && (_profile!.role == 'super_admin' || _profile!.role == 'content_admin' || _profile!.role == 'viewer')) ...[
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEF3C7),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: const Color(0xFFFDE68A)),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.shield, color: Color(0xFFB45309), size: 22),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Admin Status: ${_profile!.role.replaceAll('_', ' ').toUpperCase()}',
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF92400E)),
-                            ),
-                            const Text(
-                              'Elevated permissions are active for this account.',
-                              style: TextStyle(fontSize: 12, color: Color(0xFFB45309)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFB45309),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          elevation: 0,
-                        ),
-                        onPressed: () => Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => const AdminLayout()),
-                        ),
-                        child: const Text('Admin Panel', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
 
               // Account Role & Email (Read-only)
               _profileFieldTile('Account Role', roleDisplay, Icons.badge_outlined),

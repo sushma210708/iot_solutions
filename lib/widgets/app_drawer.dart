@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
+import '../services/api_service.dart';
 import 'contact_modal.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -11,9 +12,25 @@ class AppDrawer extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
       leading: Icon(icon, color: const Color(0xFF475569)),
       title: Text(title, style: const TextStyle(color: Color(0xFF1E293B), fontSize: 16, fontWeight: FontWeight.w500)),
-      onTap: () {
+      onTap: () async {
         Navigator.pop(context);
-        Navigator.pushNamed(context, route);
+        if (route == '/dashboard') {
+          try {
+            final token = await AuthService().getIdToken();
+            if (token != null) {
+              final profile = await ApiService().getCurrentUserProfile(token);
+              if (profile.role == 'super_admin' || profile.role == 'content_admin' || profile.role == 'viewer') {
+                if (context.mounted) {
+                  Navigator.pushNamed(context, '/admin');
+                  return;
+                }
+              }
+            }
+          } catch (_) {}
+        }
+        if (context.mounted) {
+          Navigator.pushNamed(context, route);
+        }
       },
     );
   }

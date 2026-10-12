@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
+import '../services/api_service.dart';
 import 'contact_modal.dart';
 
 class NavBar extends StatelessWidget {
@@ -80,7 +81,23 @@ class NavBar extends StatelessWidget {
                       foregroundColor: const Color(0xFF2563EB),
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                     ),
-                    onPressed: () => Navigator.pushNamed(context, '/dashboard'),
+                    onPressed: () async {
+                      try {
+                        final token = await AuthService().getIdToken();
+                        if (token != null) {
+                          final profile = await ApiService().getCurrentUserProfile(token);
+                          if (profile.role == 'super_admin' || profile.role == 'content_admin' || profile.role == 'viewer') {
+                            if (context.mounted) {
+                              Navigator.pushNamed(context, '/admin');
+                              return;
+                            }
+                          }
+                        }
+                      } catch (_) {}
+                      if (context.mounted) {
+                        Navigator.pushNamed(context, '/dashboard');
+                      }
+                    },
                     icon: const Icon(Icons.dashboard_outlined, size: 18),
                     label: const Text('My Dashboard', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                   ),
