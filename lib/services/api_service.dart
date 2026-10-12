@@ -848,6 +848,8 @@ class ApiService {
       if (data['success'] == true) {
         return {
           'emails': (data['emails'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? <String>[],
+          'grantedEmails': data['grantedEmails'] ?? <dynamic>[],
+          'allActiveRecipients': (data['allActiveRecipients'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? <String>[],
           'defaultEmail': data['defaultEmail']?.toString() ?? 'Gfiotsolutions@gmail.com',
           'updatedAt': data['updatedAt']?.toString(),
           'updatedBy': data['updatedBy']?.toString(),

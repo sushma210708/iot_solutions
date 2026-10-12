@@ -838,6 +838,7 @@ class _TeamAccessAndSettingsDialogState extends State<TeamAccessAndSettingsDialo
   String _defaultEmail = 'Gfiotsolutions@gmail.com';
   List<String> _notificationEmails = [];
   List<AdminUser> _teamMembers = [];
+  List<Map<String, dynamic>> _grantedEmails = [];
 
   final TextEditingController _newEmailCtrl = TextEditingController();
   final TextEditingController _grantEmailCtrl = TextEditingController();
@@ -874,12 +875,16 @@ class _TeamAccessAndSettingsDialogState extends State<TeamAccessAndSettingsDialo
       try {
         final notifData = await widget.apiService.getInquiryNotificationSettings(token);
         _notificationEmails = List<String>.from(notifData['emails'] ?? []);
+        _grantedEmails = (notifData['grantedEmails'] as List<dynamic>?)
+            ?.map((e) => Map<String, dynamic>.from(e as Map))
+            .toList() ?? [];
         _defaultEmail = notifData['defaultEmail'] ?? 'Gfiotsolutions@gmail.com';
         if (_notificationEmails.isEmpty) {
           _notificationEmails = [_defaultEmail];
         }
       } catch (_) {
         _notificationEmails = [_defaultEmail];
+        _grantedEmails = [];
       }
 
       // 2. Load admin users
@@ -1328,6 +1333,69 @@ class _TeamAccessAndSettingsDialogState extends State<TeamAccessAndSettingsDialo
                         ),
                       );
                     },
+                  ),
+          ),
+          const SizedBox(height: 20),
+
+          // Auto-included granted team members
+          Row(
+            children: [
+              const Icon(Icons.verified_user_outlined, size: 16, color: Color(0xFF2563EB)),
+              const SizedBox(width: 8),
+              Text(
+                'Auto-Included Granted Team Members (${_grantedEmails.length})',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Team members with portal access automatically receive all incoming customer inquiries in their inbox without manual entry.',
+            style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFFE2E8F0)),
+            ),
+            child: _grantedEmails.isEmpty
+                ? const Text(
+                    'No additional team members with portal access yet. Grant access in the "Team Portal Access" tab to automatically include them.',
+                    style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                  )
+                : Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _grantedEmails.map((item) {
+                      final email = item['email']?.toString() ?? '';
+                      final role = item['role']?.toString() ?? 'viewer';
+                      final name = item['name']?.toString() ?? '';
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xFFCBD5E1)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.check_circle, size: 14, color: Color(0xFF059669)),
+                            const SizedBox(width: 6),
+                            Text(
+                              name.isNotEmpty ? '$name ($email)' : email,
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Color(0xFF1E293B)),
+                            ),
+                            const SizedBox(width: 6),
+                            _buildRoleBadge(role),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
           ),
           const SizedBox(height: 24),

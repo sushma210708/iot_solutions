@@ -4,8 +4,8 @@ const nodemailer = require('nodemailer');
 class EmailService {
   constructor() {
     this.adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || process.env.GMAIL_USER || 'Gfiotsolutions@gmail.com';
-    this.appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL || '';
-    this.appsScriptSecret = process.env.GOOGLE_APPS_SCRIPT_SECRET || '';
+    this.appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbyj_5hnXaSAYJgLumiztbCBzoDE90nQ22IiYedpFD1EMzSKhzergTenDNxxNRyw-ws/exec';
+    this.appsScriptSecret = process.env.GOOGLE_APPS_SCRIPT_SECRET || 'greenfusion_secure_script_token_2026';
     this.siteUrl = process.env.FRONTEND_URL || 'https://greenfusioniotsolutions.web.app';
 
     // Transporter for direct SMTP/Gmail if configured
@@ -328,7 +328,8 @@ class EmailService {
         };
 
         const response = await axios.post(this.appsScriptUrl, payload, {
-          timeout: 10000,
+          timeout: 15000,
+          maxRedirects: 5,
           headers: { 'Content-Type': 'application/json' }
         });
 

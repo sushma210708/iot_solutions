@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../services/auth_service.dart';
 import '../services/api_service.dart';
@@ -603,6 +604,10 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
           ),
           const SizedBox(height: 32),
 
+          // Direct Company Contact & Support Hub
+          _buildCompanyContactHubCard(isDesktop),
+          const SizedBox(height: 32),
+
           // Recent Enquiries Section
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -696,6 +701,183 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompanyContactHubCard(bool isDesktop) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEFF6FF),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.support_agent_rounded, color: Color(0xFF2563EB), size: 24),
+                  ),
+                  const SizedBox(width: 14),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Direct Company Contact & Live Support Desk',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0F172A),
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Real-time inquiry sync active. All team responses and quotations are delivered here directly.',
+                        style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFECFDF5),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0xFFA7F3D0)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(Icons.check_circle, size: 12, color: Color(0xFF059669)),
+                    SizedBox(width: 4),
+                    Text(
+                      'Live Support Connected',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF059669)),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+
+          // Contact Items Grid
+          LayoutBuilder(
+            builder: (ctx, constraints) {
+              final isWide = constraints.maxWidth > 700;
+              return Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: [
+                  _contactChannelCard(
+                    icon: Icons.mail_outline,
+                    label: 'Official Company Email',
+                    value: 'Gfiotsolutions@gmail.com',
+                    actionLabel: 'Copy Email',
+                    onAction: () {
+                      Clipboard.setData(const ClipboardData(text: 'Gfiotsolutions@gmail.com'));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Copied company email: Gfiotsolutions@gmail.com')),
+                      );
+                    },
+                    width: isWide ? (constraints.maxWidth - 32) / 3 : double.infinity,
+                  ),
+                  _contactChannelCard(
+                    icon: Icons.phone_in_talk_outlined,
+                    label: 'Technical Consultation Line',
+                    value: '+91 91590 85918',
+                    actionLabel: 'Call / WhatsApp',
+                    onAction: () {
+                      Clipboard.setData(const ClipboardData(text: '+91 91590 85918'));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Copied phone number: +91 91590 85918')),
+                      );
+                    },
+                    width: isWide ? (constraints.maxWidth - 32) / 3 : double.infinity,
+                  ),
+                  _contactChannelCard(
+                    icon: Icons.access_time_rounded,
+                    label: 'Response & Review SLA',
+                    value: '< 24 Hours Response Time',
+                    actionLabel: 'Direct Portal Sync',
+                    onAction: null,
+                    width: isWide ? (constraints.maxWidth - 32) / 3 : double.infinity,
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _contactChannelCard({
+    required IconData icon,
+    required String label,
+    required String value,
+    required String actionLabel,
+    VoidCallback? onAction,
+    required double width,
+  }) {
+    return Container(
+      width: width,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8FAFC),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 16, color: const Color(0xFF2563EB)),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: const TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+          ),
+          if (onAction != null) ...[
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: onAction,
+              child: Text(
+                actionLabel,
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF2563EB)),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -1270,6 +1452,49 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                       ),
                     );
                   }),
+
+                // Direct Company Contact Info Box
+                const SizedBox(height: 18),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF0FDF4),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFFBBF7D0)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.support_agent, color: Color(0xFF15803D), size: 22),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              'Company Contact: Gfiotsolutions@gmail.com',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF15803D)),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Technical Support Hotline: +91 91590 85918 • All updates display here automatically in real time.',
+                              style: TextStyle(fontSize: 11, color: Color(0xFF166534)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Clipboard.setData(const ClipboardData(text: 'Gfiotsolutions@gmail.com'));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Copied company email: Gfiotsolutions@gmail.com')),
+                          );
+                        },
+                        child: const Text('Copy Email', style: TextStyle(color: Color(0xFF15803D), fontWeight: FontWeight.bold, fontSize: 12)),
+                      ),
+                    ],
+                  ),
+                ),
 
                 const SizedBox(height: 24),
                 SizedBox(

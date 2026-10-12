@@ -90,6 +90,26 @@ exports.createInquiry = async (req, res, next) => {
       console.error('[InquiryController] Error fetching notification settings:', settingErr.message);
     }
 
+    // Automatically include ALL active granted team members (super_admin, content_admin, viewer)
+    try {
+      const grantedTeamUsers = await User.find({
+        role: { $in: ['super_admin', 'content_admin', 'viewer'] },
+        status: 'active'
+      }).select('email');
+
+      const grantedEmails = grantedTeamUsers
+        .map(u => (u.email ? u.email.trim().toLowerCase() : ''))
+        .filter(Boolean);
+
+      notificationEmails = [...new Set([
+        ...notificationEmails.map(e => e.trim().toLowerCase()),
+        ...grantedEmails,
+        emailService.adminEmail.trim().toLowerCase()
+      ])];
+    } catch (teamErr) {
+      console.error('[InquiryController] Error fetching granted team users:', teamErr.message);
+    }
+
     // Send email notification to configured recipients asynchronously with delivery status capture
     try {
       const emailResult = await emailService.sendAdminInquiryNotification(inquiry, notificationEmails);
@@ -373,22 +393,42 @@ exports.replyToInquiry = async (req, res, next) => {
   }
 };
 
-// @desc    Get configured inquiry notification recipient emails
+// @desc    Get configured inquiry notification recipient emails & granted team recipients
 // @route   GET /api/inquiries/settings/notifications
 // @access  Private (Admin / Viewer)
 exports.getNotificationSettings = async (req, res, next) => {
   try {
     const setting = await Setting.findOne({ key: 'inquiry_notification_emails' });
-    const defaultEmail = emailService.adminEmail || 'Gfiotsolutions@gmail.com';
-    let emails = [defaultEmail];
+    const defaultEmail = (emailService.adminEmail || 'Gfiotsolutions@gmail.com').toLowerCase();
+    let customEmails = [];
 
-    if (setting && Array.isArray(setting.value) && setting.value.length > 0) {
-      emails = setting.value;
+    if (setting && Array.isArray(setting.value)) {
+      customEmails = setting.value.map(e => e.toLowerCase());
     }
+
+    // Retrieve all active granted team members
+    const grantedTeamUsers = await User.find({
+      role: { $in: ['super_admin', 'content_admin', 'viewer'] },
+      status: 'active'
+    }).select('email name role');
+
+    const grantedList = grantedTeamUsers.map(u => ({
+      email: u.email.toLowerCase(),
+      name: u.name,
+      role: u.role
+    }));
+
+    const allActiveRecipients = [...new Set([
+      defaultEmail,
+      ...customEmails,
+      ...grantedTeamUsers.map(u => u.email.toLowerCase())
+    ])];
 
     res.status(200).json({
       success: true,
-      emails,
+      emails: customEmails.length > 0 ? customEmails : [defaultEmail],
+      grantedEmails: grantedList,
+      allActiveRecipients,
       defaultEmail,
       updatedAt: setting ? setting.updatedAt : null,
       updatedBy: setting ? setting.updatedBy : 'System Default'
@@ -460,7 +500,7 @@ exports.sendTestNotification = async (req, res, next) => {
       name: 'Test Project Inquiry (System Verification)',
       email: targetEmail || (req.user ? req.user.email : 'admin@greenfusion.com'),
       phone: '+91 98765 43210',
-      message: 'This is a test notification verifying that inquiry email alerts are properly configured and delivered to your designated team inbox.',
+      message: 'This is a test notification verifying that inquiry email alerts are properly configured and delivered to all designated inboxes and granted team emails.',
       createdAt: new Date()
     };
 
@@ -469,11 +509,18 @@ exports.sendTestNotification = async (req, res, next) => {
       recipients = [targetEmail.trim().toLowerCase()];
     } else {
       const setting = await Setting.findOne({ key: 'inquiry_notification_emails' });
-      if (setting && Array.isArray(setting.value) && setting.value.length > 0) {
-        recipients = setting.value;
-      } else {
-        recipients = [emailService.adminEmail];
-      }
+      const customEmails = (setting && Array.isArray(setting.value)) ? setting.value.map(e => e.toLowerCase()) : [];
+
+      const grantedTeamUsers = await User.find({
+        role: { $in: ['super_admin', 'content_admin', 'viewer'] },
+        status: 'active'
+      }).select('email');
+
+      recipients = [...new Set([
+        (emailService.adminEmail || 'Gfiotsolutions@gmail.com').toLowerCase(),
+        ...customEmails,
+        ...grantedTeamUsers.map(u => u.email.toLowerCase())
+      ])];
     }
 
     const emailResult = await emailService.sendAdminInquiryNotification(testInquiry, recipients);
