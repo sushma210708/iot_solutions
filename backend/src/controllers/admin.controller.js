@@ -27,8 +27,13 @@ exports.createAdmin = async (req, res, next) => {
     const assignedRole = role || 'viewer';
     const assignedName = (name && name.trim()) ? name.trim() : trimmedEmail.split('@')[0];
 
-    // Check if user already exists
-    let existingUser = await User.findOne({ email: trimmedEmail });
+    // Check if user already exists (case-insensitive)
+    let existingUser = await User.findOne({
+      $or: [
+        { email: trimmedEmail },
+        { email: { $regex: new RegExp(`^${trimmedEmail}$`, 'i') } }
+      ]
+    });
     if (existingUser) {
       existingUser.role = assignedRole;
       if (name && name.trim()) existingUser.name = assignedName;

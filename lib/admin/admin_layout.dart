@@ -9,6 +9,7 @@ import 'admin_about_us_page.dart';
 import 'admin_services_page.dart';
 import '../pages/home_page.dart';
 import '../pages/login_page.dart';
+import '../pages/customer_dashboard_page.dart';
 import '../services/auth_service.dart';
 import '../services/api_service.dart';
 import '../models/admin_user.dart';
@@ -189,11 +190,37 @@ class _AdminLayoutState extends State<AdminLayout> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: TextButton.icon(
-                    onPressed: _logout,
-                    icon: Icon(Icons.logout, color: Color(0x8A1E293B), size: 20),
-                    label: Text('Logout', style: TextStyle(color: Color(0x8A1E293B))),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  child: Column(
+                    children: [
+                      OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 38),
+                          foregroundColor: const Color(0xFF059669),
+                          side: const BorderSide(color: Color(0xFF059669)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomerDashboardPage())),
+                        icon: const Icon(Icons.person_outline, size: 18),
+                        label: const Text('Customer Portal', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 36),
+                          foregroundColor: const Color(0xFF475569),
+                        ),
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage())),
+                        icon: const Icon(Icons.home_outlined, size: 18),
+                        label: const Text('Visit Main Website', style: TextStyle(fontSize: 13)),
+                      ),
+                      const SizedBox(height: 4),
+                      TextButton.icon(
+                        onPressed: _logout,
+                        icon: const Icon(Icons.logout, color: Color(0x8A1E293B), size: 18),
+                        label: const Text('Logout', style: TextStyle(color: Color(0x8A1E293B))),
+                      ),
+                    ],
                   ),
                 ),
               ],

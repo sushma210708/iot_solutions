@@ -27,21 +27,35 @@ exports.getMe = async (req, res) => {
 exports.syncUser = async (req, res) => {
   try {
     const { uid, email, name } = req.firebaseUser;
+    const cleanEmail = (email || '').trim().toLowerCase();
     
-    // Check if user exists by email
-    let user = await User.findOne({ email: email });
+    // Check if user exists by email (case-insensitive)
+    let user = await User.findOne({
+      $or: [
+        { email: cleanEmail },
+        { email: { $regex: new RegExp(`^${cleanEmail}$`, 'i') } }
+      ]
+    });
     
     if (user) {
-      // If user exists but firebaseUid is different (e.g. they were added by email)
+      let needsSave = false;
+      // If user exists but firebaseUid is different (e.g. they were added by email before sign up)
       if (user.firebaseUid !== uid) {
         user.firebaseUid = uid;
+        needsSave = true;
+      }
+      if (name && (!user.name || user.name === user.email.split('@')[0])) {
+        user.name = name;
+        needsSave = true;
+      }
+      if (needsSave) {
         await user.save();
       }
     } else {
       // If user doesn't exist, create them as a normal user!
       user = await User.create({
-        name: name || email.split('@')[0],
-        email: email,
+        name: name || cleanEmail.split('@')[0],
+        email: cleanEmail,
         firebaseUid: uid,
         role: 'user', // Default role for Registered Users
         status: 'active'

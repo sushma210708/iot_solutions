@@ -6,6 +6,7 @@ import '../services/api_service.dart';
 import '../models/admin_user.dart';
 import '../models/inquiry.dart';
 import 'login_page.dart';
+import '../admin/admin_layout.dart';
 
 class CustomerDashboardPage extends StatefulWidget {
   const CustomerDashboardPage({super.key});
@@ -268,6 +269,7 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
           Expanded(
             child: TabBarView(
               controller: _tabController,
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 _buildOverviewTab(isDesktop),
                 _buildMyEnquiriesTab(isDesktop),
@@ -340,6 +342,27 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
             child: const Text('Products', style: TextStyle(color: Color(0xFF475569), fontWeight: FontWeight.w600)),
           ),
           const SizedBox(width: 12),
+        ],
+        if (_profile != null && (_profile!.role == 'super_admin' || _profile!.role == 'content_admin' || _profile!.role == 'viewer')) ...[
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF1E293B),
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              elevation: 0,
+            ),
+            onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const AdminLayout()),
+            ),
+            icon: const Icon(Icons.admin_panel_settings, size: 16, color: Color(0xFFF59E0B)),
+            label: Text(
+              isDesktop ? 'Admin Panel' : 'Admin',
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const SizedBox(width: 8),
         ],
         // User badge
         Container(
@@ -469,174 +492,286 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
         : (_authService.currentUser?.email?.split('@').first ?? 'Customer');
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(isDesktop ? 32 : 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Welcome Banner
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(28),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF1E3A8A), Color(0xFF2563EB)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF2563EB).withOpacity(0.2),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome back, $displayName!',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Green Fusion IoT Solutions Customer Portal. Track project inquiries, hardware consultation requests, and IoT implementation status in real-time.',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFFE2E8F0),
-                          height: 1.5,
-                        ),
-                      ),
-                      const SizedBox(height: 18),
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFF1E3A8A),
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
-                        onPressed: () {
-                          _tabController.animateTo(2); // Switch to Submit Enquiry tab
-                        },
-                        icon: const Icon(Icons.add_circle_outline, size: 18),
-                        label: const Text('Submit New Enquiry', style: TextStyle(fontWeight: FontWeight.bold)),
+      padding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 32 : 16,
+        vertical: isDesktop ? 28 : 16,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Admin Privilege Alert Banner (if logged in with admin role)
+              if (_profile != null && (_profile!.role == 'super_admin' || _profile!.role == 'content_admin' || _profile!.role == 'viewer')) ...[
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF3C7),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: const Color(0xFFFDE68A), width: 1.5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFD97706).withOpacity(0.08),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
+                  child: LayoutBuilder(
+                    builder: (context, abConstraints) {
+                      final isNarrow = abConstraints.maxWidth < 600;
+                      final alertContent = Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFDE68A),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Icon(Icons.admin_panel_settings, color: Color(0xFFB45309), size: 20),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Logged in with Administrative Role: ${_profile!.role.replaceAll('_', ' ').toUpperCase()}',
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF92400E)),
+                                ),
+                                const SizedBox(height: 2),
+                                const Text(
+                                  'You have full admin access to manage products, inquiries, and team members.',
+                                  style: TextStyle(fontSize: 12, color: Color(0xFFB45309)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+
+                      final switchButton = ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFB45309),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          elevation: 0,
+                        ),
+                        onPressed: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AdminLayout()),
+                        ),
+                        icon: const Icon(Icons.launch, size: 14),
+                        label: const Text('Open Admin Panel', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                      );
+
+                      if (isNarrow) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            alertContent,
+                            const SizedBox(height: 12),
+                            SizedBox(width: double.infinity, child: switchButton),
+                          ],
+                        );
+                      }
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: alertContent),
+                          const SizedBox(width: 16),
+                          switchButton,
+                        ],
+                      );
+                    },
+                  ),
                 ),
-                if (isDesktop) ...[
-                  const SizedBox(width: 24),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.12),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.hub_outlined, size: 64, color: Colors.white),
-                  ),
-                ],
               ],
-            ),
-          ),
-          const SizedBox(height: 28),
 
-          // Counters Section
-          const Text(
-            'Enquiry Overview',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF0F172A),
-            ),
-          ),
-          const SizedBox(height: 16),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final crossAxisCount = isDesktop ? 4 : (constraints.maxWidth > 500 ? 2 : 1);
-              return GridView.count(
-                crossAxisCount: crossAxisCount,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                childAspectRatio: isDesktop ? 1.8 : 2.2,
-                children: [
-                  _buildStatCard(
-                    title: 'Total Enquiries',
-                    value: '$totalCount',
-                    icon: Icons.assignment_outlined,
-                    color: const Color(0xFF2563EB),
-                    bgColor: const Color(0xFFEFF6FF),
+              // Welcome Banner
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(isDesktop ? 28 : 20),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF1E3A8A), Color(0xFF2563EB)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  _buildStatCard(
-                    title: 'Received / In Progress',
-                    value: '$inProgressCount',
-                    icon: Icons.hourglass_top_outlined,
-                    color: const Color(0xFFD97706),
-                    bgColor: const Color(0xFFFEF3C7),
-                  ),
-                  _buildStatCard(
-                    title: 'Contacted / In Review',
-                    value: '$contactedCount',
-                    icon: Icons.chat_bubble_outline,
-                    color: const Color(0xFF7C3AED),
-                    bgColor: const Color(0xFFEDE9FE),
-                  ),
-                  _buildStatCard(
-                    title: 'Resolved / Completed',
-                    value: '$completedCount',
-                    icon: Icons.check_circle_outline,
-                    color: const Color(0xFF059669),
-                    bgColor: const Color(0xFFD1FAE5),
-                  ),
-                ],
-              );
-            },
-          ),
-          const SizedBox(height: 32),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF2563EB).withOpacity(0.2),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Welcome back, $displayName!',
+                            style: TextStyle(
+                              fontSize: isDesktop ? 24 : 20,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                              letterSpacing: -0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Green Fusion IoT Solutions Customer Portal. Track project inquiries, hardware consultation requests, and IoT implementation status in real-time.',
+                            style: TextStyle(
+                              fontSize: isDesktop ? 14 : 13,
+                              color: const Color(0xFFE2E8F0),
+                              height: 1.5,
+                            ),
+                          ),
+                          const SizedBox(height: 18),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: const Color(0xFF1E3A8A),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              elevation: 0,
+                            ),
+                            onPressed: () {
+                              _tabController.animateTo(2); // Switch to Submit Enquiry tab
+                            },
+                            icon: const Icon(Icons.add_circle_outline, size: 18),
+                            label: const Text('Submit New Enquiry', style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (isDesktop) ...[
+                      const SizedBox(width: 24),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.12),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.hub_outlined, size: 64, color: Colors.white),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 28),
 
-          // Direct Company Contact & Support Hub
-          _buildCompanyContactHubCard(isDesktop),
-          const SizedBox(height: 32),
-
-          // Recent Enquiries Section
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+              // Counters Section
               const Text(
-                'Recent Submissions',
+                'Enquiry Overview',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF0F172A),
                 ),
               ),
-              if (_myInquiries.isNotEmpty)
-                TextButton(
-                  onPressed: () => _tabController.animateTo(1),
-                  child: const Text('View All Enquiries', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final width = constraints.maxWidth;
+                  final int crossAxisCount;
+                  final double aspectRatio;
+                  if (width >= 900) {
+                    crossAxisCount = 4;
+                    aspectRatio = 1.8;
+                  } else if (width >= 550) {
+                    crossAxisCount = 2;
+                    aspectRatio = 2.4;
+                  } else {
+                    crossAxisCount = 1;
+                    aspectRatio = 3.6;
+                  }
+                  return GridView.count(
+                    crossAxisCount: crossAxisCount,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    childAspectRatio: aspectRatio,
+                    children: [
+                      _buildStatCard(
+                        title: 'Total Enquiries',
+                        value: '$totalCount',
+                        icon: Icons.assignment_outlined,
+                        color: const Color(0xFF2563EB),
+                        bgColor: const Color(0xFFEFF6FF),
+                      ),
+                      _buildStatCard(
+                        title: 'Received / In Progress',
+                        value: '$inProgressCount',
+                        icon: Icons.hourglass_top_outlined,
+                        color: const Color(0xFFD97706),
+                        bgColor: const Color(0xFFFEF3C7),
+                      ),
+                      _buildStatCard(
+                        title: 'Contacted / In Review',
+                        value: '$contactedCount',
+                        icon: Icons.chat_bubble_outline,
+                        color: const Color(0xFF7C3AED),
+                        bgColor: const Color(0xFFEDE9FE),
+                      ),
+                      _buildStatCard(
+                        title: 'Resolved / Completed',
+                        value: '$completedCount',
+                        icon: Icons.check_circle_outline,
+                        color: const Color(0xFF059669),
+                        bgColor: const Color(0xFFD1FAE5),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: 32),
+
+              // Direct Company Contact & Support Hub
+              _buildCompanyContactHubCard(isDesktop),
+              const SizedBox(height: 32),
+
+              // Recent Enquiries Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Recent Submissions',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0F172A),
+                    ),
+                  ),
+                  if (_myInquiries.isNotEmpty)
+                    TextButton(
+                      onPressed: () => _tabController.animateTo(1),
+                      child: const Text('View All Enquiries', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold)),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              if (_isLoadingInquiries)
+                const Center(child: Padding(padding: EdgeInsets.all(24), child: CircularProgressIndicator(color: Color(0xFF2563EB))))
+              else if (_myInquiries.isEmpty)
+                _buildEmptyStateCard()
+              else
+                Column(
+                  children: _myInquiries.take(3).map((inquiry) => _buildInquiryCard(inquiry, isDesktop)).toList(),
                 ),
             ],
           ),
-          const SizedBox(height: 12),
-          if (_isLoadingInquiries)
-            const Center(child: Padding(padding: EdgeInsets.all(24), child: CircularProgressIndicator(color: Color(0xFF2563EB))))
-          else if (_myInquiries.isEmpty)
-            _buildEmptyStateCard()
-          else
-            Column(
-              children: _myInquiries.take(3).map((inquiry) => _buildInquiryCard(inquiry, isDesktop)).toList(),
-            ),
-        ],
+        ),
       ),
     );
   }
@@ -649,7 +784,7 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
     required Color bgColor,
   }) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -666,14 +801,14 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: bgColor,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: color, size: 24),
+            child: Icon(icon, color: color, size: 22),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -682,12 +817,12 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                 Text(
                   value,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 22,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF0F172A),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   title,
                   maxLines: 1,
@@ -709,7 +844,7 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
   Widget _buildCompanyContactHubCard(bool isDesktop) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.all(isDesktop ? 24 : 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -725,68 +860,131 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(Icons.support_agent_rounded, color: Color(0xFF2563EB), size: 24),
-                  ),
-                  const SizedBox(width: 14),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Direct Company Contact & Live Support Desk',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF0F172A),
+          // Responsive Header
+          LayoutBuilder(
+            builder: (ctx, hConstraints) {
+              final isSmall = hConstraints.maxWidth < 650;
+              if (isSmall) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFEFF6FF),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.support_agent_rounded, color: Color(0xFF2563EB), size: 22),
                         ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Text(
+                            'Company Contact & Live Support Desk',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF0F172A),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFECFDF5),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: const Color(0xFFA7F3D0)),
                       ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Real-time inquiry sync active. All team responses and quotations are delivered here directly.',
-                        style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.check_circle, size: 12, color: Color(0xFF059669)),
+                          SizedBox(width: 4),
+                          Text(
+                            'Live Support Connected',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF059669)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEFF6FF),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(Icons.support_agent_rounded, color: Color(0xFF2563EB), size: 24),
+                      ),
+                      const SizedBox(width: 14),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Direct Company Contact & Live Support Desk',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF0F172A),
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'Real-time inquiry sync active. All team responses and quotations are delivered here directly.',
+                            style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFECFDF5),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFA7F3D0)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.check_circle, size: 12, color: Color(0xFF059669)),
-                    SizedBox(width: 4),
-                    Text(
-                      'Live Support Connected',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF059669)),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFECFDF5),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: const Color(0xFFA7F3D0)),
                     ),
-                  ],
-                ),
-              ),
-            ],
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check_circle, size: 12, color: Color(0xFF059669)),
+                        SizedBox(width: 4),
+                        Text(
+                          'Live Support Connected',
+                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF059669)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 20),
 
           // Contact Items Grid
           LayoutBuilder(
             builder: (ctx, constraints) {
-              final isWide = constraints.maxWidth > 700;
+              final width = constraints.maxWidth;
+              final double cardWidth;
+              if (width >= 800) {
+                cardWidth = (width - 32) / 3;
+              } else if (width >= 500) {
+                cardWidth = (width - 16) / 2;
+              } else {
+                cardWidth = double.infinity;
+              }
               return Wrap(
                 spacing: 16,
                 runSpacing: 16,
@@ -802,7 +1000,7 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                         const SnackBar(content: Text('Copied company email: Gfiotsolutions@gmail.com')),
                       );
                     },
-                    width: isWide ? (constraints.maxWidth - 32) / 3 : double.infinity,
+                    width: cardWidth,
                   ),
                   _contactChannelCard(
                     icon: Icons.phone_in_talk_outlined,
@@ -815,7 +1013,7 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                         const SnackBar(content: Text('Copied phone number: +91 91590 85918')),
                       );
                     },
-                    width: isWide ? (constraints.maxWidth - 32) / 3 : double.infinity,
+                    width: cardWidth,
                   ),
                   _contactChannelCard(
                     icon: Icons.access_time_rounded,
@@ -823,7 +1021,7 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                     value: '< 24 Hours Response Time',
                     actionLabel: 'Direct Portal Sync',
                     onAction: null,
-                    width: isWide ? (constraints.maxWidth - 32) / 3 : double.infinity,
+                    width: cardWidth,
                   ),
                 ],
               );
@@ -895,113 +1093,152 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
     }
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(isDesktop ? 32 : 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header Row with Filter & Refresh
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 32 : 16,
+        vertical: isDesktop ? 28 : 16,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'My Inquiries & Requests',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF0F172A),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Track the progress of your IoT proposals and technical requests (${_myInquiries.length} total)',
-                    style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  // Filter dropdown
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xFFCBD5E1)),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: _selectedStatusFilter,
-                        icon: const Icon(Icons.filter_list, size: 18, color: Color(0xFF64748B)),
-                        style: const TextStyle(color: Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600),
-                        onChanged: (val) {
-                          if (val != null) setState(() => _selectedStatusFilter = val);
-                        },
-                        items: const [
-                          DropdownMenuItem(value: 'All', child: Text('All Statuses')),
-                          DropdownMenuItem(value: 'Received', child: Text('Received')),
-                          DropdownMenuItem(value: 'Under Review', child: Text('Under Review')),
-                          DropdownMenuItem(value: 'Contacted', child: Text('Contacted')),
-                          DropdownMenuItem(value: 'In Discussion', child: Text('In Discussion')),
-                          DropdownMenuItem(value: 'Completed', child: Text('Completed')),
-                          DropdownMenuItem(value: 'Closed', child: Text('Closed')),
+              // Responsive Header Row with Filter & Refresh
+              LayoutBuilder(
+                builder: (ctx, hConstraints) {
+                  final isSmall = hConstraints.maxWidth < 650;
+                  final filterControls = Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Filter dropdown
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: const Color(0xFFCBD5E1)),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _selectedStatusFilter,
+                            icon: const Icon(Icons.filter_list, size: 18, color: Color(0xFF64748B)),
+                            style: const TextStyle(color: Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.w600),
+                            onChanged: (val) {
+                              if (val != null) setState(() => _selectedStatusFilter = val);
+                            },
+                            items: const [
+                              DropdownMenuItem(value: 'All', child: Text('All Statuses')),
+                              DropdownMenuItem(value: 'Received', child: Text('Received')),
+                              DropdownMenuItem(value: 'Under Review', child: Text('Under Review')),
+                              DropdownMenuItem(value: 'Contacted', child: Text('Contacted')),
+                              DropdownMenuItem(value: 'In Discussion', child: Text('In Discussion')),
+                              DropdownMenuItem(value: 'Completed', child: Text('Completed')),
+                              DropdownMenuItem(value: 'Closed', child: Text('Closed')),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        tooltip: 'Refresh Enquiries',
+                        icon: _isLoadingInquiries
+                            ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF2563EB)))
+                            : const Icon(Icons.refresh, color: Color(0xFF2563EB)),
+                        onPressed: _isLoadingInquiries ? null : _loadInquiries,
+                      ),
+                    ],
+                  );
+
+                  if (isSmall) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'My Inquiries & Requests',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF0F172A),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Track progress of your IoT proposals (${_myInquiries.length} total)',
+                          style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                        ),
+                        const SizedBox(height: 12),
+                        filterControls,
+                      ],
+                    );
+                  }
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'My Inquiries & Requests',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF0F172A),
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Track the progress of your IoT proposals and technical requests (${_myInquiries.length} total)',
+                            style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                          ),
                         ],
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    tooltip: 'Refresh Enquiries',
-                    icon: _isLoadingInquiries
-                        ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF2563EB)))
-                        : const Icon(Icons.refresh, color: Color(0xFF2563EB)),
-                    onPressed: _isLoadingInquiries ? null : _loadInquiries,
-                  ),
-                ],
+                      filterControls,
+                    ],
+                  );
+                },
               ),
+              const SizedBox(height: 24),
+
+              if (_inquiriesError != null) ...[
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF2F2),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFFCA5A5)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.error_outline, color: Color(0xFFDC2626)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Failed to load enquiries: $_inquiriesError',
+                          style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _loadInquiries,
+                        child: const Text('Try Again', style: TextStyle(color: Color(0xFFDC2626), fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+              ],
+
+              if (_isLoadingInquiries && _myInquiries.isEmpty)
+                const Center(child: Padding(padding: EdgeInsets.all(36), child: CircularProgressIndicator(color: Color(0xFF2563EB))))
+              else if (filteredList.isEmpty)
+                _buildEmptyStateCard()
+              else
+                Column(
+                  children: filteredList.map((inquiry) => _buildInquiryCard(inquiry, isDesktop)).toList(),
+                ),
             ],
           ),
-          const SizedBox(height: 24),
-
-          if (_inquiriesError != null) ...[
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFEF2F2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFFCA5A5)),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.error_outline, color: Color(0xFFDC2626)),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'Failed to load enquiries: $_inquiriesError',
-                      style: const TextStyle(color: Color(0xFFDC2626), fontSize: 13),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: _loadInquiries,
-                    child: const Text('Try Again', style: TextStyle(color: Color(0xFFDC2626), fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-
-          if (_isLoadingInquiries && _myInquiries.isEmpty)
-            const Center(child: Padding(padding: EdgeInsets.all(36), child: CircularProgressIndicator(color: Color(0xFF2563EB))))
-          else if (filteredList.isEmpty)
-            _buildEmptyStateCard()
-          else
-            Column(
-              children: filteredList.map((inquiry) => _buildInquiryCard(inquiry, isDesktop)).toList(),
-            ),
-        ],
+        ),
       ),
     );
   }
@@ -1080,11 +1317,14 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header: ID + Status + Date
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
+          // Header: ID + Status + Date (Responsive Wrap)
+          LayoutBuilder(
+            builder: (ctx, hConstraints) {
+              final isSmall = hConstraints.maxWidth < 550;
+              final badgeGroup = Wrap(
+                spacing: 8,
+                runSpacing: 6,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -1103,7 +1343,6 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
@@ -1119,8 +1358,7 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                       ),
                     ),
                   ),
-                  if (inquiry.hasCompanyReply) ...[
-                    const SizedBox(width: 8),
+                  if (inquiry.hasCompanyReply)
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
@@ -1144,14 +1382,35 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                         ],
                       ),
                     ),
-                  ],
                 ],
-              ),
-              Text(
-                dateStr,
-                style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
-              ),
-            ],
+              );
+
+              if (isSmall) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    badgeGroup,
+                    const SizedBox(height: 8),
+                    Text(
+                      dateStr,
+                      style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
+                    ),
+                  ],
+                );
+              }
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: badgeGroup),
+                  const SizedBox(width: 8),
+                  Text(
+                    dateStr,
+                    style: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 14),
 
@@ -1229,33 +1488,70 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
           ],
           const SizedBox(height: 14),
 
-          // Footer details: Phone & Details Modal button
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
+          // Footer details: Phone, Email & Details Modal button (Responsive)
+          LayoutBuilder(
+            builder: (ctx, fConstraints) {
+              final isSmall = fConstraints.maxWidth < 600;
+              final infoChips = Wrap(
+                spacing: 12,
+                runSpacing: 6,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  const Icon(Icons.phone_outlined, size: 14, color: Color(0xFF64748B)),
-                  const SizedBox(width: 4),
-                  Text(
-                    inquiry.phone.isNotEmpty ? inquiry.phone : 'Not provided',
-                    style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.phone_outlined, size: 14, color: Color(0xFF64748B)),
+                      const SizedBox(width: 4),
+                      Text(
+                        inquiry.phone.isNotEmpty ? inquiry.phone : 'Not provided',
+                        style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 16),
-                  const Icon(Icons.email_outlined, size: 14, color: Color(0xFF64748B)),
-                  const SizedBox(width: 4),
-                  Text(
-                    inquiry.email,
-                    style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.email_outlined, size: 14, color: Color(0xFF64748B)),
+                      const SizedBox(width: 4),
+                      Text(
+                        inquiry.email,
+                        style: const TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                      ),
+                    ],
                   ),
                 ],
-              ),
-              TextButton.icon(
-                onPressed: () => _showInquiryDetailsModal(inquiry),
-                icon: const Icon(Icons.info_outline, size: 16, color: Color(0xFF2563EB)),
-                label: const Text('View Details', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold, fontSize: 13)),
-              ),
-            ],
+              );
+
+              if (isSmall) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    infoChips,
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton.icon(
+                        onPressed: () => _showInquiryDetailsModal(inquiry),
+                        icon: const Icon(Icons.info_outline, size: 16, color: Color(0xFF2563EB)),
+                        label: const Text('View Details', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold, fontSize: 13)),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: infoChips),
+                  TextButton.icon(
+                    onPressed: () => _showInquiryDetailsModal(inquiry),
+                    icon: const Icon(Icons.info_outline, size: 16, color: Color(0xFF2563EB)),
+                    label: const Text('View Details', style: TextStyle(color: Color(0xFF2563EB), fontWeight: FontWeight.bold, fontSize: 13)),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
@@ -1266,14 +1562,15 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
     final statusColor = _getStatusColor(inquiry.status);
     final statusBgColor = _getStatusBgColor(inquiry.status);
     final dateStr = DateFormat('MMMM dd, yyyy • hh:mm a').format(inquiry.createdAt);
+    final screenWidth = MediaQuery.of(context).size.width;
 
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          width: 580,
-          padding: const EdgeInsets.all(28),
+          width: screenWidth > 640 ? 580 : screenWidth * 0.94,
+          padding: EdgeInsets.all(screenWidth > 600 ? 28 : 18),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -1914,7 +2211,55 @@ class _CustomerDashboardPageState extends State<CustomerDashboardPage> with Sing
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
+
+              // Admin Privileges Banner inside Profile (if admin)
+              if (_profile != null && (_profile!.role == 'super_admin' || _profile!.role == 'content_admin' || _profile!.role == 'viewer')) ...[
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFEF3C7),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFFDE68A)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.shield, color: Color(0xFFB45309), size: 22),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Admin Status: ${_profile!.role.replaceAll('_', ' ').toUpperCase()}',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF92400E)),
+                            ),
+                            const Text(
+                              'Elevated permissions are active for this account.',
+                              style: TextStyle(fontSize: 12, color: Color(0xFFB45309)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFB45309),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          elevation: 0,
+                        ),
+                        onPressed: () => Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AdminLayout()),
+                        ),
+                        child: const Text('Admin Panel', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
 
               // Account Role & Email (Read-only)
               _profileFieldTile('Account Role', roleDisplay, Icons.badge_outlined),

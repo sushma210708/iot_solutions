@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../services/api_service.dart';
+import '../admin/admin_layout.dart';
+import 'customer_dashboard_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -87,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
         throw Exception('Failed to obtain authentication credentials. Please try logging in.');
       }
 
-      // 3. Sync customer profile with MongoDB backend (automatically defaults role to 'user')
+      // 3. Sync customer profile with MongoDB backend
       await _apiService.syncUser(token);
 
       // 4. Update profile name if provided
@@ -95,8 +97,27 @@ class _RegisterPageState extends State<RegisterPage> {
         try {
           await _apiService.updateProfile(token, name: name);
         } catch (_) {
-          // Non-blocking; continue to dashboard
+          // Non-blocking; continue
         }
+      }
+
+      // 5. Check role for role-based navigation
+      try {
+        final profile = await _apiService.getCurrentUserProfile(token);
+        if (!mounted) return;
+
+        if (profile.role == 'super_admin' || profile.role == 'content_admin' || profile.role == 'viewer') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Account created! Welcome to Admin Panel, ${profile.name.isNotEmpty ? profile.name : profile.email}!', style: const TextStyle(color: Colors.white)),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AdminLayout()));
+          return;
+        }
+      } catch (profileError) {
+        debugPrint('Profile role check fallback: $profileError');
       }
 
       if (!mounted) return;
@@ -108,8 +129,8 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       );
 
-      // 5. Route customer directly to Customer Dashboard
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      // 6. Route regular customer directly to Customer Dashboard
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const CustomerDashboardPage()));
     } catch (e) {
       if (!mounted) return;
       String errorText = e.toString();
