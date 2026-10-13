@@ -18,15 +18,15 @@ class ServicesPage extends StatelessWidget {
       body: InteractiveGridBackground(
         child: CustomScrollView(
         slivers: [
-          const SliverAppBar(
+          SliverAppBar(
             pinned: true,
             automaticallyImplyLeading: false,
-            backgroundColor: Color(0xFFF8FAFC),
+            backgroundColor: const Color(0xFFF8FAFC),
             elevation: 0,
-            iconTheme: IconThemeData(color: Color(0xFF1E293B)),
-            toolbarHeight: 88,
+            iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
+            toolbarHeight: isDesktop ? 88 : 72,
             titleSpacing: 0,
-            title: NavBar(isScrolled: true),
+            title: const NavBar(isScrolled: true),
           ),
           SliverToBoxAdapter(
             child: Column(

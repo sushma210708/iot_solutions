@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: _isScrolled ? const Color(0xFFF8FAFC).withValues(alpha: 0.9) : Colors.transparent,
             elevation: 0,
             iconTheme: const IconThemeData(color: Color(0xFF1E293B)),
-            toolbarHeight: 88,
+            toolbarHeight: isDesktop ? 88 : 72,
             titleSpacing: 0,
             title: NavBar(
               isScrolled: _isScrolled,

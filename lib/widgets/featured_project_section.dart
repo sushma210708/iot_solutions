@@ -292,7 +292,7 @@ class _ProjectCardState extends State<ProjectCard> {
               
               // Content Section
               Padding(
-                padding: const EdgeInsets.all(32.0),
+                padding: EdgeInsets.all(MediaQuery.of(context).size.width < 600 ? 20.0 : 32.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

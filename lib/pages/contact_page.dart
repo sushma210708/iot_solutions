@@ -20,10 +20,10 @@ class ContactPage extends StatelessWidget {
           slivers: [
             SliverAppBar(
               pinned: true,
-              automaticallyImplyLeading: !isDesktop,
+              automaticallyImplyLeading: false,
               backgroundColor: const Color(0xFFF8FAFC),
               elevation: 0,
-              toolbarHeight: 88,
+              toolbarHeight: isDesktop ? 88 : 72,
               titleSpacing: 0,
               title: const NavBar(isScrolled: true),
             ),

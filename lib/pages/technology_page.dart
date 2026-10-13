@@ -207,10 +207,10 @@ class _TechnologyPageState extends State<TechnologyPage> {
           slivers: [
             SliverAppBar(
               pinned: true,
-              automaticallyImplyLeading: !isDesktop,
+              automaticallyImplyLeading: false,
               backgroundColor: Colors.white.withValues(alpha: 0.95),
               elevation: 0,
-              toolbarHeight: 88,
+              toolbarHeight: isDesktop ? 88 : 72,
               titleSpacing: 0,
               iconTheme: const IconThemeData(color: Color(0xFF061426)),
               title: const NavBar(isScrolled: true),

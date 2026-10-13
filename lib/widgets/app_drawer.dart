@@ -50,36 +50,53 @@ class AppDrawer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(
-                        'assets/logo.png',
-                        height: 44,
-                        fit: BoxFit.contain,
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/');
+                        },
+                        child: Image.asset(
+                          'assets/logo.png',
+                          height: 40,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Color(0xFF64748B), size: 22),
+                        onPressed: () => Navigator.pop(context),
                       ),
                     ],
                   ),
                 ),
-                const Divider(color: Color(0x1F1E293B)),
-                _drawerItem(context, Icons.home_outlined, 'Home', '/'),
-                _drawerItem(context, Icons.inventory_2_outlined, 'Products', '/solutions'),
-                _drawerItem(context, Icons.business_center_outlined, 'Services', '/services'),
-                _drawerItem(context, Icons.memory_outlined, 'Technology', '/technology'),
-                _drawerItem(context, Icons.group_outlined, 'Mentors', '/mentors'),
-                _drawerItem(context, Icons.info_outline, 'About Us', '/about'),
-                if (isLoggedIn)
-                  _drawerItem(context, Icons.dashboard_outlined, 'My Dashboard', '/dashboard'),
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-                  leading: const Icon(Icons.chat_bubble_outline, color: Color(0xFF2563EB)),
-                  title: const Text('Get in Touch', style: TextStyle(color: Color(0xFF2563EB), fontSize: 16, fontWeight: FontWeight.bold)),
-                  onTap: () {
-                    Navigator.pop(context);
-                    ContactModal.show(context);
-                  },
+                const Divider(color: Color(0x1F1E293B), height: 1),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    children: [
+                      _drawerItem(context, Icons.home_outlined, 'Home', '/'),
+                      _drawerItem(context, Icons.inventory_2_outlined, 'Products', '/solutions'),
+                      _drawerItem(context, Icons.business_center_outlined, 'Services', '/services'),
+                      _drawerItem(context, Icons.memory_outlined, 'Technology', '/technology'),
+                      _drawerItem(context, Icons.group_outlined, 'Mentors', '/mentors'),
+                      _drawerItem(context, Icons.info_outline, 'About Us', '/about'),
+                      if (isLoggedIn)
+                        _drawerItem(context, Icons.dashboard_outlined, 'My Dashboard', '/dashboard'),
+                      ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                        leading: const Icon(Icons.chat_bubble_outline, color: Color(0xFF2563EB)),
+                        title: const Text('Get in Touch', style: TextStyle(color: Color(0xFF2563EB), fontSize: 16, fontWeight: FontWeight.bold)),
+                        onTap: () {
+                          Navigator.pop(context);
+                          ContactModal.show(context);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                const Spacer(),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: isLoggedIn

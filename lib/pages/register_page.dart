@@ -178,10 +178,11 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: Container(
-            width: 440,
-            padding: const EdgeInsets.all(36.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 440),
+            child: Container(
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width < 600 ? 24.0 : 36.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(24),
@@ -431,6 +432,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

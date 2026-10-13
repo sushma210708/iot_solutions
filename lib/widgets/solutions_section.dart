@@ -164,18 +164,31 @@ class _SolutionsSectionState extends State<SolutionsSection> {
           // Cards Section
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: isDesktop ? 64 : 24,
+              horizontal: isDesktop ? 64 : 20,
               vertical: isDesktop ? 80 : 40,
             ),
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 1200),
                 child: filteredProducts.isEmpty
-                    ? Center(child: Text('No products found in this category.', textAlign: TextAlign.center, style: TextStyle(color: Color(0x8A1E293B))))
-                    : Wrap(
-                        spacing: 32,
-                        runSpacing: 32,
-                        children: filteredProducts.map((p) => _ProductCard(product: p, isDesktop: isDesktop)).toList(),
+                    ? const Center(child: Text('No products found in this category.', textAlign: TextAlign.center, style: TextStyle(color: Color(0x8A1E293B))))
+                    : LayoutBuilder(
+                        builder: (context, constraints) {
+                          final width = constraints.maxWidth;
+                          double cardWidth;
+                          if (width >= 1100) {
+                            cardWidth = (width - 64) / 3;
+                          } else if (width >= 700) {
+                            cardWidth = (width - 32) / 2;
+                          } else {
+                            cardWidth = width;
+                          }
+                          return Wrap(
+                            spacing: 32,
+                            runSpacing: 32,
+                            children: filteredProducts.map((p) => _ProductCard(product: p, cardWidth: cardWidth)).toList(),
+                          );
+                        },
                       ),
               ),
             ),
@@ -188,9 +201,9 @@ class _SolutionsSectionState extends State<SolutionsSection> {
 
 class _ProductCard extends StatefulWidget {
   final Product product;
-  final bool isDesktop;
+  final double cardWidth;
 
-  const _ProductCard({required this.product, required this.isDesktop});
+  const _ProductCard({required this.product, required this.cardWidth});
 
   @override
   State<_ProductCard> createState() => _ProductCardState();
@@ -217,7 +230,7 @@ class _ProductCardState extends State<_ProductCard> {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
-          width: widget.isDesktop ? 378.0 : double.infinity,
+          width: widget.cardWidth,
           height: 520,
           decoration: BoxDecoration(
             color: Colors.white,

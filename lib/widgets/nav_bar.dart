@@ -25,7 +25,7 @@ class NavBar extends StatelessWidget {
     final isDesktop = MediaQuery.of(context).size.width >= 900;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: isDesktop ? 64.0 : 24.0, vertical: 12.0),
+      padding: EdgeInsets.symmetric(horizontal: isDesktop ? 64.0 : 20.0, vertical: isDesktop ? 12.0 : 8.0),
       child: isDesktop ? _buildDesktopNav(context) : _buildMobileNav(context),
     );
   }
@@ -34,10 +34,10 @@ class NavBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildLogo(),
+        _buildLogo(context),
         Builder(
           builder: (ctx) => IconButton(
-            icon: const Icon(Icons.menu, color: Color(0xFF0F161B)),
+            icon: const Icon(Icons.menu, color: Color(0xFF0F161B), size: 28),
             onPressed: () => Scaffold.of(ctx).openDrawer(),
           ),
         ),
@@ -49,7 +49,7 @@ class NavBar extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildLogo(),
+        _buildLogo(context),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           decoration: BoxDecoration(
@@ -161,15 +161,19 @@ class NavBar extends StatelessWidget {
     );
   }
 
-  Widget _buildLogo() {
-    return Row(
-      children: [
-        Image.asset(
-          'assets/logo.png',
-          height: 44,
-          fit: BoxFit.contain,
-        ),
-      ],
+  Widget _buildLogo(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, '/'),
+      borderRadius: BorderRadius.circular(8),
+      child: Row(
+        children: [
+          Image.asset(
+            'assets/logo.png',
+            height: 40,
+            fit: BoxFit.contain,
+          ),
+        ],
+      ),
     );
   }
 

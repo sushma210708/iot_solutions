@@ -22,7 +22,7 @@ class MentorsPage extends StatelessWidget {
             automaticallyImplyLeading: false,
             backgroundColor: const Color(0xFFF8FAFC).withValues(alpha: 0.9),
             elevation: 0,
-            toolbarHeight: 88,
+            toolbarHeight: isDesktop ? 88 : 72,
             titleSpacing: 0,
             title: const NavBar(isScrolled: true),
           ),

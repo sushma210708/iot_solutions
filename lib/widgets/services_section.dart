@@ -85,6 +85,15 @@ class _ServicesSectionState extends State<ServicesSection> {
             const Center(child: CircularProgressIndicator(color: Color(0xFF2563EB)))
           else if (_services.isEmpty)
             const Center(child: Text('No services currently available.', style: TextStyle(color: Color(0xFF475569))))
+          else if (crossAxisCount == 1)
+            Column(
+              children: _services.asMap().entries.map((entry) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: _buildServiceCardMobile(entry.value, (entry.key + 1).toString().padLeft(2, '0')),
+                );
+              }).toList(),
+            )
           else
             GridView.builder(
               shrinkWrap: true,
@@ -93,7 +102,7 @@ class _ServicesSectionState extends State<ServicesSection> {
                 crossAxisCount: crossAxisCount,
                 crossAxisSpacing: 24,
                 mainAxisSpacing: 24,
-                childAspectRatio: isDesktop ? 1.1 : 1.1,
+                childAspectRatio: isDesktop ? 1.05 : 1.15,
               ),
               itemCount: _services.length,
               itemBuilder: (context, index) {
@@ -108,13 +117,87 @@ class _ServicesSectionState extends State<ServicesSection> {
     );
   }
 
+  Widget _buildServiceCardMobile(Service service, String number) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2563EB).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: service.imageUrl.isNotEmpty
+                    ? Center(child: Image.network(service.imageUrl, width: 28, height: 28))
+                    : const Icon(Icons.business_center, color: Color(0xFF2563EB), size: 28),
+              ),
+              Text(
+                number,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2563EB),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Text(
+            service.title,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1E293B),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            service.description,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Color(0xFF475569),
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildServiceCard(Service service, String number) {
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.85),
+        color: Colors.white.withOpacity(0.95),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Color(0xFF1E293B).withOpacity(0.1)),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,7 +215,7 @@ class _ServicesSectionState extends State<ServicesSection> {
                 ),
                 child: service.imageUrl.isNotEmpty
                     ? Center(child: Image.network(service.imageUrl, width: 32, height: 32))
-                    : const Icon(Icons.business_center, color: Color(0xFF60A5FA), size: 32),
+                    : const Icon(Icons.business_center, color: Color(0xFF2563EB), size: 32),
               ),
               Text(
                 number,
@@ -153,14 +236,17 @@ class _ServicesSectionState extends State<ServicesSection> {
               color: Color(0xFF1E293B),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
           Expanded(
-            child: Text(
-              service.description,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Color(0xFF475569),
-                height: 1.6,
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Text(
+                service.description,
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Color(0xFF475569),
+                  height: 1.6,
+                ),
               ),
             ),
           ),
@@ -175,53 +261,136 @@ class _ServicesSectionState extends State<ServicesSection> {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: isDesktop ? 48 : 24, vertical: 32),
+        padding: EdgeInsets.symmetric(horizontal: isDesktop ? 48 : 20, vertical: isDesktop ? 32 : 24),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [Color(0xFF2563EB), Color(0xFF1E3A8A)],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(16),
-        ),
-        child: Flex(
-          direction: isDesktop ? Axis.horizontal : Axis.vertical,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.rocket_launch, color: Color(0xFF1E293B), size: 40),
-                const SizedBox(width: 24),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('LET\'S BUILD TOGETHER', style: TextStyle(color: Color(0xFF475569), fontWeight: FontWeight.bold, letterSpacing: 1)),
-                    const SizedBox(height: 8),
-                    RichText(
-                      text: const TextSpan(
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1E293B)),
-                        children: [
-                          TextSpan(text: 'Turning Ideas into '),
-                          TextSpan(text: 'Real Solutions', style: TextStyle(color: Color(0xFF93C5FD))),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            if (!isDesktop) const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: const BoxDecoration(
-                color: Color(0xFF1E293B),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.arrow_forward, color: Color(0xFF2563EB)),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF1E3A8A).withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, 8),
             ),
           ],
         ),
+        child: isDesktop
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.rocket_launch, color: Colors.white, size: 32),
+                      ),
+                      const SizedBox(width: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'LET\'S BUILD TOGETHER',
+                            style: TextStyle(
+                              color: Color(0xFFBFDBFE),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          RichText(
+                            text: const TextSpan(
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                              children: [
+                                TextSpan(text: 'Turning Ideas into '),
+                                TextSpan(text: 'Real Solutions', style: TextStyle(color: Color(0xFF93C5FD))),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Row(
+                      children: [
+                        Text('Get Started', style: TextStyle(color: Color(0xFF1E3A8A), fontWeight: FontWeight.bold, fontSize: 14)),
+                        SizedBox(width: 8),
+                        Icon(Icons.arrow_forward, color: Color(0xFF1E3A8A), size: 16),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.rocket_launch, color: Colors.white, size: 24),
+                      ),
+                      const SizedBox(width: 14),
+                      const Expanded(
+                        child: Text(
+                          'LET\'S BUILD TOGETHER',
+                          style: TextStyle(
+                            color: Color(0xFFBFDBFE),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  RichText(
+                    text: const TextSpan(
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white, height: 1.2),
+                      children: [
+                        TextSpan(text: 'Turning Ideas into\n'),
+                        TextSpan(text: 'Real Solutions', style: TextStyle(color: Color(0xFF93C5FD))),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Get Started', style: TextStyle(color: Color(0xFF1E3A8A), fontWeight: FontWeight.bold, fontSize: 14)),
+                        SizedBox(width: 8),
+                        Icon(Icons.arrow_forward, color: Color(0xFF1E3A8A), size: 16),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }

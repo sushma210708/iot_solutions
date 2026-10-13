@@ -9,9 +9,12 @@ class ContactModal {
       barrierDismissible: true,
       builder: (ctx) => Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 620),
+          constraints: BoxConstraints(
+            maxWidth: 620,
+            maxHeight: MediaQuery.of(ctx).size.height * 0.9,
+          ),
           child: const ContactFormCard(isModal: true),
         ),
       ),
@@ -24,9 +27,12 @@ class ContactModal {
       barrierDismissible: false,
       builder: (ctx) => Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 500),
+          constraints: BoxConstraints(
+            maxWidth: 500,
+            maxHeight: MediaQuery.of(ctx).size.height * 0.9,
+          ),
           child: const ContactSuccessCard(),
         ),
       ),
@@ -171,13 +177,17 @@ class _ContactFormCardState extends State<ContactFormCard> {
         ],
         border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
-      padding: EdgeInsets.all(isMobile ? 24.0 : 36.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.all(isMobile ? 20.0 : 32.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
             // Header with blue badge & close button if modal
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -384,6 +394,8 @@ class _ContactFormCardState extends State<ContactFormCard> {
           ],
         ),
       ),
+    ),
+    ),
     );
   }
 
@@ -435,6 +447,8 @@ class ContactSuccessCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 600;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -448,98 +462,104 @@ class ContactSuccessCard extends StatelessWidget {
         ],
         border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
-      padding: const EdgeInsets.all(36.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Blue checkmark badge
-          Container(
-            width: 72,
-            height: 72,
-            decoration: const BoxDecoration(
-              color: Color(0xFFEFF6FF),
-              shape: BoxShape.circle,
-            ),
-            child: const Center(
-              child: Icon(Icons.check_circle_rounded, color: Color(0xFF2563EB), size: 48),
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Primary Heading
-          const Text(
-            'Thank You for Connecting with GreenFusion!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF0F172A),
-              letterSpacing: -0.4,
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          // Body Text
-          const Text(
-            'We appreciate your interest in collaborating with us. Your project inquiry has been received successfully. Our team will review your requirements and get in touch with you shortly.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: Color(0xFF475569),
-              height: 1.6,
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          // Secondary Response Time Message
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF8FAFC),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.schedule, color: Color(0xFF2563EB), size: 16),
-                SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    'Our team aims to respond as soon as possible, typically within a few minutes during business hours.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF334155),
-                    ),
-                  ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.all(isMobile ? 24.0 : 36.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Blue checkmark badge
+              Container(
+                width: 72,
+                height: 72,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFEFF6FF),
+                  shape: BoxShape.circle,
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 28),
-
-          // Action Button
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                if (ModalRoute.of(context)?.settings.name == '/contact') {
-                  Navigator.pushReplacementNamed(context, '/');
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2563EB),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                elevation: 0,
+                child: const Center(
+                  child: Icon(Icons.check_circle_rounded, color: Color(0xFF2563EB), size: 48),
+                ),
               ),
-              child: const Text('Back to Home', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
-            ),
+              const SizedBox(height: 24),
+
+              // Primary Heading
+              const Text(
+                'Thank You for Connecting with GreenFusion!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF0F172A),
+                  letterSpacing: -0.4,
+                ),
+              ),
+              const SizedBox(height: 14),
+
+              // Body Text
+              const Text(
+                'We appreciate your interest in collaborating with us. Your project inquiry has been received successfully. Our team will review your requirements and get in touch with you shortly.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xFF475569),
+                  height: 1.6,
+                ),
+              ),
+              const SizedBox(height: 14),
+
+              // Secondary Response Time Message
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: const Color(0xFFE2E8F0)),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.schedule, color: Color(0xFF2563EB), size: 16),
+                    SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        'Our team aims to respond as soon as possible, typically within a few minutes during business hours.',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF334155),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 28),
+
+              // Action Button
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (ModalRoute.of(context)?.settings.name == '/contact') {
+                      Navigator.pushReplacementNamed(context, '/');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2563EB),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    elevation: 0,
+                  ),
+                  child: const Text('Back to Home', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.white)),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

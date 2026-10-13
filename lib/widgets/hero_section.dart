@@ -44,6 +44,7 @@ class _HeroSectionState extends State<HeroSection> {
     }
 
     final isDesktop = MediaQuery.of(context).size.width >= 900;
+    final isMobile = MediaQuery.of(context).size.width < 600;
 
     // Default values if no data or error
     final badgeText = _heroContent?.badge.isNotEmpty == true ? _heroContent!.badge : 'Engineering Innovation';
@@ -92,7 +93,7 @@ class _HeroSectionState extends State<HeroSection> {
           title1,
           textAlign: isDesktop ? TextAlign.start : TextAlign.center,
           style: TextStyle(
-            fontSize: isDesktop ? 72 : 48,
+            fontSize: isDesktop ? 72 : (isMobile ? 36 : 48),
             fontWeight: FontWeight.w900,
             color: Color(0xFF1E293B),
             height: 1.1,
@@ -102,7 +103,7 @@ class _HeroSectionState extends State<HeroSection> {
           title2,
           textAlign: isDesktop ? TextAlign.start : TextAlign.center,
           style: TextStyle(
-            fontSize: isDesktop ? 72 : 48,
+            fontSize: isDesktop ? 72 : (isMobile ? 36 : 48),
             fontWeight: FontWeight.w900,
             color: const Color(0xFF2563EB),
             height: 1.1,
@@ -114,13 +115,13 @@ class _HeroSectionState extends State<HeroSection> {
           description,
           textAlign: isDesktop ? TextAlign.start : TextAlign.center,
           style: TextStyle(
-            fontSize: isDesktop ? 18 : 16,
+            fontSize: isDesktop ? 18 : (isMobile ? 15 : 16),
             color: Color(0xFF64748B),
             height: 1.5,
           ),
         ),
-        const SizedBox(height: 48),
-        const SizedBox(height: 64),
+        SizedBox(height: isMobile ? 32 : 48),
+        SizedBox(height: isMobile ? 32 : 64),
       ],
     );
 
@@ -155,8 +156,8 @@ class _HeroSectionState extends State<HeroSection> {
         Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
-            horizontal: isDesktop ? 64.0 : 24.0,
-            vertical: isDesktop ? 120.0 : 64.0,
+            horizontal: isDesktop ? 64.0 : 20.0,
+            vertical: isDesktop ? 120.0 : 56.0,
           ),
           child: leftContent,
         ),

@@ -370,31 +370,58 @@ class _FooterSectionState extends State<FooterSection> {
               const SizedBox(height: 56),
               Divider(color: Colors.white.withOpacity(0.1)),
               const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
+              if (isDesktop || isTablet)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        footer.copyrightText,
+                        style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => ContactModal.show(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2563EB),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'Get in Touch',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                      ),
+                    ),
+                  ],
+                )
+              else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => ContactModal.show(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF2563EB),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'Get in Touch',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
                       footer.copyrightText,
-                      style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
                     ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => ContactModal.show(context),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2563EB),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      elevation: 0,
-                    ),
-                    child: const Text(
-                      'Get in Touch',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
-                    ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
             ],
           ),
         ),

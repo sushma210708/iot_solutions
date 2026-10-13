@@ -59,11 +59,14 @@ class _AboutUsPageState extends State<AboutUsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: !isDesktop ? const AppDrawer() : null,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(88),
-        child: ColoredBox(
-          color: Color(0xFFF8FAFC), // Dark Nav bar
-          child: NavBar(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(isDesktop ? 88 : 72),
+        child: const ColoredBox(
+          color: Color(0xFFF8FAFC),
+          child: SafeArea(
+            bottom: false,
+            child: NavBar(isScrolled: true),
+          ),
         ),
       ),
       body: SingleChildScrollView(

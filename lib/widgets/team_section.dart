@@ -146,7 +146,7 @@ class _MentorCardState extends State<MentorCard> {
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
           transform: Matrix4.translationValues(0, _isHovered ? -8 : 0, 0),
-          width: 320,
+          width: MediaQuery.of(context).size.width < 600 ? double.infinity : 320,
           decoration: BoxDecoration(
             color: const Color(0xFFF8FAFC),
             borderRadius: BorderRadius.circular(24),
@@ -194,7 +194,7 @@ class _MentorCardState extends State<MentorCard> {
               ),
               // Content Section
               Padding(
-                padding: const EdgeInsets.all(32.0),
+                padding: EdgeInsets.all(MediaQuery.of(context).size.width < 600 ? 20.0 : 32.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
